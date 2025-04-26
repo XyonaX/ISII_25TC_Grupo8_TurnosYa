@@ -1,0 +1,20 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "TurnosYa-API",
+        "version": "1.0.0",
+        "description": "Documentación de TurnosYa API usando Swagger"
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Ruta principal",
+                "responses": {
+                    "200": {
+                        "description": "Respuesta exitosa"
+                    }
+                }
+            }
+        }
+    }
+}
