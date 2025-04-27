@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+/*Navbar*/
+.navbar-custom{
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+    height: 125px;
+  }
+
+.navbar-logo{
+    height: 130px;
+    width: 140px;
+}
+
+body {
+    background-color: rgb(134, 211, 157) !important;
+} 
+
+.navbar-title {
+    font-size: 45px; 
+    font-family: 'Trebuchet MS', sans-serif; 
+    display: flex;
+    align-items: center;
+  }
+  
+  .text-turnos {
+    color: #ae5bbf; 
+    /*font-weight: bold;*/
+    margin-right: 3.2px;  
+}
+  
+  .text-ya {
+    color: #04a658; 
+    /*font-weight: bold;*/
+  }
