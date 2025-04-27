@@ -1,159 +1,102 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  TextField, 
-  MenuItem, 
-  Select, 
-  FormControl, 
-  InputLabel, 
-  Box, 
-  Typography,
-  CircularProgress,
-  Alert 
-} from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { fetchTurnos } from '../services/turnos'; // Importa tu servicio
-
-// Tipo para TypeScript (ajústalo según la respuesta de tu API)
-type Turno = {
-  id: string;
-  fecha: string;
-  medico: string;
-  especialidad: string;
-  estado: 'disponible' | 'reservado';
-};
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Turnos = () => {
-  // Estados
-  const [turnos, setTurnos] = useState<Turno[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchText, setSearchText] = useState('');
-  const [especialidadFilter, setEspecialidadFilter] = useState<string>('todas');
-  const [estadoFilter, setEstadoFilter] = useState<string>('todos');
-  const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 5,
-  });
-  // Columnas del DataGrid
-  const columns: GridColDef[] = [
-    { field: 'fecha', headerName: 'Fecha y Hora', width: 200 },
-    { field: 'medico', headerName: 'Médico', width: 200 },
-    { field: 'especialidad', headerName: 'Especialidad', width: 200 },
-    { 
-      field: 'estado', 
-      headerName: 'Estado', 
-      width: 130,
-      renderCell: (params) => (
-        <span style={{ 
-          color: params.value === 'disponible' ? 'green' : 'red',
-          fontWeight: 'bold'
-        }}>
-          {params.value}
-        </span>
-      ),
+  // Datos estáticos de ejemplo
+  const turnosEjemplo = [
+    {
+      id: '1',
+      fecha: '2023-05-20 10:00',
+      medico: 'Dr. García',
+      especialidad: 'Cardiología',
+      estado: 'disponible'
     },
+    {
+      id: '2',
+      fecha: '2023-05-20 11:00',
+      medico: 'Dra. López',
+      especialidad: 'Dermatología',
+      estado: 'reservado'
+    },
+    {
+      id: '3',
+      fecha: '2023-05-21 09:30',
+      medico: 'Dr. Martínez',
+      especialidad: 'Pediatría',
+      estado: 'disponible'
+    }
   ];
 
-  // Obtener turnos de la API al cargar el componente
-  useEffect(() => {
-    const cargarTurnos = async () => {
-      try {
-        const datos = await fetchTurnos(); // Usa el servicio
-        setTurnos(datos);
-        setError(null);
-      } catch (err) {
-        setError('Error al cargar los turnos. Por favor, recarga la página.');
-        console.error('Error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    cargarTurnos();
-  }, []);
-
-  // Filtrar turnos
-  const turnosFiltrados = turnos.filter((turno) => {
-    const coincideBusqueda = 
-      turno.medico.toLowerCase().includes(searchText.toLowerCase()) || 
-      turno.especialidad.toLowerCase().includes(searchText.toLowerCase());
-    const coincideEspecialidad = 
-      especialidadFilter === 'todas' || turno.especialidad === especialidadFilter;
-    const coincideEstado = 
-      estadoFilter === 'todos' || turno.estado === estadoFilter;
-    return coincideBusqueda && coincideEspecialidad && coincideEstado;
-  });
-
   return (
-    <Box sx={{ padding: 3 }}>
-      <Typography variant="h4" gutterBottom>Buscar Turnos</Typography>
+    <div className="container mt-4">
+      <h2 className="mb-4">Buscar Turnos</h2>
 
-      {/* Mostrar error si existe */}
-      {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
-
-      {/* Barra de búsqueda */}
-      <TextField
-        label="Buscar por médico o especialidad"
-        variant="outlined"
-        fullWidth
-        sx={{ mb: 3 }}
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-      />
-
-      {/* Filtros */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-        <FormControl sx={{ minWidth: 200 }}>
-          <InputLabel>Especialidad</InputLabel>
-          <Select
-            value={especialidadFilter}
-            onChange={(e) => setEspecialidadFilter(e.target.value as string)}
-            label="Especialidad"
-          >
-            <MenuItem value="todas">Todas</MenuItem>
-            <MenuItem value="Cardiología">Cardiología</MenuItem>
-            <MenuItem value="Dermatología">Dermatología</MenuItem>
-            {/* Añade más especialidades según tu API */}
-          </Select>
-        </FormControl>
-
-        <FormControl sx={{ minWidth: 200 }}>
-          <InputLabel>Estado</InputLabel>
-          <Select
-            value={estadoFilter}
-            onChange={(e) => setEstadoFilter(e.target.value as string)}
-            label="Estado"
-          >
-            <MenuItem value="todos">Todos</MenuItem>
-            <MenuItem value="disponible">Disponible</MenuItem>
-            <MenuItem value="reservado">Reservado</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-
-    
-      {/* DataGrid con loading */}
-      <div style={{ height: 500, width: '100%' }}>
-        {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-            <CircularProgress />
-          </Box>
-        ) : (
-            <DataGrid
-      rows={turnosFiltrados}
-      columns={columns}
-      paginationModel={paginationModel}
-      onPaginationModelChange={setPaginationModel}
-      pageSizeOptions={[5, 10]}
-      disableRowSelectionOnClick
-      localeText={{
-        noRowsLabel: 'No hay turnos disponibles',
-        footerRowSelected: (count) => 
-          `${count} ${count === 1 ? 'fila seleccionada' : 'filas seleccionadas'}`,
-      }}
-    />
-        )}
+      {/* Barra de búsqueda (sin funcionalidad) */}
+      <div className="mb-4">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Buscar por médico o especialidad"
+          disabled
+        />
       </div>
-    </Box>
+
+      {/* Filtros (sin funcionalidad) */}
+      <div className="row mb-4">
+        <div className="col-md-6 mb-2">
+          <select className="form-select" disabled>
+            <option>Todas las especialidades</option>
+          </select>
+        </div>
+        <div className="col-md-6">
+          <select className="form-select" disabled>
+            <option>Todos los estados</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Tabla de resultados */}
+      <div className="table-responsive">
+        <table className="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Fecha y Hora</th>
+              <th>Médico</th>
+              <th>Especialidad</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {turnosEjemplo.map((turno) => (
+              <tr key={turno.id}>
+                <td>{turno.fecha}</td>
+                <td>{turno.medico}</td>
+                <td>{turno.especialidad}</td>
+                <td>
+                  <span 
+                    className={`badge ${turno.estado === 'disponible' ? 'bg-success' : 'bg-danger'}`}
+                  >
+                    {turno.estado}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Paginación (sin funcionalidad) */}
+      <nav>
+        <ul className="pagination justify-content-center mt-4">
+          <li className="page-item active">
+            <button className="page-link">1</button>
+          </li>
+          <li className="page-item">
+            <button className="page-link">2</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
   );
 };
 
