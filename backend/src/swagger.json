@@ -6,7 +6,7 @@
         "description": "Documentación de TurnosYa API usando Swagger"
     },
     "paths": {
-        "/": {
+        "/api": {
             "get": {
                 "summary": "Ruta principal",
                 "responses": {
@@ -14,6 +14,169 @@
                         "description": "Respuesta exitosa"
                     }
                 }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "summary": "Obtener todos los usuarios",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios"
+                    }
+                }
+            }
+        },
+        "/api/users/dni/{dni}": {
+            "get": {
+                "summary": "Obtener usuario por DNI",
+                "parameters": [
+                    {
+                        "name": "dni",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario encontrado"
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "summary": "Obtener usuario por ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario encontrado"
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Actualizar usuario",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario actualizado"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Eliminar usuario",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario eliminado"
+                    }
+                }
+            }
+        },
+        "/api/users/create": {
+            "post": {
+                "summary": "Crear un nuevo usuario",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario creado"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "dni_usuario": { "type": "string" },
+                    "nombre_usuario": { "type": "string" },
+                    "apellido_usuario": { "type": "string" },
+                    "fecha_nac_usuario": { "type": "string", "format": "date" },
+                    "celular_usuario": { "type": "string" },
+                    "email_usuario": { "type": "string" },
+                    "clave_usuario": { "type": "string" },
+                    "calle_usuario": { "type": "string" },
+                    "num_usuario": { "type": "string" },
+                    "dpto_usuario": { "type": "string", "nullable": true },
+                    "cod_postal": { "type": "string" },
+                    "id_ciudad": { "type": "string" },
+                    "id_estado_usuario": { "type": "string" },
+                    "tipo_usuario": {
+                        "type": "string",
+                        "enum": ["paciente", "medico"]
+                    }
+                },
+                "required": [
+                    "dni_usuario",
+                    "nombre_usuario",
+                    "apellido_usuario",
+                    "fecha_nac_usuario",
+                    "celular_usuario",
+                    "email_usuario",
+                    "clave_usuario",
+                    "calle_usuario",
+                    "num_usuario",
+                    "cod_postal",
+                    "id_ciudad",
+                    "id_estado_usuario",
+                    "tipo_usuario"
+                ]
             }
         }
     }
