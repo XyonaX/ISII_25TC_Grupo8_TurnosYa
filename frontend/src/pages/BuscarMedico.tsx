@@ -36,13 +36,13 @@ const BuscarMedico = () => {
       <div className="row justify-content-center">
         <div className="col-md-12 col-lg-10">
           <div className="card shadow-lg border-0 card-formulario">
-            <div className="card-body p-4">
+            <div className="card-body p-4 row">
               <h2 className="card-title text-center mb-4 card-titulo">
                 <span className="text-iniciar">Buscar</span>
                 <span className="text-sesion"> Medicos</span>
               </h2>
-              <div className="row mb-4 ">
-                <div className="col-md-4">
+              <div className="row mb-4 justify-content-center">
+                <div className="col-auto">
                   <input
                     type="text"
                     className="form-control input-formulario-buscarMedico"
@@ -50,7 +50,8 @@ const BuscarMedico = () => {
                     style={{ 
                       borderRadius: '8px',
                       border: '2px solid #ae5bbf',
-                      height: '40px'
+                      height: '40px',
+                      minWidth: '300px'
                     }}
                   />
                 </div>
