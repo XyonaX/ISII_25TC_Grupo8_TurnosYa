@@ -33,3 +33,126 @@ body {
     color: #04a658; 
     /*font-weight: bold;*/
   }
+
+  /* FORMULARIO DE INICIO DE SESIÓN (correcto, respetando tu diseño) */
+
+.container-formulario {
+  min-height: calc(100vh - 245px);
+}
+
+/* Card */
+.card-formulario {
+  border-radius: 15px;
+  border: 2px solid #04a658;
+  background-color: #fff;
+}
+
+/* Título */
+.card-titulo {
+  font-size: 2rem;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.text-iniciar {
+  color: #ae5bbf;
+}
+
+.text-sesion {
+  color: #04a658;
+}
+
+/* Labels */
+.label-formulario {
+  font-weight: bold;
+  color: #04a658;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+/* Inputs */
+.input-formulario {
+  border-radius: 8px;
+  border: 2px solid #ae5bbf;
+  padding: 0.5rem 1rem;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+/* Botón INGRESAR */
+.boton-ingresar {
+  background-color: #ae5bbf !important;
+  color: white !important;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 0.5rem;
+  font-family: 'Trebuchet MS', sans-serif;
+  transition: background-color 0.3s;
+}
+
+.boton-ingresar:hover {
+  background-color: #9a4aad !important;
+}
+
+/* Separador "o" */
+.separador-formulario {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.linea-separador {
+  flex: 1;
+  height: 1px;
+  background-color: #ddd;
+}
+
+.texto-separador {
+  margin: 0 1rem;
+  color: #777;
+}
+
+/* Botón Continuar con Google */
+.boton-google {
+  background-color: #ffffff !important;
+  color: #757575 !important;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5rem;
+  font-family: 'Trebuchet MS', sans-serif;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boton-google:hover {
+  background-color: #f8f8f8 !important;
+  box-shadow: 0 2px 5px rgba(166, 110, 176, 0.64);
+}
+
+/* Icono de Google */
+.icono-google {
+  color: #5682e8;
+  font-size: 1.2rem;
+  margin-right: 10px;
+}
+
+/* Texto abajo del formulario */
+.texto-registro {
+  color: #555;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+/* Enlace de registro */
+.enlace-registro {
+  color: #04a658;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.enlace-registro:hover {
+  text-decoration: underline;
+}
