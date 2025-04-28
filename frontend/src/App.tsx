@@ -6,6 +6,7 @@ import HeaderNavbar from "./components/common/HeaderNavbar";
 import HomePage from './pages/HomePage';
 import Turnos from './pages/Turnos';
 import IniciarSesion from './pages/IniciarSesion';
+import Registrarse from './pages/Registrarse';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path='/' element={<HomePage/>} />
           <Route path='/turnos' element={<Turnos/>} />          
           <Route path='/login' element={<IniciarSesion/>} />
+          <Route path='/registro' element={<Registrarse/>} />
         </Routes>
       </main>
     </div>
