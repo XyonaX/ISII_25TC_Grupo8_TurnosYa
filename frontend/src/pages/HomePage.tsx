@@ -23,7 +23,7 @@ const HomePage = () => {
         > Agenda tu cita
         </h1>
         <p style={{ marginBottom: "1.5rem", }}className="fs-5">Encontrá tu especialista y pedí un turno</p>
-        <button className="custom-button">Reserva una consulta</button>
+        <button className="custom-button">Buscar Médicos</button>
       </div>
     </div>
   );
