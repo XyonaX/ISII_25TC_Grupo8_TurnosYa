@@ -1,11 +1,6 @@
 import { Schema, model } from "mongoose";
 
 const ProvinciaSchema = new Schema({
-    id_provincia: {
-        type: String,
-        required: true,
-        unique: true,
-    },
     nombre_provincia: {
         type: String,
         required: true,
