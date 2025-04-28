@@ -36,35 +36,62 @@ const HomePage = () => {
       </div>
 
       {/* Sección de servicios de salud */}
-      <section className="servicios-section bg-white">
+      <section id="servicios-homepage" className="servicios-section bg-white">
       <div className="container py-5 text-center">
         {/* Encabezado */}
         <div className="row mb-5">
           <div className="col">
             <h1 className="servicios-title">Cuidando de tu salud</h1>
-            <p className="servicios-descripcion">
-              Conoce nuestros servicios
-            </p>
+            <p className="servicios-descripcion">Conoce nuestros servicios</p>
           </div>
         </div>
 
         {/* Servicios */}
-        <div className="row g-3">
+        <div className="row g-3 justify-content-center">
           {/* Card 1 */}
           <div className="col-lg-3 col-md-6">
             <div className="card h-100">
               <div className="card-body text-center">
-                <img
-                  src=""
-                  alt=""
-                  className="staff-img"
-                />
-                <h4 className="staff-name">Titulo</h4>
-                <h5 className="staff-cargo">Parrafo</h5>
+                <img src="assets/img/staff-finanzas.JPG" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
+                <h4 className="card-home-title">Reservas y Turnos</h4>
                 <div className="d-flex flex-row justify-content-center">
-                  <div className="p-4">
+                  <div className="card-home-text p-3">
                     <a>
-                     Texto
+                      Encuentra profesionales verificados y reserva tu turno en segundos. 
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+            {/* Card 2 */}
+            <div className="col-lg-3 col-md-6">
+            <div className="card h-100">
+              <div className="card-body text-center">
+                <img src="assets/img/staff-finanzas.JPG" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
+                <h4 className="card-home-title">Experiencia personalizada</h4>
+                <div className="d-flex flex-row justify-content-center">
+                  <div className="card-home-text p-3">
+                    <a>
+                     Si sos un profesional de la salud, organizamos tu día a día con nuestro historial de turnos y recordatorios. 
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+            {/* Card 3 */}
+            <div className="col-lg-3 col-md-6">
+            <div className="card h-100">
+              <div className="card-body text-center">
+                <img src="assets/img/staff-finanzas.JPG" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
+                <h4 className="card-home-title">Opciones de Pago</h4>
+                <div className="d-flex flex-row justify-content-center">
+                  <div className="card-home-text p-3">
+                    <a>
+                      Diferentes formas de pago y posibilidad de cancelación con 24 HS de anticipación. 
                     </a>
                   </div>
                 </div>
@@ -73,7 +100,6 @@ const HomePage = () => {
           </div>
 
 
-          {/* Puedes continuar agregando más cards */}
         </div>
       </div>
     </section>

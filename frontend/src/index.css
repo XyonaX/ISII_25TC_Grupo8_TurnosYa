@@ -80,10 +80,10 @@ body {
     background-color: #19d184;; /* Color cuando pasas el mouse */
   }
 
-/* Estilos para las tarjetas 
+/**** HOMEPAGE ***/
 
 .servicios-section{
-  height: 500px; 
+  height: 550px; 
   width: 100%; 
   margin: 0; 
   padding: 0; 
@@ -92,51 +92,55 @@ body {
 
 .servicios-title{
   color:#19d184;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-/*
-.health-services-card {
-  height: 100%;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  border: none;
-  border-radius: 0.5rem;
-  transition: transform 0.3s ease;
+.servicios-descripcion{
+  color: #777;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 18px;
 }
 
-.health-services-card:hover {
-  transform: translateY(-5px);
+.card-home-title{
+  font-family: 'Times New Roman', Times, serif;
+  color: #19d184;
+  font-weight: bold;
 }
 
-.health-services-card .card-title {
-  font-family: 'Trebuchet MS', sans-serif;
-  margin-bottom: 1rem;
-  color: #0d6efd; 
+.card-home-text{
+  color: #777; 
+  font-family: 'Times New Roman', Times, serif;
 }
 
-.health-services-card .btn {
-  margin-top: auto;
+#servicios-homepag img{
+  margin-top: -50px;
 }
 
-.card{
+#servicios-homepag i{
+  font-size: 26px;
+  color:#ccab85;
+}
+
+#servicios-homepage .card{
   border-radius: 0;
-  box-shadow: 5px 5px 15px rgba(183, 226, 176, 0.7);
+  box-shadow: 5px 5px 15px rgba(131, 117, 130, 0.7);
   transition: all 0.3s ease-in;
   -webkit-transition: all 0.3s ease-in;
   -moz-transition: all 0.3s easy-in;
 }
 
-.card:hover{
-  background-color: #19d184;
+#servicios-homepage .card:hover{
+  background-color: #38be86; /*#19d184*/
   color: #fff;
   border-radius: 5px;
   border: none;
-  box-shadow: 5px 5px 10px rgba(150, 187, 144, 0.7); 
+  box-shadow: 5px 5px 10px rgba(233, 207, 240, 0.7); 
 }
 
-.card:hover .staff-name, #team .card:hover h5, #team .card:hover i {
+#servicios-homepage .card:hover .card-home-title, #servicios-homepage .card:hover .card-home-text {
   color: #fffcf7;
 }
-*/
+
 
   /* FORMULARIO DE INICIO DE SESIÓN (correcto, respetando tu diseño) */
 
