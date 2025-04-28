@@ -7,6 +7,7 @@ body {
   }
 
 
+
 /*Navbar*/
 /*.navbar-custom{
     padding-top: 60px !important;
@@ -177,6 +178,11 @@ body {
   border: 2px solid #ae5bbf;
   padding: 0.5rem 1rem;
   font-family: 'Trebuchet MS', sans-serif;
+}
+
+.input-formulario-buscarMedico::placeholder{
+  color: #04a658 !important;
+  opacity: 1;
 }
 
 /* Botón INGRESAR */

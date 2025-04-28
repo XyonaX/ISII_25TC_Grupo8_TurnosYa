@@ -7,7 +7,7 @@ import Footer from './components/common/Footer';
 import HomePage from './pages/HomePage';
 import IniciarSesion from './pages/IniciarSesion';
 import Registrarse from './pages/Registrarse';
-import Turnos from './pages/Turnos';
+import BuscarMedico from './pages/BuscarMedico';
 import SobreNosotros from './pages/SobreNosotros';
 import PreguntasFrecuentes from './pages/PreguntasFrecuentes';
 import TerminosCondiciones from './pages/TerminosCondiciones';
@@ -22,7 +22,7 @@ function App() {
           <Route path='/' element={<HomePage/>} />          
           <Route path='/login' element={<IniciarSesion/>} />
           <Route path='/registro' element={<Registrarse/>} />
-          <Route path='/turnos' element={<Turnos/>} />
+          <Route path='/buscarmedico' element={<BuscarMedico/>} />
           <Route path='/sobrenosotros' element={<SobreNosotros/>} />
           <Route path='/preguntasfrecuentes' element={<PreguntasFrecuentes/>} />
           <Route path='/terminos' element={<TerminosCondiciones/>} />
