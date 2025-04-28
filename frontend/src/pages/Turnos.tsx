@@ -47,14 +47,14 @@ const Turnos = () => {
       {/* Filtros (sin funcionalidad) */}
       <div className="row mb-4">
         <div className="col-md-6 mb-2">
-          <select className="form-select" disabled>
+          <select className="form-select" >
             <option>Todas las especialidades</option>
             <option>Cardiología</option>
             <option>Dermatología</option>
           </select>
         </div>
         <div className="col-md-6">
-          <select className="form-select" disabled>
+          <select className="form-select" >
             <option>Todos los estados</option>
             <option>Disponible</option>
             <option>Reservado</option>
