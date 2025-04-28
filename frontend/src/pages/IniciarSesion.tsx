@@ -6,7 +6,7 @@ import { FaGoogle } from 'react-icons/fa'; // Importamos el ícono de Google
 const IniciarSesion = () => {
 
   return (
-    <div className="container container-formulario">
+    <div className="container container-formulario p-4">
   <div className="row justify-content-center">
     <div className="col-md-8 col-lg-6">
       <div className="card shadow-lg border-0 card-formulario">
