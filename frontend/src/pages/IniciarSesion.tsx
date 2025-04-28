@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaGoogle } from 'react-icons/fa'; // Importamos el ícono de Google
 
@@ -77,12 +78,12 @@ const IniciarSesion = () => {
           <div className="mt-4 text-center">
             <p className="mt-3 mb-0 texto-registro">
               ¿No tienes cuenta?{' '}
-              <a 
-                href="#!" 
-                className="enlace-registro"
+              <Link
+                  to="/registro"
+                  className="enlace-registro"
               >
                 Regístrate aquí
-              </a>
+              </Link>
             </p>
           </div>
 
