@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import PaginationUI from '../utils/PaginationUI';
 
 const Turnos = () => {
   // Datos estáticos de ejemplo
@@ -26,6 +27,8 @@ const Turnos = () => {
       estado: 'disponible'
     }
   ];
+  const currentPage = 1;
+  const totalPages = 3;
 
   return (
     <div className="container mt-4">
@@ -44,13 +47,17 @@ const Turnos = () => {
       {/* Filtros (sin funcionalidad) */}
       <div className="row mb-4">
         <div className="col-md-6 mb-2">
-          <select className="form-select" disabled>
+          <select className="form-select" >
             <option>Todas las especialidades</option>
+            <option>Cardiología</option>
+            <option>Dermatología</option>
           </select>
         </div>
         <div className="col-md-6">
-          <select className="form-select" disabled>
+          <select className="form-select" >
             <option>Todos los estados</option>
+            <option>Disponible</option>
+            <option>Reservado</option>
           </select>
         </div>
       </div>
@@ -85,17 +92,12 @@ const Turnos = () => {
         </table>
       </div>
 
-      {/* Paginación (sin funcionalidad) */}
-      <nav>
-        <ul className="pagination justify-content-center mt-4">
-          <li className="page-item active">
-            <button className="page-link">1</button>
-          </li>
-          <li className="page-item">
-            <button className="page-link">2</button>
-          </li>
-        </ul>
-      </nav>
+      {/* Componente de paginación reutilizable */}
+      <PaginationUI 
+        currentPage={currentPage}
+        totalPages={totalPages}
+        disabled={true} // Deshabilitado para vista estática
+      />
     </div>
   );
 };
