@@ -7,6 +7,11 @@ const MedicoSchema = new Schema({
         required: true,
         unique: true,
     },
+    id_medico: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     matricula_medico: {
         type: String,
         required: true,
