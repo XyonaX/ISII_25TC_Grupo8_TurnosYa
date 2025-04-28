@@ -26,7 +26,7 @@ const HomePage = () => {
         </h1>
         <p style={{ marginBottom: "1.5rem", }}className="fs-5">Encontrá tu especialista y pedí un turno</p>
         <button className="custom-button">
-          <Link className="nav-link" to="/turnos">
+          <Link className="nav-link" to="/buscarmedico">
               Buscar Médicos
             </Link>
           </button>
