@@ -7,6 +7,11 @@ const PacienteSchema = new Schema({
         required: true,
         unique: true,
     },
+    id_paciente: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     id_obra_social: {
         type: Schema.Types.ObjectId,
         ref: 'ObraSocial',
