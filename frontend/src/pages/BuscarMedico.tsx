@@ -44,13 +44,13 @@ const BuscarMedico = () => {
                 <div className="col-md-4">
                   <input
                     type="text"
-                    className="form-control input-formulario"
+                    className="form-control input-formulario-buscarMedico"
                     placeholder="Buscar por nombre"
-                    disabled
                     style={{ 
                       borderRadius: '8px',
                       border: '2px solid #ae5bbf',
-                      height: '40px' // Hacemos el input más pequeño
+                      height: '40px',
+                      
                     }}
                   />
                 </div>
@@ -62,7 +62,8 @@ const BuscarMedico = () => {
                     style={{ 
                       borderRadius: '8px',
                       border: '2px solid #ae5bbf',
-                      height: '40px'
+                      height: '40px',
+                      color: 'green',
                     }}
                   >
                     <option>Todas las especialidades</option>
@@ -76,7 +77,8 @@ const BuscarMedico = () => {
                     style={{ 
                       borderRadius: '8px',
                       border: '2px solid #ae5bbf',
-                      height: '40px'
+                      height: '40px',
+                      color: 'green',
                     }}
                   >
                     <option>Todas las provincias</option>
@@ -90,7 +92,8 @@ const BuscarMedico = () => {
                     style={{ 
                       borderRadius: '8px',
                       border: '2px solid #ae5bbf',
-                      height: '40px'
+                      height: '40px',
+                      color: 'green',
                     }}
                   >
                     <option>Todas las obras sociales</option>
