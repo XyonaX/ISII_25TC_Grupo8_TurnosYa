@@ -1,14 +1,10 @@
-*{
-  margin: 0px;
-  padding: 0px;
-}
 
 body {
   background-color: #9cc4b3 !important;
-  padding: 0%;
-  margin: 0;
+  /*padding: 0% !important;
+  margin: 0% !important;
   overflow-x: hidden; /* Previene desbordamiento horizontal */
-} 
+  }
 
 
 /*Navbar*/
@@ -82,6 +78,64 @@ body {
   .custom-button:hover {
     background-color: #19d184;; /* Color cuando pasas el mouse */
   }
+
+/* Estilos para las tarjetas 
+
+.servicios-section{
+  height: 500px; 
+  width: 100%; 
+  margin: 0; 
+  padding: 0; 
+  display: block;
+}
+
+.servicios-title{
+  color:#19d184;
+}
+
+/*
+.health-services-card {
+  height: 100%;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: none;
+  border-radius: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.health-services-card:hover {
+  transform: translateY(-5px);
+}
+
+.health-services-card .card-title {
+  font-family: 'Trebuchet MS', sans-serif;
+  margin-bottom: 1rem;
+  color: #0d6efd; 
+}
+
+.health-services-card .btn {
+  margin-top: auto;
+}
+
+.card{
+  border-radius: 0;
+  box-shadow: 5px 5px 15px rgba(183, 226, 176, 0.7);
+  transition: all 0.3s ease-in;
+  -webkit-transition: all 0.3s ease-in;
+  -moz-transition: all 0.3s easy-in;
+}
+
+.card:hover{
+  background-color: #19d184;
+  color: #fff;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 5px 5px 10px rgba(150, 187, 144, 0.7); 
+}
+
+.card:hover .staff-name, #team .card:hover h5, #team .card:hover i {
+  color: #fffcf7;
+}
+*/
 
   /* FORMULARIO DE INICIO DE SESIÓN (correcto, respetando tu diseño) */
 
