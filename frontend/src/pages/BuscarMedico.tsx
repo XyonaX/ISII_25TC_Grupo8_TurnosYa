@@ -32,7 +32,7 @@ const BuscarMedico = () => {
   const totalPages = 3;
 
   return (
-    <div className="container container-formulario p-6">
+    <div className="container container-formulario p-6 mb-4">
       <div className="row justify-content-center">
         <div className="col-md-12 col-lg-10">
           <div className="card shadow-lg border-0 card-formulario">
