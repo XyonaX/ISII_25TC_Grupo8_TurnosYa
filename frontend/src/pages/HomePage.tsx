@@ -1,6 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { Link } from 'react-router-dom';
+
 const HomePage = () => {
 
   return (
@@ -23,7 +25,11 @@ const HomePage = () => {
         > Agenda tu cita
         </h1>
         <p style={{ marginBottom: "1.5rem", }}className="fs-5">Encontrá tu especialista y pedí un turno</p>
-        <button className="custom-button">Buscar Médicos</button>
+        <button className="custom-button">
+          <Link className="nav-link" to="/turnos">
+              Buscar Médicos
+            </Link>
+          </button>
       </div>
     </div>
   );
