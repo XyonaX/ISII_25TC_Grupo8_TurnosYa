@@ -1,7 +1,8 @@
-import {Schema, model} from 'mongoose';
+// models/Medico.ts
+import { Schema, model } from 'mongoose';
 
 const MedicoSchema = new Schema({
-    id_usuaro: {
+    id_usuario: {  
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true,
@@ -16,8 +17,7 @@ const MedicoSchema = new Schema({
         type: String,
         required: true,
     },
-})
+});
 
 const Medico = model('Medico', MedicoSchema);
-
 export default Medico;
