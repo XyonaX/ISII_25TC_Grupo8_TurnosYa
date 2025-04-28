@@ -1,6 +1,6 @@
 export default function HeaderNavbar() {
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary navbar-custom">
+    <nav className="navbar navbar-expand-lg navbar-custom " style={{ backgroundColor: "#f9fffb" }}>
     <div className="container-fluid">
         <a className="navbar-brand d-flex align-items-center" href="#">
             <img
@@ -19,13 +19,13 @@ export default function HeaderNavbar() {
             <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav ms-auto mb-3 mb-lg-0">
                 <li className="nav-item custom-nav-link">
-                    <a className="nav-link " aria-current="page" href="#"> INICIO SESION
+                    <a className="nav-link" aria-current="page" href="#">INICIAR SESION
                     </a>
                 </li>
-                <li className="nav-item">
-                    <a className="nav-link custom-nav-link" href="#">
+                <li className="nav-item custom-nav-link">
+                    <a className="nav-link" href="#">
                     REGISTRARSE
                     </a>
                 </li>
