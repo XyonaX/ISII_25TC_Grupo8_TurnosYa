@@ -85,6 +85,11 @@ const Footer = () => {
                                     Política de Privacidad
                                 </Link>
                             </li>
+                            <li className="mb-2">
+                                <Link to="/preguntasfrecuentes" className="text-decoration-none" style={{ color: '#555' }}>
+                                    Preguntas Frecuentes
+                                </Link>
+                            </li>
                         </ul>
                     </div>
                 </div>
