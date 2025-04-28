@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 /* Common */
 import HeaderNavbar from "./components/common/HeaderNavbar";
 /* Pages */
-import { HomePage } from './pages/HomePage';
+import HomePage from './pages/HomePage';
 import Turnos from './pages/Turnos';
 import IniciarSesion from './pages/IniciarSesion';
 

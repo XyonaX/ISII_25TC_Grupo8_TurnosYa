@@ -1,22 +1,32 @@
-/*export const HomePage = () => {
-  return (
-    <div className="text-xl text-red-500">HomePage</div>
-  )
-  
-}*/
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-export const HomePage = () => {
-  return (
-    <div>
-        <div className="text-center mt-5">
-        <div className="text-xl text-red-500">
-          HomePage
-        </div>
+const HomePage = () => {
 
-        {/* Aquí agregamos el botón de Bootstrap */}
-        <button className="btn btn-primary btn-lg mt-4">¡Haz clic aquí!</button>
-        </div>
+  return (
+    <div
+      className="position-relative"
+      style={{
+        backgroundImage: 'url("/homepage-portada2.png")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "80vh",
+        color: "white",
+      }}
+    >
+      <div
+        className="position-absolute top-50 start-0 translate-middle-y text-start"
+        style={{ textShadow: "0 2px 4px rgba(165, 192, 161, 0.7)", paddingLeft: "2rem",}}>
+        <h1
+          style={{ fontFamily: "Verdana, sans-serif", marginBottom: "1rem",}}
+          className="display-4 fw-bold"
+        > Agenda tu cita
+        </h1>
+        <p style={{ marginBottom: "1.5rem", }}className="fs-5">Encontrá tu especialista y pedí un turno</p>
+        <button className="custom-button">Reserva una consulta</button>
+      </div>
     </div>
-    
-  )
-}
+  );
+};
+
+export default HomePage;

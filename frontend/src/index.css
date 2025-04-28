@@ -1,23 +1,30 @@
-
-
-/*Navbar*/
-.navbar-custom{
-    padding-top: 60px !important;
-    padding-bottom: 60px !important;
-    height: 125px;
-  }
-
-.navbar-logo{
-    height: 130px;
-    width: 140px;
+*{
+  margin: 0px;
+  padding: 0px;
 }
 
 body {
-    background-color: rgb(134, 211, 157) !important;
+  background-color: #9cc4b3 !important;
+  padding: 0%;
+  margin: 0;
+  overflow-x: hidden; /* Previene desbordamiento horizontal */
 } 
 
+
+/*Navbar*/
+/*.navbar-custom{
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+    height: 125px;
+  }*/
+
+.navbar-logo{
+    height: 70px;
+    width: 80px;
+}
+
 .navbar-title {
-    font-size: 45px; 
+    font-size: 25px; 
     font-family: 'Trebuchet MS', sans-serif; 
     display: flex;
     align-items: center;
@@ -32,4 +39,46 @@ body {
   .text-ya {
     color: #04a658; 
     /*font-weight: bold;*/
+  }
+
+  .custom-nav-link{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
+    font-size: 16px;
+    color: rgb(236, 13, 13);
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+
+  .custom-nav-link:hover {
+    color: violet !important;
+  }
+
+  .home-img {
+    margin: 0; /* Asegúrate de que no haya márgenes */
+    padding: 0; /* Elimina cualquier padding */
+    width: 100%; /* Ocupar todo el ancho de la ventana del navegador */
+    overflow: hidden; /* Evita que elementos fuera del área visible interfieran */
+    margin-top: 0 !important;
+  }
+
+  .homepage-portada {
+    width: 100%; /* Ocupar el ancho completo del viewport */
+    height: auto; /* Ajustar la altura proporcionalmente */
+    max-height: 900px; /* Limita la altura máxima como en el carrusel */
+    object-fit: contain; /* Ajusta proporcionalmente */
+  }
+
+  .custom-button {
+    background-color: #1fb979; /* Color verde personalizado */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 10px 20px;
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 1.25rem;
+    transition: background-color 0.3s; /* Animación suave */
+    box-shadow: 0 4px 8px rgba(221, 221, 221, 0.6); /* Sombra blanca */
+  }
+  
+  .custom-button:hover {
+    background-color: #19d184;; /* Color cuando pasas el mouse */
   }
