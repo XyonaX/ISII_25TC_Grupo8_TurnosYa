@@ -5,6 +5,7 @@ import swaggerDocument from "./swagger.json";
 import apiRoutes from "./routes/api.routes";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import './models';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
