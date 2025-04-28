@@ -4,7 +4,7 @@
   )
   
 }*/
-
+import { Link } from 'react-router-dom';
 export const HomePage = () => {
   return (
     <div>
@@ -14,7 +14,11 @@ export const HomePage = () => {
         </div>
 
         {/* Aquí agregamos el botón de Bootstrap */}
-        <button className="btn btn-primary btn-lg mt-4">¡Haz clic aquí!</button>
+        <button className="boton-ingresar">
+          <Link className="nav-link" to="/turnos">
+            Buscar Médicos
+          </Link>
+        </button>
         </div>
     </div>
     
