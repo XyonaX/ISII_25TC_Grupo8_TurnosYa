@@ -29,26 +29,14 @@ api.interceptors.response.use(
 );
 
 export const authService = {
-  // Registro de usuario
-  register: async (userData: RegisterFormData): Promise<UsuarioResponse | PacienteResponse | MedicoResponse> => {
-    try {
-      const response = await api.post('/auth/register', userData);
-      return response.data.data;
-    } catch (error) {
-      console.error('Error en registro:', error);
-      throw error;
-    }
+  register: async (userData: RegisterFormData): Promise<UsuarioResponse> => {
+    const res = await axios.post(`${API_BASE_URL}/auth/register`, userData);
+    return res.data;
   },
 
-  // Login de usuario
-  login: async (loginData: LoginData): Promise<{ user: UsuarioResponse; token: string }> => {
-    try {
-      const response = await api.post('/auth/login', loginData);
-      return response.data.data;
-    } catch (error) {
-      console.error('Error en login:', error);
-      throw error;
-    }
+  login: async (credentials: LoginData): Promise<UsuarioResponse> => {
+    const res = await axios.post(`${API_BASE_URL}/auth/login`, credentials);
+    return res.data;
   },
 
   // Obtener información del usuario actual
