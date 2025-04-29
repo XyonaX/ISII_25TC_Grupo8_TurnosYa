@@ -8,6 +8,7 @@ import { IUsuario } from "../interfaces/IUsuario";
 import Paciente from "../models/Paciente";
 import Medico from "../models/Medico";
 import userSchema from "./validations/userSchema";
+import Usuario from "../models/Usuario";
 
 // Esquema de validación para login
 const loginSchema = Joi.object({
@@ -22,67 +23,59 @@ const loginSchema = Joi.object({
 
 const registerHandler = async (req: Request, res: Response) => {
     try {
-        const { error, value } = userSchema.validate(req.body, {
-            abortEarly: false,
+        const newUser = await registerController(req.body);
+
+        // Si el tipo de usuario es paciente, creá un documento en pacientes
+        if (req.body.tipo_usuario === "paciente") {
+            try {
+                const nuevoPaciente = new Paciente({
+                    id_usuario: newUser._id,
+                    id_obra_social: req.body.id_obra_social,
+                });
+                await nuevoPaciente.save();
+            } catch (error) {
+                console.error(
+                    "Error al crear paciente, se elimina el usuario:",
+                    error
+                );
+                await Usuario.findByIdAndDelete(newUser._id);
+                return res.status(500).json({
+                    success: false,
+                    message: "Error al crear paciente",
+                });
+            }
+        }
+
+        // Si el tipo de usuario es médico, creá un documento en médicos
+        if (req.body.tipo_usuario === "medico") {
+            try {
+                const nuevoMedico = new Medico({
+                    id_usuario: newUser._id,
+                    matricula_medico: req.body.matricula_medico,
+                });
+                await nuevoMedico.save();
+            } catch (error) {
+                console.error(
+                    "Error al crear médico, se elimina el usuario:",
+                    error
+                );
+                await Usuario.findByIdAndDelete(newUser._id);
+                return res.status(500).json({
+                    success: false,
+                    message: "Error al crear médico",
+                });
+            }
+        }
+
+        res.status(201).json({
+            success: true,
+            message: "Usuario registrado correctamente",
         });
-
-        if (error) {
-            console.log("Errores de validación:", error.details); // 👈
-            return res.status(400).json({
-                success: false,
-                message: "Error de validación",
-                errors: error.details.map((detail) => detail.message),
-            });
-        }
-
-        console.log("Payload recibido:", value); // 👈
-
-        const newUser = await registerController(value);
-
-        // Crear paciente o médico según el tipo de usuario
-        if (value.tipo_usuario === "paciente") {
-            if (!value.id_obra_social) {
-                return res.status(400).json({
-                    success: false,
-                    message: "La obra social es requerida para pacientes",
-                });
-            }
-
-            const nuevoPaciente = new Paciente({
-                id_usuario: newUser._id,
-                id_obra_social: value.id_obra_social,
-            });
-
-            await nuevoPaciente.save();
-        } else if (value.tipo_usuario === "medico") {
-            if (!value.matricula_medico) {
-                return res.status(400).json({
-                    success: false,
-                    message: "La matrícula es requerida para médicos",
-                });
-            }
-
-            const nuevoMedico = new Medico({
-                id_usuario: newUser._id,
-                matricula_medico: value.matricula_medico,
-            });
-
-            await nuevoMedico.save();
-        }
     } catch (error: any) {
-        console.error("Error en registro:", error);
-
-        if (error.message.includes("ya está registrado")) {
-            return res.status(409).json({
-                success: false,
-                message: error.message,
-            });
-        }
-
-        return res.status(500).json({
+        console.error("Error en registro:", error.message);
+        res.status(409).json({
             success: false,
-            message: "Error interno del servidor al registrar usuario",
-            error: error.message,
+            message: error.message,
         });
     }
 };
