@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { IUsuario } from "../interfaces/IUsuario";
 import Usuario from "../models/Usuario";
+import EstadoUsuario from "../models/EstadoUsuario";
 
 const getAllUsersController = async () => {
     try {
@@ -65,6 +66,12 @@ const createUserController = async (userData: IUsuario) => {
             throw new Error("User already exists");
         }
 
+        // Buscar el estado "Activo"
+        const estadoActivo = await EstadoUsuario.findOne({ nombre_estado_usuario: "Activo" });
+        if (!estadoActivo) {
+            throw new Error("Estado 'Activo' no encontrado en la base de datos.");
+        }
+
         // Hashear la contraseña
         const hashedPassword = await bcrypt.hash(userData.clave_usuario, 10);
         
@@ -72,7 +79,8 @@ const createUserController = async (userData: IUsuario) => {
         const newUser = new Usuario({
             ...userData,
             clave_usuario: hashedPassword,
-            fecha_nac_usuario: new Date(userData.fecha_nac_usuario) // Asegurar que es Date
+            fecha_nac_usuario: new Date(userData.fecha_nac_usuario), // Asegurar que es Date
+            id_estado_usuario: estadoActivo._id // ✅ Setear el estado "Activo"
         });
 
         await newUser.save();

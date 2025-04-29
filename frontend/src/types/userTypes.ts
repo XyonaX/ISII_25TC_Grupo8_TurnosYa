@@ -11,6 +11,7 @@ export interface UsuarioBase {
   num_usuario: string;
   dpto_usuario?: string;
   cod_postal: string;
+  tipo_usuario: "paciente" | "medico";
   id_ciudad: string;
   id_estado_usuario: string;
   createdAt?: Date;
@@ -19,29 +20,38 @@ export interface UsuarioBase {
 
 // Definición de PacienteData
 export interface PacienteData {
-  id_obra_social: string;
+  id_obra_social?: string;
 }
 
 // Definición de MedicoData 
 export interface MedicoData {
   matricula_medico: string;
+  especialidades?: string[];
 }
 
 // Tipos para relaciones pobladas (si tu backend las popula)
 export interface Ciudad {
   _id: string;
   nombre_ciudad: string;
-  id_provincia: string | Provincia;
+  provincia?: {
+    _id: string;
+    nombre_provincia: string;
+    pais?: {
+      _id: string;
+      nombre_pais: string;
+    };
+  };
 }
 
-export interface Provincia {
+export interface ObraSocial {
   _id: string;
-  nombre_provincia: string;
+  nombre_obra_social: string;
+  codigo?: string;
 }
 
-export interface Pais {
+export interface Especialidad {
   _id: string;
-  nombre_pais: string;
+  nombre_especialidad: string;
 }
 
 export interface EstadoUsuario {
@@ -50,18 +60,26 @@ export interface EstadoUsuario {
 }
 
 // Tipos extendidos para respuestas con relaciones pobladas
-export interface UsuarioResponse extends UsuarioBase {
-  tipo_usuario?: "paciente" | "medico";
+export interface UsuarioResponse extends Omit<UsuarioBase, 'id_ciudad' | 'id_estado_usuario'> {
+  id_ciudad?: Ciudad; // Objeto poblado
+  id_estado_usuario?: EstadoUsuario; // Objeto poblado
 }
 
-export interface PacienteResponse extends UsuarioResponse, PacienteData {}
-export interface MedicoResponse extends UsuarioResponse, MedicoData {}
+export interface PacienteResponse extends UsuarioResponse, PacienteData {
+  tipo_usuario: "paciente";
+}
 
+export interface MedicoResponse extends UsuarioResponse, MedicoData {
+  tipo_usuario: "medico";
+}
 // Tipo para formulario de registro 
 export type RegisterFormData = Omit<UsuarioBase, "_id" | "createdAt" | "updatedAt"> & {
   clave_usuario: string;
-  especialidades?: string;
-} & (Partial<PacienteData> | Partial<MedicoData>);
+} & {
+  id_obra_social?: string;
+  matricula_medico?: string;
+  especialidades?: string[];
+};
 
 // Tipo para login
 export interface LoginData {

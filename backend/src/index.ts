@@ -5,6 +5,7 @@ import swaggerDocument from "./swagger.json";
 import apiRoutes from "./routes/api.routes";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import medicoRoutes from './routes/MedicoRoutes';
 import './models';
 
 const app = express();
@@ -36,12 +37,22 @@ mongoose.connect(mongoUri)
     process.exit(1); // Sale de la aplicación si falla la conexión
   });
 
+mongoose.connection.on('connected', async () => {
+  const collections = await mongoose.connection.db.listCollections().toArray();
+  console.log('📁 Colecciones disponibles:', collections.map(c => c.name));
+});
+
+mongoose.connection.on('connected', () => {
+  console.log(`✅ Conectado a la base: ${mongoose.connection.db.databaseName}`);
+});
 // Rutas
+
 app.get("/", (req: Request, res: Response) => {
     res.send("¡Hola Mundo con Express + TypeScript + Swagger!");
 });
 
 app.use("/api", apiRoutes);
+app.use(medicoRoutes);
 
 // Swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

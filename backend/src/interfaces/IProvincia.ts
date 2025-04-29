@@ -1,7 +1,6 @@
 import { Document, Types } from "mongoose";
 
 export interface IProvincia extends Document {
-    id_provincia: string;
     nombre_provincia: string;
     id_pais: Types.ObjectId;
 }

@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const TurnoSchema = new Schema({
     id_turno: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true,
         unique: true,
     },
@@ -20,7 +20,7 @@ const TurnoSchema = new Schema({
     },
     id_estado_turno: {
         type: Schema.Types.ObjectId,
-        ref: "EstadoTurno",
+        ref: "estados_turno",
         required: true,
     },
     id_medico: {
@@ -36,6 +36,6 @@ const TurnoSchema = new Schema({
     },
 });
 
-const Turno = model("Turno", TurnoSchema);
+const Turno = model("turnos", TurnoSchema);
 
 export default Turno;

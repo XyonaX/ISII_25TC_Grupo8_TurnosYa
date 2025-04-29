@@ -9,8 +9,8 @@ const PacienteSchema = new Schema({
     },
     id_obra_social: {
         type: Schema.Types.ObjectId,
-        ref: 'ObraSocial',
-        required: true
+        ref: 'obras_sociales',
+        required: false
     }
     // No necesitas id_paciente ya que MongoDB genera _id automáticamente
 }, { timestamps: true });

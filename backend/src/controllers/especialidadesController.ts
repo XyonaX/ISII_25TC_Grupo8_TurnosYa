@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Especialidad from '../models/Especialidad';
-import { IEspecialidad } from '../interfaces/IEspecialidad';
 
 export const obtenerEspecialidades = async (req: Request, res: Response) => {
   try {
@@ -9,7 +8,6 @@ export const obtenerEspecialidades = async (req: Request, res: Response) => {
       success: true,
       data: especialidades.map(esp => ({
         _id: esp._id,
-        id_especialidad: esp.id_especialidad,
         nombre_especialidad: esp.nombre_especialidad
       }))
     });
