@@ -35,10 +35,17 @@ const BuscarMedico = () => {
     const fetchMedicos = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:3000/medicos');
-        setMedicos(response.data);
+        setLoadingOptions(true);
+        
+        // Usar dataService.getMedicos() en lugar de axios.get directo
+        const medicosResponse = await dataService.getMedicos();
+        setMedicos(medicosResponse); // dataService.getMedicos ya retorna el array de Medicos
+
+        // Cargar especialidades usando dataService
         const especialidadesResponse = await dataService.getEspecialidades();
         setEspecialidadesOptions(especialidadesResponse);
+
+        // Cargar obras sociales usando dataService
         const obrasSocialesResponse = await dataService.getObrasSociales();
         setObrasSocialesOptions(obrasSocialesResponse);
 
@@ -59,10 +66,11 @@ const BuscarMedico = () => {
     const coincideNombre = medico.medico.toLowerCase().includes(nombreFiltro.toLowerCase());
     const coincideEspecialidad = especialidadFiltro === 'Especialidades' || medico.especialidad === especialidadFiltro;
     const coincideObraSocial = obraSocialFiltro === 'Obras Sociales' || medico.obraSocial === obraSocialFiltro;
-    
+
     return coincideNombre && coincideEspecialidad && coincideObraSocial;
   });
 
+  // Mostrar spinner si se está cargando médicos O las opciones de los dropdowns
   if (loading || loadingOptions) {
     return (
       <div className="container text-center mt-5">
@@ -102,7 +110,7 @@ const BuscarMedico = () => {
                     placeholder="Buscar por nombre"
                     value={nombreFiltro}
                     onChange={(e) => setNombreFiltro(e.target.value)}
-                    style={{ 
+                    style={{
                       borderRadius: '8px',
                       border: '2px solid #ae5bbf',
                       height: '40px',
@@ -115,13 +123,13 @@ const BuscarMedico = () => {
               {/* Filtros adicionales */}
               <div className='container row align-items-center'>
                 <div className="col-auto">
-                  {/* Especialidades - Ahora dinámico */}
+                  {/* Especialidades - Ahora cargadas desde backend */}
                   <div className="mb-1">
-                    <select 
+                    <select
                       className="form-select form-select-sm input-formulario"
                       value={especialidadFiltro}
                       onChange={(e) => setEspecialidadFiltro(e.target.value)}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         border: '2px solid #ae5bbf',
                         height: '40px',
@@ -137,13 +145,13 @@ const BuscarMedico = () => {
                     </select>
                   </div>
 
-                  {/* Obras Sociales - Ahora dinámico */}
+                  {/* Obras Sociales - Ahora cargadas desde backend */}
                   <div className="mb-1">
-                    <select 
+                    <select
                       className="form-select form-select-sm input-formulario"
                       value={obraSocialFiltro}
                       onChange={(e) => setObraSocialFiltro(e.target.value)}
-                      style={{ 
+                      style={{
                         borderRadius: '8px',
                         border: '2px solid #ae5bbf',
                         height: '40px',
@@ -151,7 +159,7 @@ const BuscarMedico = () => {
                       }}
                     >
                        {/* Opción por defecto */}
-                       <option value="Obras Sociales">Obras Sociales</option>
+                      <option value="Obras Sociales">Obras Sociales</option>
                       {/* Opciones cargadas desde el backend */}
                       {obrasSocialesOptions.map(os => (
                         <option key={os._id} value={os.nombre_obra_social}>{os.nombre_obra_social}</option>
@@ -180,7 +188,7 @@ const BuscarMedico = () => {
                             <td>{medico.especialidad}</td>
                             <td>{medico.obraSocial}</td>
                             <td>
-                              <span 
+                              <span
                                 className={`badge ${medico.estado === 'disponible' ? 'bg-primary' : 'bg-danger'}`}
                                 style={{ padding: '6px 10px', borderRadius: '12px', fontSize: '0.85rem' }}
                               >
@@ -206,7 +214,7 @@ const BuscarMedico = () => {
               </div>
 
               {/* Componente de paginación */}
-              <PaginationUI 
+              <PaginationUI
                 currentPage={1}
                 totalPages={Math.ceil(medicosFiltrados.length / 10)}
                 disabled={false}
