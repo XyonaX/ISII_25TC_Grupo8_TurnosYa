@@ -43,10 +43,7 @@ const userUpdateSchema = Joi.object({
     }),
     id_estado_usuario: Joi.string().optional().messages({
         "string.empty": "El estado es requerido",
-    }),
-    tipo_usuario: Joi.string().valid("paciente", "medico").optional().messages({
-        "any.only": "El tipo de usuario no es válido",
-    }),
+    })
 });
 
 export default userUpdateSchema;
