@@ -1,18 +1,12 @@
 import { Schema, model } from "mongoose";
 
 const PaisSchema = new Schema({
-    id_pais: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        unique: true,
-    },
     nombre_pais: {
-    type: String,
-    required: true,
-    unique: true
-  }
-});
+        type: String,
+        required: true,
+    }
+} , { collection: 'paises' });
 
-const Pais = model("paises", PaisSchema);
+const Pais = model("Pais", PaisSchema);
 
 export default Pais;

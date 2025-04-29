@@ -16,7 +16,7 @@ const TurnoSchema = new Schema({
     },
     hora_turno: {
         type: String,
-        required: true
+        required: true,
     },
     id_estado_turno: {
         type: Schema.Types.ObjectId,
@@ -30,10 +30,11 @@ const TurnoSchema = new Schema({
     },
     id_paciente: {
         type: Schema.Types.ObjectId,
+        default: null,
         ref: "Paciente",
-        required: true,
-    }
-})
+        required: false,
+    },
+});
 
 const Turno = model("turnos", TurnoSchema);
 

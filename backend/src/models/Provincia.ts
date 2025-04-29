@@ -1,11 +1,6 @@
 import { Schema, model } from "mongoose";
 
 const ProvinciaSchema = new Schema({
-    id_provincia: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        unique: true,
-    },
     nombre_provincia: {
         type: String,
         required: true,
@@ -15,7 +10,7 @@ const ProvinciaSchema = new Schema({
         ref: "Pais",
         required: true,
     }
-})
+},{ collection: 'provincias' })
 
 const Provincia = model("Provincia", ProvinciaSchema);
 

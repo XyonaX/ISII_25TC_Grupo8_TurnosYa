@@ -1,13 +1,14 @@
 import { Schema, model } from 'mongoose';
 
 const estadoUsuarioSchema = new Schema({
-    nombre_estado_usuario: {  // Nota: Corregí a "estado" (singular) para coincidir con tu ejemplo
+    nombre_estado_usuario: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        trim: true
     }
-});
+}, { timestamps: true });
 
-const EstadoUsuario = model('estados_usuario', estadoUsuarioSchema, 'estados_usuario');
+const EstadoUsuario = model('EstadoUsuario', estadoUsuarioSchema, 'estados_usuario');
 
 export default EstadoUsuario;

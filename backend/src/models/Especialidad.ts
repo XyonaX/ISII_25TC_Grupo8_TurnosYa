@@ -11,4 +11,3 @@ const EspecialidadSchema = new Schema({
 const Especialidad = model("Especialidad", EspecialidadSchema);
 
 export default Especialidad;
-

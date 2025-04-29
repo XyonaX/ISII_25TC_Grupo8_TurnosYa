@@ -6,6 +6,7 @@ import apiRoutes from "./routes/api.routes";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import medicoRoutes from './routes/MedicoRoutes';
+import './models';
 
 const app = express();
 const PORT = process.env.PORT || 3000;

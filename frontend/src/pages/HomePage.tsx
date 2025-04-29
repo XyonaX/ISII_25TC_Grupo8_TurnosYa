@@ -8,19 +8,19 @@ import { Link } from 'react-router-dom';
 const HomePage = () => {
 
   return (
-    <div>
+    <div className="container-fluid" style={{ padding: "0" }}>
     <div
       className="position-relative"
       style={{
         backgroundImage: 'url("/homepage-portada2.png")',
         backgroundSize: "cover",
         backgroundPosition: "center",
-        height: "80vh",
+        height: "90vh",
         color: "white",
       }}>
       <div
         className="position-absolute top-50 start-0 translate-middle-y text-start"
-        style={{ textShadow: "0 2px 4px rgba(165, 192, 161, 0.7)", paddingLeft: "2rem",}}>
+        style={{ textShadow: "0 2px 4px rgba(165, 192, 161, 0.7)", paddingLeft: "5rem",}}>
         <h1
           style={{ fontFamily: "Verdana, sans-serif", marginBottom: "1rem",}}
           className="display-4 fw-bold"
@@ -52,7 +52,7 @@ const HomePage = () => {
           <div className="col-lg-3 col-md-6">
             <div className="card h-100">
               <div className="card-body text-center">
-                <img src="assets/img/staff-finanzas.JPG" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
+                <img src="/img-card1.png" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
                 <h4 className="card-home-title">Reservas y Turnos</h4>
                 <div className="d-flex flex-row justify-content-center">
                   <div className="card-home-text p-3">
@@ -69,7 +69,7 @@ const HomePage = () => {
             <div className="col-lg-3 col-md-6">
             <div className="card h-100">
               <div className="card-body text-center">
-                <img src="assets/img/staff-finanzas.JPG" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
+                <img src="/img-card2.png" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
                 <h4 className="card-home-title">Experiencia personalizada</h4>
                 <div className="d-flex flex-row justify-content-center">
                   <div className="card-home-text p-3">
@@ -86,7 +86,7 @@ const HomePage = () => {
             <div className="col-lg-3 col-md-6">
             <div className="card h-100">
               <div className="card-body text-center">
-                <img src="assets/img/staff-finanzas.JPG" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
+                <img src="/img-card3.png" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
                 <h4 className="card-home-title">Opciones de Pago</h4>
                 <div className="d-flex flex-row justify-content-center">
                   <div className="card-home-text p-3">
@@ -99,9 +99,14 @@ const HomePage = () => {
             </div>
           </div>
 
-
         </div>
       </div>
+    </section>
+
+    <section className="franja-violeta">
+            <div className="container text-center">
+                <p className="franja-texto"> &gt; Comenzá ahora y disfrutá de todos los beneficios &lt;</p>
+            </div>
     </section>
 
 

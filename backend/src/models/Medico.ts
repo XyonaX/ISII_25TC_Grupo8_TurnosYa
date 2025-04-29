@@ -13,7 +13,7 @@ const MedicoSchema = new Schema({
         type: String,
         required: true,
     },
-})
+});
 
 const Medico = model('Medico', MedicoSchema, 'medicos');
 
