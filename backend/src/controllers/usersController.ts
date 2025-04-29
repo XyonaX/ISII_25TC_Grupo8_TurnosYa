@@ -79,8 +79,8 @@ const createUserController = async (userData: IUsuario) => {
         const newUser = new Usuario({
             ...userData,
             clave_usuario: hashedPassword,
-            fecha_nac_usuario: new Date(userData.fecha_nac_usuario), // Asegurar que es Date
-            id_estado_usuario: estadoActivo._id // ✅ Setear el estado "Activo"
+            fecha_nac_usuario: new Date(userData.fecha_nac_usuario), 
+            id_estado_usuario: estadoActivo._id 
         });
 
         await newUser.save();
