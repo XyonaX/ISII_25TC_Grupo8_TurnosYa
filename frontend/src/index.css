@@ -40,35 +40,35 @@ body {
 
   .custom-nav-link{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
-    font-size: 16px;
+    font-size: 15px;
     color: rgb(236, 13, 13);
     text-transform: uppercase;
     transition: color 0.3s ease;
   }
 
   .custom-nav-link:hover {
-    color: violet !important;
+    color: #ae5bbf !important;
   }
 
   .home-img {
-    margin: 0; /* Asegúrate de que no haya márgenes */
-    padding: 0; /* Elimina cualquier padding */
-    width: 100%; /* Ocupar todo el ancho de la ventana del navegador */
-    overflow: hidden; /* Evita que elementos fuera del área visible interfieran */
+    margin: 0; 
+    padding: 0; 
+    width: 100%; 
+    overflow: hidden;
     margin-top: 0 !important;
   }
 
   .homepage-portada {
-    width: 100%; /* Ocupar el ancho completo del viewport */
-    height: auto; /* Ajustar la altura proporcionalmente */
-    max-height: 900px; /* Limita la altura máxima como en el carrusel */
-    object-fit: contain; /* Ajusta proporcionalmente */
+    width: 100%;
+    height: auto;
+    max-height: 900px; 
+    object-fit: contain; 
   }
 
   .custom-button {
-    background-color: #1fb979; /* Color verde personalizado */
-    color: white; /* Color del texto */
-    border: none; /* Sin borde */
+    background-color: #1fb979;
+    color: white; 
+    border: none; 
     padding: 10px 20px;
     border-radius: 5px; /* Bordes redondeados */
     font-size: 1.25rem;
@@ -77,13 +77,13 @@ body {
   }
   
   .custom-button:hover {
-    background-color: #19d184;; /* Color cuando pasas el mouse */
+    background-color: #19d184;; /* Color cuando pasas el cursor */
   }
 
 /**** HOMEPAGE ***/
 
 .servicios-section{
-  height: 550px; 
+  height: 650px; 
   width: 100%; 
   margin: 0; 
   padding: 0; 
@@ -92,7 +92,8 @@ body {
 
 .servicios-title{
   color:#19d184;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-weight: bold;
 }
 
 .servicios-descripcion{
@@ -139,6 +140,20 @@ body {
 
 #servicios-homepage .card:hover .card-home-title, #servicios-homepage .card:hover .card-home-text {
   color: #fffcf7;
+}
+
+.franja-violeta {
+  background-color: #ae5bbf; 
+  padding: 40px 0; 
+  color: white; 
+}
+
+.franja-texto {
+  font-size: 1.5rem; 
+  font-weight: bold;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  margin: 0; 
+  letter-spacing: 1px; 
 }
 
 
