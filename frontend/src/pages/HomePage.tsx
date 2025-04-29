@@ -8,19 +8,19 @@ import { Link } from 'react-router-dom';
 const HomePage = () => {
 
   return (
-    <div>
+    <div className="container-fluid" style={{ padding: "0" }}>
     <div
       className="position-relative"
       style={{
         backgroundImage: 'url("/homepage-portada2.png")',
         backgroundSize: "cover",
         backgroundPosition: "center",
-        height: "80vh",
+        height: "90vh",
         color: "white",
       }}>
       <div
         className="position-absolute top-50 start-0 translate-middle-y text-start"
-        style={{ textShadow: "0 2px 4px rgba(165, 192, 161, 0.7)", paddingLeft: "2rem",}}>
+        style={{ textShadow: "0 2px 4px rgba(165, 192, 161, 0.7)", paddingLeft: "5rem",}}>
         <h1
           style={{ fontFamily: "Verdana, sans-serif", marginBottom: "1rem",}}
           className="display-4 fw-bold"
