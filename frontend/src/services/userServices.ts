@@ -7,7 +7,10 @@ import type {
   MedicoResponse,
   Ciudad,
   ObraSocial,
-  Especialidad
+  Especialidad,
+  Medico // Importar Medico type
+  //Provincia, // Importado para usos futuros
+  //Pais
 } from '../types/userTypes';
 
 
@@ -178,6 +181,19 @@ export const dataService = {
     }
   },
 
+  // Obtener lista de médicos para el listado
+  getMedicos: async (): Promise<Medico[]> => {
+    try {
+      // Usar la instancia 'api' que tiene la URL base '/api'
+      // La ruta en el backend es /api/medico/medicos
+      const response = await api.get('/medico/medicos');
+      // Basado en medicoControllers.ts, devuelve el array directamente (res.json(medicos))
+      return response.data; // <-- Aquí se completa, retornando response.data
+    } catch (error) {
+      console.error('Error obteniendo médicos:', error);
+      throw error;
+    }
+  },
   // Obtener países
   getPaises: async (): Promise<Pais[]> => {
     try {
