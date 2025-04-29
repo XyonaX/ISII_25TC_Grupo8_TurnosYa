@@ -7,11 +7,16 @@ body {
 
 
 /*Navbar*/
-/*.navbar-custom{
-    padding-top: 60px !important;
-    padding-bottom: 60px !important;
-    height: 125px;
-  }*/
+
+  @media (max-width: 768px) {
+    .navbar-custom {
+      height: auto;
+      padding: 1rem;
+    }
+    .navbar-collapse {
+      background-color: #f9fffb; /* Agrega un fondo para visibilidad */
+    }
+  }
 
 .navbar-logo{
     height: 70px;
@@ -40,8 +45,8 @@ body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
     font-size: 15px;
     color: rgb(236, 13, 13);
-    text-transform: uppercase;
-    transition: color 0.3s ease;
+    /*text-transform: uppercase;
+    transition: color 0.3s ease;*/
   }
 
   .custom-nav-link:hover {
@@ -52,15 +57,12 @@ body {
     margin: 0; 
     padding: 0; 
     width: 100%; 
-    overflow: hidden;
-    margin-top: 0 !important;
+    /*overflow: hidden;*/
   }
 
   .homepage-portada {
-    width: 100%;
-    height: auto;
-    max-height: 900px; 
-    object-fit: contain; 
+    /*max-height: 900px; */
+    min-height: auto;
   }
 
   .custom-button {
@@ -81,11 +83,8 @@ body {
 /**** HOMEPAGE ***/
 
 .servicios-section{
-  height: 650px; 
-  width: 100%; 
-  margin: 0; 
-  padding: 0; 
-  display: block;
+  /*height: 650px; */
+  min-height: auto;
 }
 
 .servicios-title{

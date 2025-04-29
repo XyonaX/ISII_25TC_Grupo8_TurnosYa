@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 export default function HeaderNavbar() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-custom " style={{ backgroundColor: "#f9fffb", height: "70px"}}>
+        <nav className="navbar navbar-expand-lg navbar-custom " style={{ backgroundColor: "#f9fffb"}}>
         <div className="container-fluid">
             <Link className="navbar-brand d-flex align-items-center" to="/">
                 <img
