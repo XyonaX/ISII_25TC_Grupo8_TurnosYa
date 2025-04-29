@@ -18,44 +18,19 @@ const Registrarse = () => {
     calle_usuario: '',
     num_usuario: '',
     cod_postal: '',
-    id_ciudad: '',
-    id_estado_usuario: '65d8a1b2e1a8f6c7f0e4b5c9', // Asumimos que '1' es el estado activo por defecto
-    tipo_usuario: 'paciente',
-    ...({ id_obra_social: '' } as { id_obra_social: string }),
-    ...({ matricula_medico: '' } as { matricula_medico: string }),
-    ...({ especialidades: [] } as { especialidades: string[] })
-});
+    id_ciudad: '5f8d0d55b54764421b7156b6',
+    id_estado_usuario: '5f8d0d55b54764421b7156b7', // Asumimos que '1' es el estado activo por defecto
+    tipo_usuario: 'medico',
+    
+  });
 
-  // Datos dinámicos
-  const [ciudades, setCiudades] = useState<Ciudad[]>([]);
-  const [obrasSociales, setObrasSociales] = useState<ObraSocial[]>([]);
-  const [especialidadesMedicas, setEspecialidadesMedicas] = useState<Especialidad[]>([]);
-  const [loadingData, setLoadingData] = useState(true);
   const [errors, setErrors] = useState<RegisterErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [ciudadesRes, obrasSocialesRes, especialidadesRes] = await Promise.all([
-          dataService.getCiudades(),
-          dataService.getObrasSociales(),
-          dataService.getEspecialidades()
-        ]);
-        
-        setCiudades(ciudadesRes);
-        setObrasSociales(obrasSocialesRes);
-        setEspecialidadesMedicas(especialidadesRes);
-      } catch (error) {
-        console.error('Error cargando datos:', error);
-        setErrors({ general: 'Error cargando datos necesarios. Intente recargar la página.' });
-      } finally {
-        setLoadingData(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  // Datos para los selects
+  const especialidades = ['Cardiología', 'Dermatología', 'Pediatría', 'Oftalmología', 'Neurología']; 
+  const obrasSociales = ['OSDE', 'Swiss Medical', 'Galeno', 'Medicus'];
+  const ciudades = ['Buenos Aires', 'Córdoba', 'Rosario', 'Mendoza'];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -73,10 +48,10 @@ const Registrarse = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setErrors({});
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setErrors({});
 
     try {
       const userToSend = {
@@ -121,22 +96,22 @@ const Registrarse = () => {
     );
   }
 
-  return (
-    <div className="container container-formulario p-4">
-      <div className="row justify-content-center">
-        <div className="col-md-8 col-lg-6">
-          <div className="card shadow-lg border-0 card-formulario">
-            <div className="card-body p-4">
-              <h2 className="card-title text-center mb-4 card-titulo">
-                <span className="text-iniciar">Crear</span> <span className="text-sesion">Cuenta</span>
-              </h2>
+    return (
+        <div className='container container-formulario p-4'>
+            <div className='row justify-content-center'>
+                <div className='col-md-8 col-lg-6'>
+                    <div className='card shadow-lg border-0 card-formulario'>
+                        <div className='card-body p-4'>
+                            <h2 className='card-title text-center mb-4 card-titulo'>
+                                <span className='text-iniciar'>Crear</span>{" "}
+                                <span className='text-sesion'>Cuenta</span>
+                            </h2>
 
-              {/* Mostrar error general */}
-              {errors.general && (
-                <div className="alert alert-danger">
-                  {errors.general}
-                </div>
-              )}
+                            {errors.general && (
+                                <div className='alert alert-danger'>
+                                    {errors.general}
+                                </div>
+                            )}
 
               {/* Toggle Paciente / Médico */}
               <div className="d-flex justify-content-center mb-2">
@@ -427,43 +402,31 @@ const Registrarse = () => {
               )}
 
 
-                {/* Botón REGISTRARSE */}
-                <div className="d-grid gap-2 mb-3">
-                  <button 
-                    type="submit" 
-                    className="boton-ingresar"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <span className="ms-2">Registrando...</span>
-                      </>
-                    ) : 'REGISTRARSE'}
-                  </button>
+                                <div className='d-grid gap-2 mb-3'>
+                                    <button
+                                        type='submit'
+                                        className='btn btn-primary'
+                                        disabled={isSubmitting}
+                                    >
+                                        {isSubmitting
+                                            ? "Registrando..."
+                                            : "REGISTRARSE"}
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div className='mt-4 text-center'>
+                                <p>
+                                    ¿Ya tienes cuenta?{" "}
+                                    <Link to='/login'>Inicia sesión aquí</Link>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </form>
-
-              {/* Separador */}
-              <div className="separador-formulario">
-                <div className="linea-separador"></div>
-                <span className="texto-separador">o</span>
-                <div className="linea-separador"></div>
-              </div>
-
-              {/* Link a login */}
-              <div className="mt-4 text-center">
-                <p className="mt-3 mb-0 texto-registro">
-                  ¿Ya tienes cuenta?{' '}
-                  <Link to="/login" className="enlace-registro">Inicia sesión aquí</Link>
-                </p>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Registrarse;
