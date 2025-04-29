@@ -16,8 +16,16 @@ const getEstadoTurnoId = async (id_estado_turno: number) => {
 };
 
 //Crear turno (Médico)
-const createTurnoController = async (idMedico: string, turnoData: ITurno) => {
+const createTurnoController = async (
+    idMedico: string,
+    role: string,
+    turnoData: ITurno
+) => {
     try {
+        if (role !== "medico") {
+            throw new Error("Solo los médicos pueden crear turnos");
+        }
+
         const disponibleId = await getEstadoTurnoId(1); // Estado "disponible"
 
         const nuevoTurno = new Turno({
@@ -56,7 +64,7 @@ const getAllTurnosController = async () => {
     }
 };
 
-// Obtener turno por ID (Médico)
+// Obtener turno por ID (Médico o Paciente)
 const getTurnoByIdController = async (id: string) => {
     try {
         const turno = await Turno.findById(id)
@@ -76,9 +84,14 @@ const getTurnoByIdController = async (id: string) => {
 // Actualizar turno (Médico)
 const updateTurnoController = async (
     idMedico: string,
+    role: string,
     idTurno: string,
     updateData: Partial<ITurno>
 ) => {
+    if (role !== "medico") {
+        throw new Error("Solo los médicos pueden actualizar turnos");
+    }
+
     // Validamos los IDs primero
     if (!mongoose.Types.ObjectId.isValid(idMedico)) {
         throw new Error("ID de médico inválido");
@@ -114,9 +127,16 @@ const updateTurnoController = async (
 };
 
 // Eliminar turno (Médico)
-const deleteTurnoController = async (idMedico: string, idTurno: string) => {
+const deleteTurnoController = async (
+    idMedico: string,
+    role: string,
+    idTurno: string
+) => {
     try {
         // Verificar que el turno pertenece al médico
+        if (role !== "medico") {
+            throw new Error("Solo los médicos pueden eliminar turnos");
+        }
         const turno = await Turno.findOne({
             _id: idTurno,
             id_medico: new mongoose.Types.ObjectId(idMedico),
@@ -141,10 +161,111 @@ const deleteTurnoController = async (idMedico: string, idTurno: string) => {
     }
 };
 
+// Agendar turno (Paciente)
+const agendarTurnoController = async (
+    idPaciente: string,
+    role: string,
+    idTurno: string,
+    motivo?: string
+) => {
+
+    if (!mongoose.Types.ObjectId.isValid(idTurno)) {
+        throw new Error("ID de turno inválido");
+    }
+    if (role !== "paciente") {
+        throw new Error("Solo los pacientes pueden agendar turnos | controlador");
+    }
+
+    const turno = await Turno.findById(idTurno);
+
+    if (!turno) throw new Error("Turno no encontrado");
+    if (
+        turno.id_estado_turno.toString() !==
+        (await getEstadoTurnoId(1)).toString()
+    ) {
+        throw new Error("El turno no está disponible");
+    }
+
+    turno.id_paciente = new mongoose.Types.ObjectId(idPaciente);
+    turno.motivo_turno = motivo || null;
+    turno.id_estado_turno = await getEstadoTurnoId(2); // Estado reservado
+
+    await turno.save();
+    return turno;
+};
+
+//Editar motivo de turno (Paciente)
+const editarMotivoTurnoController = async (
+    idPaciente: string,
+    role: string,
+    idTurno: string,
+    nuevoMotivo: string
+) => {
+    if (role !== "paciente") {
+        throw new Error("Solo los pacientes pueden editar el motivo del turno");
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(idTurno)) {
+        throw new Error("ID de turno inválido");
+    }
+
+    const turno = await Turno.findById(idTurno);
+
+    if (!turno) throw new Error("Turno no encontrado");
+    if (!turno.id_paciente || turno.id_paciente.toString() !== idPaciente) {
+        throw new Error("No autorizado para modificar este turno");
+    }
+
+    turno.motivo_turno = nuevoMotivo;
+    await turno.save();
+    return turno;
+};
+
+//Cancelar turno (Paciente)
+const cancelarTurnoPacienteController = async (
+    idPaciente: string,
+    role: string,
+    idTurno: string
+) => {
+    if(role !== "paciente"){
+        throw new Error("Solo los pacientes pueden cancelar turnos");
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(idTurno)) {
+        throw new Error("ID de turno inválido");
+    }
+
+    const turno = await Turno.findById(idTurno);
+
+    if (!turno) throw new Error("Turno no encontrado");
+    if (!turno.id_paciente || turno.id_paciente.toString() !== idPaciente) {
+        throw new Error("No autorizado para cancelar este turno");
+    }
+
+    const ahora = new Date();
+    const fechaTurno = new Date(turno.fecha_turno);
+    const [hora, minuto] = turno.hora_turno.split(":").map(Number);
+    fechaTurno.setHours(hora, minuto, 0, 0);
+
+    if (fechaTurno < ahora) {
+        throw new Error("No se puede cancelar un turno vencido");
+    }
+
+    turno.id_paciente = null;
+    turno.motivo_turno = null;
+    turno.id_estado_turno = await getEstadoTurnoId(1); // Vuelve a "disponible"
+
+    await turno.save();
+    return { message: "Turno cancelado exitosamente" };
+};
+
 export {
     createTurnoController,
     getAllTurnosController,
     getTurnoByIdController,
     updateTurnoController,
     deleteTurnoController,
+    agendarTurnoController,
+    editarMotivoTurnoController,
+    cancelarTurnoPacienteController,
 };
