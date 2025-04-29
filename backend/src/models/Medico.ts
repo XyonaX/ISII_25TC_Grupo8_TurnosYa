@@ -1,14 +1,11 @@
+import { required } from 'joi';
 import {Schema, model} from 'mongoose';
+import { ref } from 'process';
 
 const MedicoSchema = new Schema({
-    id_usuaro: {
+    id_usuario: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
-        required: true,
-        unique: true,
-    },
-    id_medico: {
-        type: String,
         required: true,
         unique: true,
     },
@@ -18,6 +15,6 @@ const MedicoSchema = new Schema({
     },
 })
 
-const Medico = model('Medico', MedicoSchema);
+const Medico = model('Medico', MedicoSchema, 'medicos');
 
 export default Medico;

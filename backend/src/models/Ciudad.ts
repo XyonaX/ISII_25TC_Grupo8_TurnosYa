@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const CiudadSchema = new Schema({
     id_ciudad: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true,
         unique: true,
     },

@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const ProvinciaSchema = new Schema({
     id_provincia: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true,
         unique: true,
     },

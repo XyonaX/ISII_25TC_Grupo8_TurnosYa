@@ -2,7 +2,7 @@ import {Schema, model} from 'mongoose';
 
 const estadoTurnoSchema = new Schema({
     id_estado_turno: {
-        type: Number,
+        type: Schema.Types.ObjectId,
         required: true,
         unique: true,
     },
@@ -13,6 +13,6 @@ const estadoTurnoSchema = new Schema({
 })
 
 
-const EstadoTurno = model('EstadoTurno', estadoTurnoSchema, 'estados_turno');
+const EstadoTurno = model('estados_turno', estadoTurnoSchema, 'estados_turno');
 
 export default EstadoTurno;
