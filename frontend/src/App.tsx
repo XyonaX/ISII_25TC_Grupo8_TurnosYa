@@ -17,7 +17,7 @@ function App() {
   return (
     <div className="app-container">
       <HeaderNavbar />
-      <main className="container mt-4">
+      <main>
         <Routes>
           <Route path='/' element={<HomePage/>} />          
           <Route path='/login' element={<IniciarSesion/>} />

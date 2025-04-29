@@ -8,14 +8,14 @@ import { Link } from 'react-router-dom';
 const HomePage = () => {
 
   return (
-    <div>
+    <div className="container-fluid" style={{ padding: "0" }}>
     <div
       className="position-relative"
       style={{
         backgroundImage: 'url("/homepage-portada2.png")',
         backgroundSize: "cover",
         backgroundPosition: "center",
-        height: "80vh",
+        height: "90vh",
         color: "white",
       }}>
       <div
