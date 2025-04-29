@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../index.css'; // Importamos el archivo CSS
+import '../index.css'; 
 
 
 import { Link } from 'react-router-dom';
@@ -39,7 +39,7 @@ const HomePage = () => {
       <section id="servicios-homepage" className="servicios-section bg-white">
       <div className="container py-5 text-center">
         {/* Encabezado */}
-        <div className="row mb-5">
+        <div className="row mb-5">   
           <div className="col">
             <h1 className="servicios-title">Cuidando de tu salud</h1>
             <p className="servicios-descripcion">Conoce nuestros servicios</p>
@@ -47,7 +47,7 @@ const HomePage = () => {
         </div>
 
         {/* Servicios */}
-        <div className="row g-3 justify-content-center">
+        <div className="row g-4 justify-content-center mb-4">
           {/* Card 1 */}
           <div className="col-lg-3 col-md-6">
             <div className="card h-100">
