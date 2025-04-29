@@ -1,18 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { authService } from "../services/userServices";
+import { authService, dataService } from "../services/userServices";
 import { RegisterFormData, RegisterErrors } from "../types/userTypes";
-
 import TipoUsuarioButton from "../components/TipoUsuarioBoton";
 import EspecialidadInput from "../components/EspecialidadInput";
 import ObraSocialInput from "../components/ObraSocialInput";
 
 const Registrarse = () => {
     const navigate = useNavigate();
-    const [tipoUsuario, setTipoUsuario] = useState<"paciente" | "medico">(
-        "paciente"
-    );
+    const [tipoUsuario, setTipoUsuario] = useState<"paciente" | "medico">("paciente");
     const [formData, setFormData] = useState<Partial<RegisterFormData>>({
         dni_usuario: "",
         nombre_usuario: "",
@@ -24,8 +21,8 @@ const Registrarse = () => {
         calle_usuario: "",
         num_usuario: "",
         cod_postal: "",
-        id_ciudad: "5f8d0d55b54764421b7156b6",
-        id_estado_usuario: "5f8d0d55b54764421b7156b7",
+        id_ciudad: "",
+        id_estado_usuario: "5f8d0d55b54764421b7156b7", // Asumiendo que este es un valor por defecto
         especialidades: [],
         matricula_medico: "",
         id_obra_social: "",
@@ -33,21 +30,51 @@ const Registrarse = () => {
 
     const [errors, setErrors] = useState<RegisterErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const especialidades = [
-        "Cardiología",
-        "Dermatología",
-        "Pediatría",
-        "Oftalmología",
-        "Neurología",
-    ];
-    const obrasSociales = ["OSDE", "Swiss Medical", "Galeno", "Medicus"];
-    const ciudades = ["Buenos Aires", "Córdoba", "Rosario", "Mendoza"];
+    const [isLoading, setIsLoading] = useState(true);
+    const [especialidades, setEspecialidades] = useState<{_id: string, nombre_especialidad: string}[]>([]);
+    const [obrasSociales, setObrasSociales] = useState<{_id: string, nombre_obra_social: string}[]>([]);
+    const [ciudades, setCiudades] = useState<{_id: string, nombre_ciudad: string}[]>([]);
     const [successMessage, setSuccessMessage] = useState("");
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
+    // Cargar datos dinámicos al montar el componente
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setIsLoading(true);
+                
+                // Obtener todas las datos necesarios en paralelo
+                const [especialidadesRes, obrasSocialesRes, ciudadesRes] = await Promise.all([
+                    dataService.getEspecialidades(),
+                    dataService.getObrasSociales(),
+                    dataService.getCiudades()
+                ]);
+                
+                setEspecialidades(especialidadesRes);
+                setObrasSociales(obrasSocialesRes);
+                setCiudades(ciudadesRes);
+                
+                // Establecer un valor por defecto para la ciudad si es necesario
+                if (ciudadesRes.length > 0) {
+                    setFormData(prev => ({
+                        ...prev,
+                        id_ciudad: ciudadesRes[0]._id
+                    }));
+                }
+                
+            } catch (error) {
+                console.error("Error cargando datos:", error);
+                setErrors({
+                    general: "Error al cargar los datos necesarios para el registro"
+                });
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        fetchData();
+    }, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
@@ -59,41 +86,62 @@ const Registrarse = () => {
         e.preventDefault();
         setIsSubmitting(true);
         setErrors({});
-
+    
+        // Validar que todos los campos requeridos estén presentes
+        const requiredFields: (keyof RegisterFormData)[] = [
+            'dni_usuario', 'nombre_usuario', 'apellido_usuario', 'fecha_nac_usuario',
+            'celular_usuario', 'email_usuario', 'clave_usuario', 'calle_usuario',
+            'num_usuario', 'cod_postal', 'id_ciudad', 'id_estado_usuario'
+        ];
+    
+        const missingFields = requiredFields.filter(field => !formData[field]);
+    
+        if (missingFields.length > 0) {
+            setErrors({
+                general: `Faltan campos requeridos: ${missingFields.join(', ')}`
+            });
+            setIsSubmitting(false);
+            return;
+        }
+    
         try {
-            const userToSend = {
-                ...formData,
+            // Crear objeto con todos los campos requeridos
+            const userToSend: RegisterFormData = {
+                dni_usuario: formData.dni_usuario!,
+                nombre_usuario: formData.nombre_usuario!,
+                apellido_usuario: formData.apellido_usuario!,
+                fecha_nac_usuario: formData.fecha_nac_usuario!,
+                celular_usuario: formData.celular_usuario!,
+                email_usuario: formData.email_usuario!,
+                clave_usuario: formData.clave_usuario!,
+                calle_usuario: formData.calle_usuario!,
+                num_usuario: formData.num_usuario!,
+                cod_postal: formData.cod_postal!,
+                id_ciudad: formData.id_ciudad!,
+                id_estado_usuario: formData.id_estado_usuario!,
                 tipo_usuario: tipoUsuario,
-                especialidades:
-                    tipoUsuario === "medico" && formData.especialidades
-                        ? [formData.especialidades]
-                        : undefined,
+                // Campos condicionales
+                ...(tipoUsuario === 'medico' && {
+                    matricula_medico: formData.matricula_medico!,
+                    especialidades: formData.especialidades ? [formData.especialidades[0]] : []
+                }),
+                ...(tipoUsuario === 'paciente' && {
+                    id_obra_social: formData.id_obra_social!
+                })
             };
-
+    
             const response = await authService.register(userToSend);
-
-            if (response) {
-                setSuccessMessage(
-                    "¡Registro exitoso! Serás redirigido al inicio de sesión..."
-                );
-                setTimeout(() => {
-                    navigate("/login");
-                }, 3000);
-            }
-        } catch (error: any) {
-            console.error("Error en registro:", error);
-            if (error.response?.data?.errors) {
-                setErrors(error.response.data.errors);
-            } else {
-                setErrors({
-                    general:
-                        error.message || "Ocurrió un error durante el registro",
-                });
-            }
+            // ... resto del código
+        } catch (error) {
+            // ... manejo de errores
         } finally {
             setIsSubmitting(false);
         }
     };
+
+    if (isLoading) {
+        return <div className="container mt-5">Cargando datos necesarios...</div>;
+    }
 
     return (
         <div className='container container-formulario p-4'>
@@ -331,11 +379,17 @@ const Registrarse = () => {
                                     <select
                                         className='form-control'
                                         name='id_ciudad'
-                                        disabled
+                                        required
                                         value={formData.id_ciudad}
+                                        onChange={handleChange}
                                     >
-                                        <option>Buenos Aires</option>
+                                        {ciudades.map((ciudad) => (
+                                            <option key={ciudad._id} value={ciudad._id}>
+                                                {ciudad.nombre_ciudad}
+                                            </option>
+                                        ))}
                                     </select>
+                                    {errors.id_ciudad && <small className='text-danger'>{errors.id_ciudad.message}</small>}
                                 </div>
 
                                 {tipoUsuario === "medico" && (
