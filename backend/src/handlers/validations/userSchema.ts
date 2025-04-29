@@ -32,7 +32,6 @@ const userSchema = Joi.object({
     //pattern con al menos 1 letra mayuscula, al menos 1 minuscula, min 8 caracteres
     clave_usuario: Joi.string()
         .required()
-        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
         .messages({
             "string.pattern.base": "La clave no es valida",
             "string.empty": "La clave es requerida",
@@ -57,10 +56,6 @@ const userSchema = Joi.object({
     }),
     id_estado_usuario: Joi.string().required().messages({
         "string.empty": "El estado es requerido",
-    }),
-    tipo_usuario: Joi.string().valid("paciente", "medico").required().messages({
-        "any.only": "El tipo de usuario no es valido",
-        "string.empty": "El tipo de usuario es requerido",
     }),
 });
 
