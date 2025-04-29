@@ -1,11 +1,6 @@
 import { Schema, model } from "mongoose";
 
 const CiudadSchema = new Schema({
-    id_ciudad: {
-        type: String,
-        required: true,
-        unique: true,
-    },
     nombre_ciudad: {
         type: String,
         required: true,

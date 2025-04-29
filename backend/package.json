@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/joi": "^17.2.2",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",

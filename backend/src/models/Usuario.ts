@@ -5,64 +5,69 @@ const UsuarioSchema = new Schema({
         type: String,
         required: true,
         unique: true,
+        trim: true
     },
     nombre_usuario: {
         type: String,
         required: true,
+        trim: true
     },
     apellido_usuario: {
         type: String,
         required: true,
+        trim: true
     },
     fecha_nac_usuario: {
         type: Date,
-        required: true,
+        required: true
     },
     celular_usuario: {
         type: String,
         required: true,
+        trim: true
     },
     email_usuario: {
         type: String,
         required: true,
         unique: true,
+        lowercase: true,
+        trim: true
     },
     clave_usuario: {
         type: String,
-        required: true,
+        required: true
     },
     calle_usuario: {
         type: String,
         required: true,
+        trim: true
     },
     num_usuario: {
         type: String,
         required: true,
+        trim: true
     },
     dpto_usuario: {
         type: String,
-        required: false,
+        trim: true
     },
     cod_postal: {
         type: String,
         required: true,
+        trim: true
     },
     id_ciudad: {
         type: Schema.Types.ObjectId,
         ref: "Ciudad",
-        required: true,
+        required: true
     },
     id_estado_usuario: {
         type: Schema.Types.ObjectId,
         ref: "EstadoUsuario",
-        required: true,
-    },
-    tipo_usuario: {
-        type: String,
-        enum: ["paciente", "medico"],
-        required: true,
-    },
-});
+        required: true
+    }
+}, { timestamps: true });
+
 
 const Usuario = model("Usuario", UsuarioSchema);
 
