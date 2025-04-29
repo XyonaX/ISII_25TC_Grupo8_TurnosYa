@@ -5,7 +5,6 @@ import swaggerDocument from "./swagger.json";
 import apiRoutes from "./routes/api.routes";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import medicoRoutes from './routes/MedicoRoutes';
 import './models';
 
 const app = express();
@@ -52,7 +51,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api", apiRoutes);
-app.use(medicoRoutes);
+
 
 // Swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

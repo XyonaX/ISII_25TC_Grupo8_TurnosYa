@@ -3,6 +3,6 @@ import { obtenerMedicosParaListado } from '../controllers/medicoControllers';
 const router = Router();
 
 // Ruta para el listado de médicos
-router.get('/medicos', obtenerMedicosParaListado);
+router.get('/', obtenerMedicosParaListado);
 
 export default router;
