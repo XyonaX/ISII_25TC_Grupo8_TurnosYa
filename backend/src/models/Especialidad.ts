@@ -6,7 +6,7 @@ const EspecialidadSchema = new Schema({
     required: true,
     unique: true
   }
-});
+}, { collection: 'especialidades' });
 
 const Especialidad = model("Especialidad", EspecialidadSchema);
 
