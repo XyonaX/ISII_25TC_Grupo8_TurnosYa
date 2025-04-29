@@ -1,5 +1,15 @@
 import axios from 'axios';
-import { RegisterFormData, LoginData, UsuarioResponse, PacienteResponse, MedicoResponse, EstadoUsuario } from '../types/userTypes';
+import type {
+  RegisterFormData,
+  LoginData,
+  UsuarioResponse,
+  PacienteResponse,
+  MedicoResponse,
+  Ciudad,
+  ObraSocial,
+  Especialidad
+} from '../types/userTypes';
+
 
 const API_BASE_URL = import.meta.env.VITE_BASE_URL_API || 'http://localhost:3000/api';
 
@@ -79,6 +89,19 @@ export const userService = {
     }
   },
 
+  // Obtener usuario por DNI
+  getUserByDni: async (dni: string, token: string): Promise<UsuarioResponse | PacienteResponse | MedicoResponse> => {
+    try {
+      const response = await api.get(`/users/dni/${dni}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error('Error obteniendo usuario por DNI:', error);
+      throw error;
+    }
+  },
+
   // Obtener usuario por ID
   getUserById: async (id: string, token: string): Promise<UsuarioResponse | PacienteResponse | MedicoResponse> => {
     try {
@@ -122,60 +145,73 @@ export const userService = {
   },
 };
 
-export const pacienteService = {
-  // Obtener paciente por ID de usuario
-  getPacienteByUserId: async (userId: string, token: string): Promise<PacienteResponse> => {
+export const dataService = {
+  // Obtener ciudades con estructura completa
+  getCiudades: async (): Promise<Ciudad[]> => {
     try {
-      const response = await api.get(`/pacientes/user/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await api.get('/data/ciudades');
       return response.data.data;
     } catch (error) {
-      console.error('Error obteniendo paciente:', error);
-      throw error;
-    }
-  },
-};
-
-export const medicoService = {
-  // Obtener médico por ID de usuario
-  getMedicoByUserId: async (userId: string, token: string): Promise<MedicoResponse> => {
-    try {
-      const response = await api.get(`/medicos/user/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return response.data.data;
-    } catch (error) {
-      console.error('Error obteniendo médico:', error);
+      console.error('Error obteniendo ciudades:', error);
       throw error;
     }
   },
 
-  // Obtener todos los médicos
-  getAllMedicos: async (token: string): Promise<MedicoResponse[]> => {
+  // Obtener obras sociales con estructura completa
+  getObrasSociales: async (): Promise<ObraSocial[]> => {
     try {
-      const response = await api.get('/medicos', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await api.get('/data/obras-sociales');
       return response.data.data;
     } catch (error) {
-      console.error('Error obteniendo médicos:', error);
+      console.error('Error obteniendo obras sociales:', error);
       throw error;
     }
   },
+
+  // Obtener especialidades médicas con estructura completa
+  getEspecialidades: async (): Promise<Especialidad[]> => {
+    try {
+      const response = await api.get('/data/especialidades');
+      return response.data.data;
+    } catch (error) {
+      console.error('Error obteniendo especialidades:', error);
+      throw error;
+    }
+  },
+
+  // Obtener provincias
+  getProvincias: async (): Promise<Provincia[]> => {
+    try {
+      const response = await api.get('/data/provincias');
+      return response.data.data;
+    } catch (error) {
+      console.error('Error obteniendo provincias:', error);
+      throw error;
+    }
+  },
+
+  // Obtener países
+  getPaises: async (): Promise<Pais[]> => {
+    try {
+      const response = await api.get('/data/paises');
+      return response.data.data;
+    } catch (error) {
+      console.error('Error obteniendo países:', error);
+      throw error;
+    }
+  }
 };
 
-export const estadoUsuarioService = {
-  // Obtener todos los estados de usuario
-  getEstadosUsuario: async (token: string): Promise<EstadoUsuario[]> => {
-    try {
-      const response = await api.get('/estados-usuario', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return response.data.data;
-    } catch (error) {
-      console.error('Error obteniendo estados de usuario:', error);
-      throw error;
-    }
-  },
-};
+export interface Provincia {
+  _id: string;
+  nombre_provincia: string;
+  pais: {
+    _id: string;
+    nombre_pais: string;
+  };
+}
+
+export interface Pais {
+  _id: string;
+  nombre_pais: string;
+}

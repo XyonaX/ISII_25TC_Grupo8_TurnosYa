@@ -3,9 +3,13 @@ import { Schema, model } from "mongoose";
 const ObraSocialSchema = new Schema({
     nombre_obra_social: {
         type: String,
-        required: true,
+        required: false,
+    },
+    codigo: {
+        type: String,
+        required: false,
     }
-})
+}, { collection: 'obras_sociales' });
 
 const ObraSocial = model("ObraSocial", ObraSocialSchema);
 

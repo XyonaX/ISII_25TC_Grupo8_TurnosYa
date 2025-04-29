@@ -1,18 +1,12 @@
 import { Schema, model } from "mongoose";
-import { IEspecialidad } from "../interfaces/IEspecialidad";
 
-const EspecialidadSchema = new Schema<IEspecialidad>({
-  id_especialidad: {
-    type: Number,
-    required: true,
-    unique: true
-  },
+const EspecialidadSchema = new Schema({
   nombre_especialidad: {
     type: String,
     required: true
   }
-});
+}, { collection: 'especialidades' });
 
-const Especialidad = model<IEspecialidad>("Especialidad", EspecialidadSchema);
+const Especialidad = model("Especialidad", EspecialidadSchema);
 
 export default Especialidad;

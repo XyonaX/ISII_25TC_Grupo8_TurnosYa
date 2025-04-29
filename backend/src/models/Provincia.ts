@@ -10,7 +10,7 @@ const ProvinciaSchema = new Schema({
         ref: "Pais",
         required: true,
     }
-})
+},{ collection: 'provincias' })
 
 const Provincia = model("Provincia", ProvinciaSchema);
 

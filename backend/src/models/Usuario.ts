@@ -56,6 +56,11 @@ const UsuarioSchema = new Schema({
         required: true,
         trim: true
     },
+    tipo_usuario: {
+        type: String,
+        required: true,
+        enum: ["paciente", "medico"]
+    },
     id_ciudad: {
         type: Schema.Types.ObjectId,
         ref: "Ciudad",

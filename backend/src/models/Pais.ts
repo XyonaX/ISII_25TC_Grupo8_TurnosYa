@@ -5,7 +5,7 @@ const PaisSchema = new Schema({
         type: String,
         required: true,
     }
-})
+} , { collection: 'paises' });
 
 const Pais = model("Pais", PaisSchema);
 

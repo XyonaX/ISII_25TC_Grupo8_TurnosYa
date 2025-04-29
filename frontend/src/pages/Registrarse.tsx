@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { authService } from '../services/userServices';
-import { RegisterFormData, RegisterErrors  } from '../types/userTypes';
+import { authService, dataService } from '../services/userServices';
+import { RegisterFormData, RegisterErrors, Ciudad, ObraSocial, Especialidad } from '../types/userTypes';
 
 const Registrarse = () => {
   const navigate = useNavigate();
@@ -18,19 +18,44 @@ const Registrarse = () => {
     calle_usuario: '',
     num_usuario: '',
     cod_postal: '',
-    id_ciudad: '5f8d0d55b54764421b7156b6',
-    id_estado_usuario: '5f8d0d55b54764421b7156b7', // Asumimos que '1' es el estado activo por defecto
-    tipo_usuario: 'medico',
-    
-  });
+    id_ciudad: '',
+    id_estado_usuario: '65d8a1b2e1a8f6c7f0e4b5c9', // Asumimos que '1' es el estado activo por defecto
+    tipo_usuario: 'paciente',
+    ...({ id_obra_social: '' } as { id_obra_social: string }),
+    ...({ matricula_medico: '' } as { matricula_medico: string }),
+    ...({ especialidades: [] } as { especialidades: string[] })
+});
 
+  // Datos dinámicos
+  const [ciudades, setCiudades] = useState<Ciudad[]>([]);
+  const [obrasSociales, setObrasSociales] = useState<ObraSocial[]>([]);
+  const [especialidadesMedicas, setEspecialidadesMedicas] = useState<Especialidad[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
   const [errors, setErrors] = useState<RegisterErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Datos para los selects
-  const especialidades = ['Cardiología', 'Dermatología', 'Pediatría', 'Oftalmología', 'Neurología']; 
-  const obrasSociales = ['OSDE', 'Swiss Medical', 'Galeno', 'Medicus'];
-  const ciudades = ['Buenos Aires', 'Córdoba', 'Rosario', 'Mendoza'];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [ciudadesRes, obrasSocialesRes, especialidadesRes] = await Promise.all([
+          dataService.getCiudades(),
+          dataService.getObrasSociales(),
+          dataService.getEspecialidades()
+        ]);
+        
+        setCiudades(ciudadesRes);
+        setObrasSociales(obrasSocialesRes);
+        setEspecialidadesMedicas(especialidadesRes);
+      } catch (error) {
+        console.error('Error cargando datos:', error);
+        setErrors({ general: 'Error cargando datos necesarios. Intente recargar la página.' });
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -41,16 +66,10 @@ const Registrarse = () => {
   };
 
   const handleEspecialidadChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const options = e.target.options;
-    const selectedEspecialidades: string[] = [];
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) {
-        selectedEspecialidades.push(options[i].value);
-      }
-    }
+    const options = Array.from(e.target.selectedOptions).map(opt => opt.value);
     setFormData(prev => ({
       ...prev,
-      especialidades: selectedEspecialidades
+      especialidades: options
     }));
   };
 
@@ -60,17 +79,24 @@ const Registrarse = () => {
     setErrors({});
 
     try {
-      // Preparar los datos para enviar
       const userToSend = {
         ...formData,
-        tipo_usuario: tipoUsuario
+        tipo_usuario: tipoUsuario,
+        ...(tipoUsuario === 'paciente' ? { 
+          id_obra_social: formData.id_obra_social,
+          matricula_medico: undefined,
+          especialidades: undefined
+        } : {
+          matricula_medico: formData.matricula_medico,
+          especialidades: formData.especialidades,
+          id_obra_social: undefined
+        })
       };
-
       // Llamar al servicio de registro
       const response = await authService.register(userToSend);
       
       if (response) {
-        navigate('/registro-exitoso');
+        navigate('/registro');
       }
     } catch (error: any) {
       console.error('Error en registro:', error);
@@ -83,6 +109,17 @@ const Registrarse = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (loadingData) {
+    return (
+      <div className="container text-center py-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+        <p className="mt-3">Cargando datos necesarios...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container container-formulario p-4">
@@ -102,7 +139,7 @@ const Registrarse = () => {
               )}
 
               {/* Toggle Paciente / Médico */}
-              <div className="d-flex justify-content-center mb-4">
+              <div className="d-flex justify-content-center mb-2">
                 <button
                   type="button"
                   className={`btn ${tipoUsuario === 'paciente' ? 'btn-success' : 'btn-outline-success'} mx-2`}
@@ -133,7 +170,7 @@ const Registrarse = () => {
 
               <form onSubmit={handleSubmit}>
                 {/* DNI */}
-                <div className="mb-4">
+                <div className="mb-2">
                   <label htmlFor="dni_usuario" className="form-label label-formulario">DNI</label>
                   <input 
                     type="text" 
@@ -150,7 +187,7 @@ const Registrarse = () => {
                 </div>
 
                 {/* Nombre y Apellido */}
-                <div className="mb-4">
+                <div className="mb-2">
                   <label htmlFor="nombre_usuario" className="form-label label-formulario">Nombre</label>
                   <input 
                     type="text" 
@@ -166,7 +203,7 @@ const Registrarse = () => {
                   {errors.nombre_usuario && <small className="text-danger">{errors.nombre_usuario}</small>}
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-2">
                   <label htmlFor="apellido_usuario" className="form-label label-formulario">Apellido</label>
                   <input 
                     type="text" 
@@ -183,7 +220,7 @@ const Registrarse = () => {
                 </div>
 
                 {/* Fecha de Nacimiento */}
-                <div className="mb-4">
+                <div className="mb-2">
                   <label htmlFor="fecha_nac_usuario" className="form-label label-formulario">Fecha de Nacimiento</label>
                   <input 
                     type="date" 
@@ -196,12 +233,12 @@ const Registrarse = () => {
                     required
                   />
                   {errors.fecha_nac_usuario && (
-      <small className="text-danger">{String(errors.fecha_nac_usuario)}</small>
-    )}
+                    <small className="text-danger">{String(errors.fecha_nac_usuario)}</small>
+                  )}
                 </div>
 
                 {/* Celular */}
-                <div className="mb-4">
+                <div className="mb-2">
                   <label htmlFor="celular_usuario" className="form-label label-formulario">Celular</label>
                   <input 
                     type="text" 
@@ -218,7 +255,7 @@ const Registrarse = () => {
                 </div>
 
                 {/* Email */}
-                <div className="mb-4">
+                <div className="mb-2">
                   <label htmlFor="email_usuario" className="form-label label-formulario">Correo Electrónico</label>
                   <input 
                     type="email" 
@@ -235,7 +272,7 @@ const Registrarse = () => {
                 </div>
 
                 {/* Contraseña */}
-                <div className="mb-4">
+                <div className="mb-2">
                   <label htmlFor="clave_usuario" className="form-label label-formulario">Contraseña</label>
                   <input 
                     type="password" 
@@ -252,12 +289,12 @@ const Registrarse = () => {
                 </div>
 
                 {/* Dirección */}
-                <div className="mb-4">
+                <div className=" mb-2">
                   <label className="form-label label-formulario">Dirección</label>
                   
                   {/* Fila para Calle y Número */}
                   <div className="row g-2 mb-2">
-                    <div className="col-md-8">
+                    <div className="col-sm-8 col-md-6">
                       <input 
                         type="text" 
                         className="form-control input-formulario" 
@@ -271,7 +308,7 @@ const Registrarse = () => {
                       />
                       {errors.calle_usuario && <small className="text-danger">{errors.calle_usuario}</small>}
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-sm-4 col-md-2">
                       <input 
                         type="text" 
                         className="form-control input-formulario" 
@@ -289,7 +326,7 @@ const Registrarse = () => {
 
                   {/* Fila para Departamento y Código Postal */}
                   <div className="row g-2">
-                    <div className="col-md-6">
+                    <div className="col-sm-8 col-md-2">
                       <input 
                         type="text" 
                         className="form-control input-formulario" 
@@ -301,7 +338,7 @@ const Registrarse = () => {
                         style={{ borderRadius: '8px', border: '2px solid #ae5bbf' }} 
                       />
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-sm-4 col-md-2">
                       <input 
                         type="text" 
                         className="form-control input-formulario" 
@@ -317,28 +354,78 @@ const Registrarse = () => {
                     </div>
                   </div>
                 </div>
+              {/* Ciudad */}
+              <div className="mb-2">
+                <label htmlFor="id_ciudad" className="form-label label-formulario">Ciudad</label>
+                <select 
+                  className="form-control input-formulario" 
+                  id="id_ciudad"
+                  name="id_ciudad"
+                  value={formData.id_ciudad}
+                  onChange={handleChange}
+                  style={{ borderRadius: '8px', border: '2px solid #ae5bbf' }}
+                  required
+                >
+                  <option value="">Seleccione una ciudad</option>
+                  {ciudades.map(ciudad => (
+                    <option key={ciudad._id} value={ciudad._id}>{ciudad.nombre_ciudad}</option>
+                  ))}
+                </select>
+                {errors.id_ciudad && <small className="text-danger">
+  {typeof errors.id_ciudad === 'string' 
+    ? errors.id_ciudad 
+    : errors.id_ciudad?.message}
+</small>
+}
+              </div>
 
-                {/* Ciudad */}
-                <div className="mb-4">
-                  <label htmlFor="id_ciudad" className="form-label label-formulario">Ciudad</label>
+              {/* Obra Social */}
+              {tipoUsuario === 'paciente' && (
+                <div className="mb-3">
+                  <label htmlFor="id_obra_social" className="form-label label-formulario">Obra Social</label>
                   <select 
                     className="form-control input-formulario" 
-                    id="id_ciudad"
-                    name="id_ciudad"
-                    value="5f8d0d55b54764421b7156b6"
-disabled
-
+                    id="id_obra_social"
+                    name="id_obra_social"
+                    value={formData.id_obra_social}
                     onChange={handleChange}
                     style={{ borderRadius: '8px', border: '2px solid #ae5bbf' }}
                     required
                   >
-                    <option value="">Seleccione una ciudad</option>
-                    {ciudades.map((ciudad, index) => (
-                      <option key={index} value={ciudad}>{ciudad}</option>
+                    <option value="">Seleccione obra social</option>
+                    {obrasSociales.map(obra => (
+                      <option key={obra._id} value={obra._id}>{obra.nombre_obra_social}</option>
                     ))}
                   </select>
-                  {errors.id_ciudad && <small className="text-danger">{errors.id_ciudad}</small>}
+                  {errors.id_obra_social && <small className="text-danger">{errors.id_obra_social}</small>}
                 </div>
+              )}
+
+              {/* Especialidades */}
+              {tipoUsuario === 'medico' && (
+                <div className="mb-4">
+                  <label htmlFor="especialidades" className="form-label label-formulario">Especialidades</label>
+                  <select 
+                    multiple
+                    className="form-control input-formulario" 
+                    id="especialidades"
+                    name="especialidades"
+                    value={formData.especialidades || []}
+                    onChange={handleEspecialidadChange}
+                    style={{ borderRadius: '8px', border: '2px solid #ae5bbf', height: 'auto' }}
+                    required
+                  >
+                    {especialidadesMedicas.map((especialidad) => (
+                      <option key={especialidad._id} value={especialidad._id}>
+                        {especialidad.nombre_especialidad}
+                      </option>
+                    ))}
+                  </select>
+                  <small className="text-muted">Mantén presionado Ctrl para seleccionar múltiples especialidades</small>
+                  {errors.especialidades && <small className="text-danger">{errors.especialidades}</small>}
+                </div>
+              )}
+
 
                 {/* Botón REGISTRARSE */}
                 <div className="d-grid gap-2 mb-3">
