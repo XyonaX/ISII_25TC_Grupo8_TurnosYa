@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PaginationUI from '../utils/PaginationUI';
+import { dataService } from '../services/userServices'; // Importar dataService
+import { Especialidad, ObraSocial } from '../types/userTypes'; // Importar tipos
 
 interface Medico {
   id: string;
@@ -23,8 +25,10 @@ const BuscarMedico = () => {
   const [obraSocialFiltro, setObraSocialFiltro] = useState('Obras Sociales');
   
   // Obtener opciones únicas para los filtros
-  const especialidadesUnicas = ['Especialidades', ...new Set(medicos.map(m => m.especialidad))];
-  const obrasSocialesUnicas = ['Obras Sociales', ...new Set(medicos.map(m => m.obraSocial))];
+  const [especialidadesOptions, setEspecialidadesOptions] = useState<Especialidad[]>([]);
+  const [obrasSocialesOptions, setObrasSocialesOptions] = useState<ObraSocial[]>([]);
+  const [loadingOptions, setLoadingOptions] = useState(true); // Estado de carga para las opciones
+
 
   // Cargar médicos desde backend
   useEffect(() => {
@@ -33,11 +37,17 @@ const BuscarMedico = () => {
         setLoading(true);
         const response = await axios.get('http://localhost:3000/medicos');
         setMedicos(response.data);
+        const especialidadesResponse = await dataService.getEspecialidades();
+        setEspecialidadesOptions(especialidadesResponse);
+        const obrasSocialesResponse = await dataService.getObrasSociales();
+        setObrasSocialesOptions(obrasSocialesResponse);
+
       } catch (err) {
         console.error('Error al traer los médicos:', err);
         setError('Error al cargar los médicos. Intente nuevamente más tarde.');
       } finally {
         setLoading(false);
+        setLoadingOptions(false); // Finalizar carga de opciones
       }
     };
 
@@ -53,7 +63,7 @@ const BuscarMedico = () => {
     return coincideNombre && coincideEspecialidad && coincideObraSocial;
   });
 
-  if (loading) {
+  if (loading || loadingOptions) {
     return (
       <div className="container text-center mt-5">
         <div className="spinner-border text-primary" role="status">
@@ -118,8 +128,11 @@ const BuscarMedico = () => {
                         color: 'green',
                       }}
                     >
-                      {especialidadesUnicas.map(esp => (
-                        <option key={esp} value={esp}>{esp}</option>
+                      {/* Opción por defecto */}
+                      <option value="Especialidades">Especialidades</option>
+                      {/* Opciones cargadas desde el backend */}
+                      {especialidadesOptions.map(esp => (
+                        <option key={esp._id} value={esp.nombre_especialidad}>{esp.nombre_especialidad}</option>
                       ))}
                     </select>
                   </div>
@@ -137,8 +150,11 @@ const BuscarMedico = () => {
                         color: 'green',
                       }}
                     >
-                      {obrasSocialesUnicas.map(os => (
-                        <option key={os} value={os}>{os}</option>
+                       {/* Opción por defecto */}
+                       <option value="Obras Sociales">Obras Sociales</option>
+                      {/* Opciones cargadas desde el backend */}
+                      {obrasSocialesOptions.map(os => (
+                        <option key={os._id} value={os.nombre_obra_social}>{os.nombre_obra_social}</option>
                       ))}
                     </select>
                   </div>
