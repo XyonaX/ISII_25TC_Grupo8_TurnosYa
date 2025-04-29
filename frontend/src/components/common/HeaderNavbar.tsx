@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 export default function HeaderNavbar() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-custom " style={{ backgroundColor: "#f9fffb" }}>
+        <nav className="navbar navbar-expand-lg navbar-custom " style={{ backgroundColor: "#f9fffb", height: "70px"}}>
         <div className="container-fluid">
             <Link className="navbar-brand d-flex align-items-center" to="/">
                 <img
