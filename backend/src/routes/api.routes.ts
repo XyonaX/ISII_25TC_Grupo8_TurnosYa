@@ -13,7 +13,7 @@ router.use(fakeAuth);
 router.use("/users",usersRouter);
 router.use("/auth",authRouter);
 router.use("/turnos", turnoRouter);
-
+router.use('/data', dataRoutes);
 
 
 export default router;
