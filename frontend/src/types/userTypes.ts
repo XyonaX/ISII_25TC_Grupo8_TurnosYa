@@ -60,6 +60,7 @@ export interface MedicoResponse extends UsuarioResponse, MedicoData {}
 // Tipo para formulario de registro 
 export type RegisterFormData = Omit<UsuarioBase, "_id" | "createdAt" | "updatedAt"> & {
   clave_usuario: string;
+  especialidades?: string;
 } & (Partial<PacienteData> | Partial<MedicoData>);
 
 // Tipo para login
