@@ -1,10 +1,7 @@
 import Turno from "../models/Turno";
 import EstadoTurno from "../models/EstadoTurno";
-import { ITurno, ITurnoPopulado } from "../interfaces/ITurno";
+import { ITurno } from "../interfaces/ITurno";
 import mongoose, { Types } from "mongoose";
-
-import { PacientePopulado } from "../interfaces/IPaciente";
-import { MedicoPopulado } from "../interfaces/IMedico";
 
 interface EstadoTurnoPopulado {
     _id: Types.ObjectId;
@@ -18,7 +15,7 @@ const getEstadoTurnoId = async (id_estado_turno: number) => {
     return estado._id;
 };
 
-// CREATE - Crear turno (Médico)
+//Crear turno (Médico)
 const createTurnoController = async (idMedico: string, turnoData: ITurno) => {
     try {
         const disponibleId = await getEstadoTurnoId(1); // Estado "disponible"
@@ -40,6 +37,7 @@ const createTurnoController = async (idMedico: string, turnoData: ITurno) => {
     }
 };
 
+// Obtener todos los turnos (Médico)
 const getAllTurnosController = async () => {
     try {
         const estadoDisponible = await EstadoTurno.findOne({
@@ -58,14 +56,13 @@ const getAllTurnosController = async () => {
     }
 };
 
+// Obtener turno por ID (Médico)
 const getTurnoByIdController = async (id: string) => {
     try {
-
-        console.log("ID :", id);
         const turno = await Turno.findById(id)
-        .populate("id_estado_turno")
-        .populate("id_medico")
-        .populate("id_paciente");
+            .populate("id_estado_turno")
+            .populate("id_medico")
+            .populate("id_paciente");
 
         if (!turno) throw new Error("Turno no encontrado");
 
@@ -76,40 +73,47 @@ const getTurnoByIdController = async (id: string) => {
     }
 };
 
-
-// UPDATE - Actualizar turno (Médico)
+// Actualizar turno (Médico)
 const updateTurnoController = async (
     idMedico: string,
     idTurno: string,
     updateData: Partial<ITurno>
 ) => {
-    try {
-        // Verificar que el turno pertenece al médico
-        const turnoExistente = await Turno.findOne({
-            _id: idTurno,
-            id_medico: new mongoose.Types.ObjectId(idMedico),
-        });
-
-        if (!turnoExistente)
-            throw new Error("Turno no encontrado o no autorizado");
-
-        // Actualizar solo campos permitidos
-        const turnoActualizado = await Turno.findByIdAndUpdate(
-            idTurno,
-            { $set: updateData },
-            { new: true }
-        )
-            .populate("id_estado_turno")
-            .populate("id_paciente");
-
-        return turnoActualizado;
-    } catch (error) {
-        console.error("Error al actualizar turno:", error);
-        throw new Error("Error al actualizar turno");
+    // Validamos los IDs primero
+    if (!mongoose.Types.ObjectId.isValid(idMedico)) {
+        throw new Error("ID de médico inválido");
     }
+
+    if (!mongoose.Types.ObjectId.isValid(idTurno)) {
+        throw new Error("ID de turno inválido");
+    }
+
+    const turnoObjectId = new mongoose.Types.ObjectId(idTurno);
+    const medicoObjectId = new mongoose.Types.ObjectId(idMedico);
+
+    // Buscamos el turno que pertenezca al médico
+    const turnoExistente = await Turno.findOne({
+        _id: turnoObjectId,
+        id_medico: medicoObjectId,
+    });
+
+    if (!turnoExistente) {
+        throw new Error("Turno no encontrado o no autorizado");
+    }
+
+    // Actualizamos el turno
+    const turnoActualizado = await Turno.findByIdAndUpdate(
+        turnoObjectId,
+        { $set: updateData },
+        { new: true }
+    )
+        .populate("id_estado_turno")
+        .populate("id_paciente");
+
+    return turnoActualizado;
 };
 
-// DELETE - Eliminar/Cancelar turno
+// Eliminar turno (Médico)
 const deleteTurnoController = async (idMedico: string, idTurno: string) => {
     try {
         // Verificar que el turno pertenece al médico
