@@ -9,7 +9,9 @@ import ObraSocialInput from "../components/ObraSocialInput";
 
 const Registrarse = () => {
     const navigate = useNavigate();
-    const [tipoUsuario, setTipoUsuario] = useState<"paciente" | "medico">("paciente");
+    const [tipoUsuario, setTipoUsuario] = useState<"paciente" | "medico">(
+        "paciente"
+    );
     const [formData, setFormData] = useState<Partial<RegisterFormData>>({
         dni_usuario: "",
         nombre_usuario: "",
@@ -31,9 +33,15 @@ const Registrarse = () => {
     const [errors, setErrors] = useState<RegisterErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [especialidades, setEspecialidades] = useState<{_id: string, nombre_especialidad: string}[]>([]);
-    const [obrasSociales, setObrasSociales] = useState<{_id: string, nombre_obra_social: string}[]>([]);
-    const [ciudades, setCiudades] = useState<{_id: string, nombre_ciudad: string}[]>([]);
+    const [especialidades, setEspecialidades] = useState<
+        { _id: string; nombre_especialidad: string }[]
+    >([]);
+    const [obrasSociales, setObrasSociales] = useState<
+        { _id: string; nombre_obra_social: string }[]
+    >([]);
+    const [ciudades, setCiudades] = useState<
+        { _id: string; nombre_ciudad: string }[]
+    >([]);
     const [successMessage, setSuccessMessage] = useState("");
 
     // Cargar datos dinámicos al montar el componente
@@ -41,40 +49,43 @@ const Registrarse = () => {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
-                
+
                 // Obtener todas las datos necesarios en paralelo
-                const [especialidadesRes, obrasSocialesRes, ciudadesRes] = await Promise.all([
-                    dataService.getEspecialidades(),
-                    dataService.getObrasSociales(),
-                    dataService.getCiudades()
-                ]);
-                
+                const [especialidadesRes, obrasSocialesRes, ciudadesRes] =
+                    await Promise.all([
+                        dataService.getEspecialidades(),
+                        dataService.getObrasSociales(),
+                        dataService.getCiudades(),
+                    ]);
+
                 setEspecialidades(especialidadesRes);
                 setObrasSociales(obrasSocialesRes);
                 setCiudades(ciudadesRes);
-                
+
                 // Establecer un valor por defecto para la ciudad si es necesario
                 if (ciudadesRes.length > 0) {
-                    setFormData(prev => ({
+                    setFormData((prev) => ({
                         ...prev,
-                        id_ciudad: ciudadesRes[0]._id
+                        id_ciudad: ciudadesRes[0]._id,
                     }));
                 }
-                
             } catch (error) {
                 console.error("Error cargando datos:", error);
                 setErrors({
-                    general: "Error al cargar los datos necesarios para el registro"
+                    general:
+                        "Error al cargar los datos necesarios para el registro",
                 });
             } finally {
                 setIsLoading(false);
             }
         };
-        
+
         fetchData();
     }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
@@ -86,24 +97,37 @@ const Registrarse = () => {
         e.preventDefault();
         setIsSubmitting(true);
         setErrors({});
-    
+
         // Validar que todos los campos requeridos estén presentes
         const requiredFields: (keyof RegisterFormData)[] = [
-            'dni_usuario', 'nombre_usuario', 'apellido_usuario', 'fecha_nac_usuario',
-            'celular_usuario', 'email_usuario', 'clave_usuario', 'calle_usuario',
-            'num_usuario', 'cod_postal', 'id_ciudad', 'id_estado_usuario'
+            "dni_usuario",
+            "nombre_usuario",
+            "apellido_usuario",
+            "fecha_nac_usuario",
+            "celular_usuario",
+            "email_usuario",
+            "clave_usuario",
+            "calle_usuario",
+            "num_usuario",
+            "cod_postal",
+            "id_ciudad",
+            "id_estado_usuario",
         ];
-    
-        const missingFields = requiredFields.filter(field => !formData[field]);
-    
+
+        const missingFields = requiredFields.filter(
+            (field) => !formData[field]
+        );
+
         if (missingFields.length > 0) {
             setErrors({
-                general: `Faltan campos requeridos: ${missingFields.join(', ')}`
+                general: `Faltan campos requeridos: ${missingFields.join(
+                    ", "
+                )}`,
             });
             setIsSubmitting(false);
             return;
         }
-    
+
         try {
             // Crear objeto con todos los campos requeridos
             const userToSend: RegisterFormData = {
@@ -121,26 +145,38 @@ const Registrarse = () => {
                 id_estado_usuario: formData.id_estado_usuario!,
                 tipo_usuario: tipoUsuario,
                 // Campos condicionales
-                ...(tipoUsuario === 'medico' && {
+                ...(tipoUsuario === "medico" && {
                     matricula_medico: formData.matricula_medico!,
-                    especialidades: formData.especialidades ? [formData.especialidades[0]] : []
+                    especialidades: formData.especialidades
+                        ? [formData.especialidades[0]]
+                        : [],
                 }),
-                ...(tipoUsuario === 'paciente' && {
-                    id_obra_social: formData.id_obra_social!
-                })
+                ...(tipoUsuario === "paciente" && {
+                    id_obra_social: formData.id_obra_social!,
+                }),
             };
-    
+
             const response = await authService.register(userToSend);
-            // ... resto del código
-        } catch (error) {
-            // ... manejo de errores
+            setSuccessMessage("Registro exitoso. Serás redirigido al login...");
+
+            setTimeout(() => {
+                navigate("/login");
+            }, 3000);
+        } catch (error: any) {
+            console.error("Error al registrar:", error);
+            setErrors({
+                general:
+                    "Error de conexión con el servidor. Intenta más tarde.",
+            });
         } finally {
             setIsSubmitting(false);
         }
     };
 
     if (isLoading) {
-        return <div className="container mt-5">Cargando datos necesarios...</div>;
+        return (
+            <div className='container mt-5'>Cargando datos necesarios...</div>
+        );
     }
 
     return (
@@ -384,12 +420,19 @@ const Registrarse = () => {
                                         onChange={handleChange}
                                     >
                                         {ciudades.map((ciudad) => (
-                                            <option key={ciudad._id} value={ciudad._id}>
+                                            <option
+                                                key={ciudad._id}
+                                                value={ciudad._id}
+                                            >
                                                 {ciudad.nombre_ciudad}
                                             </option>
                                         ))}
                                     </select>
-                                    {errors.id_ciudad && <small className='text-danger'>{errors.id_ciudad.message}</small>}
+                                    {errors.id_ciudad && (
+                                        <small className='text-danger'>
+                                            {errors.id_ciudad.message}
+                                        </small>
+                                    )}
                                 </div>
 
                                 {tipoUsuario === "medico" && (
@@ -451,9 +494,18 @@ const Registrarse = () => {
                                         className='btn btn-primary'
                                         disabled={isSubmitting}
                                     >
-                                        {isSubmitting
-                                            ? "Registrando..."
-                                            : "REGISTRARSE"}
+                                        {isSubmitting ? (
+                                            <>
+                                                <span
+                                                    className='spinner-border spinner-border-sm me-2'
+                                                    role='status'
+                                                    aria-hidden='true'
+                                                />
+                                                Registrando...
+                                            </>
+                                        ) : (
+                                            "REGISTRARSE"
+                                        )}
                                     </button>
                                 </div>
                             </form>
