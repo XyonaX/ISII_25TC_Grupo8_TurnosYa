@@ -9,9 +9,7 @@ const PacienteSchema = new Schema(
             unique: true,
         },
         id_obra_social: {
-            //type: Schema.Types.ObjectId, <-- esto hay que volver a ponerlo pero cuando tengamos el get de obras sociales
-            //lo saque para probar si funcionaba el registro de pacientes
-            type: String,
+            type: Schema.Types.ObjectId,
             ref: "obras_sociales",
             required: false,
         },
