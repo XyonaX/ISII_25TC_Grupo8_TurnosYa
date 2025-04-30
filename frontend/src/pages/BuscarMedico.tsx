@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import  { useState, useEffect, useMemo } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PaginationUI from '../utils/PaginationUI';
 import { dataService } from '../services/userServices'; // Importar dataService

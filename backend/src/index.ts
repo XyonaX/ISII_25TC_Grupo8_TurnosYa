@@ -35,15 +35,6 @@ mongoose.connect(mongoUri)
     console.error('❌ Error de conexión a MongoDB:', err.message);
     process.exit(1); // Sale de la aplicación si falla la conexión
   });
-
-mongoose.connection.on('connected', async () => {
-  const collections = await mongoose.connection.db.listCollections().toArray();
-  console.log('📁 Colecciones disponibles:', collections.map(c => c.name));
-});
-
-mongoose.connection.on('connected', () => {
-  console.log(`✅ Conectado a la base: ${mongoose.connection.db.databaseName}`);
-});
 // Rutas
 
 app.get("/", (req: Request, res: Response) => {
