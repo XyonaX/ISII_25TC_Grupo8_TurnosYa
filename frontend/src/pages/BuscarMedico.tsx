@@ -155,7 +155,10 @@ const BuscarMedico = () => {
                             key={esp._id}
                             value={esp.nombre_especialidad}
                             // Apply a style to make it grey if not available
-                            style={{ color: isAvailable ? 'green' : 'grey' }}
+                            style={{
+                              color: isAvailable ? 'green' : 'grey',
+                              backgroundColor: !isAvailable ? 'lightgrey' : 'transparent', // Add a light grey background
+                            }}
                             // Do NOT use 'disabled' if you want them to be selectable but visually different
                             // disabled={!isAvailable}
                           >
@@ -190,7 +193,10 @@ const BuscarMedico = () => {
                             key={esp._id}
                             value={esp.nombre_obra_social}
                             // Apply a style to make it grey if not available
-                            style={{ color: isAvailable ? 'green' : 'grey' }}
+                            style={{
+                              color: isAvailable ? 'green' : 'grey',
+                              backgroundColor: !isAvailable ? 'lightgrey' : 'transparent', // Add a light grey background
+                            }}
                             // Do NOT use 'disabled' if you want them to be selectable but visually different
                             // disabled={!isAvailable}
                           >
