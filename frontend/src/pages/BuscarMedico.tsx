@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PaginationUI from '../utils/PaginationUI';
 import { dataService } from '../services/userServices'; // Importar dataService
 import { Especialidad, ObraSocial } from '../types/userTypes'; // Importar tipos
+
 
 interface Medico {
   id: string;
@@ -25,41 +26,49 @@ const BuscarMedico = () => {
   const [obraSocialFiltro, setObraSocialFiltro] = useState('Obras Sociales');
   
   // Obtener opciones únicas para los filtros
-  const [especialidadesOptions, setEspecialidadesOptions] = useState<string[]>([]);
-  const [obrasSocialesOptions, setObrasSocialesOptions] = useState<string[]>([]);
+  const [especialidadesOptions, setEspecialidadesOptions] = useState<Especialidad[]>([]);
+  const [obrasSocialesOptions, setObrasSocialesOptions] = useState<ObraSocial[]>([]);
   const [loadingOptions, setLoadingOptions] = useState(true); // Estado de carga para las opciones
 
 
   // Cargar médicos desde backend
   useEffect(() => {
-    const fetchMedicos = async () => {
+    const fetchData  = async () => {
       try {
         setLoading(true);
         setLoadingOptions(true);
         
         // Usar dataService.getMedicos() en lugar de axios.get directo
         const medicosResponse = await dataService.getMedicos();
-        setMedicos(medicosResponse); // dataService.getMedicos ya retorna el array de Medicos
+        setMedicos(medicosResponse);
 
         // Cargar especialidades
-        const uniqueEspecialidades = Array.from(new Set(medicosResponse.map(medico => medico.especialidad)));
-        setEspecialidadesOptions(uniqueEspecialidades);
+        const especialidadesResponse = await dataService.getEspecialidades();
+        setEspecialidadesOptions(especialidadesResponse);
 
         // Cargar obras sociales
-        const uniqueObrasSociales = Array.from(new Set(medicosResponse.map(medico => medico.obraSocial)));
-        setObrasSocialesOptions(uniqueObrasSociales);
+        const obrasSocialesResponse = await dataService.getObrasSociales();
+        setObrasSocialesOptions(obrasSocialesResponse);
 
       } catch (err) {
-        console.error('Error al traer los médicos:', err);
-        setError('Error al cargar los médicos. Intente nuevamente más tarde.');
+        console.error('Error al traer datos:', err);
+        setError('Error al cargar los datos. Intente nuevamente más tarde.');
       } finally {
         setLoading(false);
         setLoadingOptions(false); // Finalizar carga de opciones
       }
     };
 
-    fetchMedicos();
+    fetchData();
   }, []);
+
+  const availableSpecialtyNames = useMemo(() => {
+    return new Set(medicos.map(medico => medico.especialidad));
+  }, [medicos]); // Recalculate only when the 'medicos' list changes
+
+  const availableObrasSocialesNames = useMemo(() => {
+    return new Set(medicos.map(medico => medico.obraSocial));
+  }, [medicos]); // Recalculate only when the 'medicos' list changes
 
   // Lógica de filtrado actualizada
   const medicosFiltrados = medicos.filter((medico) => {
@@ -100,7 +109,6 @@ const BuscarMedico = () => {
                 <span className="text-iniciar">Buscar</span>
                 <span className="text-sesion"> Médicos</span>
               </h2>
-
               {/* Input de búsqueda por nombre */}
               <div className="row mb-4 justify-content-center">
                 <div className="col-auto">
@@ -123,7 +131,7 @@ const BuscarMedico = () => {
               {/* Filtros adicionales */}
               <div className='container row align-items-center'>
                 <div className="col-auto">
-                  {/* Especialidades - Ahora cargadas desde los médicos */}
+                  {/* Especialidades - Ahora cargadas desde backend, styled based on availability */}
                   <div className="mb-1">
                     <select
                       className="form-select form-select-sm input-formulario"
@@ -133,16 +141,28 @@ const BuscarMedico = () => {
                         borderRadius: '8px',
                         border: '2px solid #ae5bbf',
                         height: '40px',
-                        color: 'green',
+                        color: 'green', // Default color for the select itself
                       }}
                     >
                       {/* Opción por defecto */}
                       <option value="Especialidades">Especialidades</option>
-                      {/* Opciones cargadas desde los médicos */}
-                      {especialidadesOptions.map(esp => (
-                        // Use the specialty name directly as the key and value
-                        <option key={esp} value={esp}>{esp}</option>
-                      ))}
+                      {/* Opciones cargadas desde el backend */}
+                      {especialidadesOptions.map(esp => {
+                        // Check if this specialty name exists in the set of available specialties from doctors
+                        const isAvailable = availableSpecialtyNames.has(esp.nombre_especialidad);
+                        return (
+                          <option
+                            key={esp._id}
+                            value={esp.nombre_especialidad}
+                            // Apply a style to make it grey if not available
+                            style={{ color: isAvailable ? 'green' : 'grey' }}
+                            // Do NOT use 'disabled' if you want them to be selectable but visually different
+                            // disabled={!isAvailable}
+                          >
+                            {esp.nombre_especialidad}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
 
@@ -162,10 +182,22 @@ const BuscarMedico = () => {
                        {/* Opción por defecto */}
                       <option value="Obras Sociales">Obras Sociales</option>
                       {/* Opciones cargadas desde los médicos */}
-                      {obrasSocialesOptions.map(esp => (
+                      {obrasSocialesOptions.map(esp => {
                         // Use the specialty name directly as the key and value
-                        <option key={esp} value={esp}>{esp}</option>
-                      ))}
+                        const isAvailable = availableObrasSocialesNames.has(esp.nombre_obra_social);
+                        return (
+                          <option
+                            key={esp._id}
+                            value={esp.nombre_obra_social}
+                            // Apply a style to make it grey if not available
+                            style={{ color: isAvailable ? 'green' : 'grey' }}
+                            // Do NOT use 'disabled' if you want them to be selectable but visually different
+                            // disabled={!isAvailable}
+                          >
+                            {esp.nombre_obra_social}
+                          </option>
+                        );
+                    })}
                     </select>
                   </div>
                 </div>
