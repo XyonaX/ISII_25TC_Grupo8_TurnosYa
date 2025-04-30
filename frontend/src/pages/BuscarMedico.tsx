@@ -25,8 +25,8 @@ const BuscarMedico = () => {
   const [obraSocialFiltro, setObraSocialFiltro] = useState('Obras Sociales');
   
   // Obtener opciones únicas para los filtros
-  const [especialidadesOptions, setEspecialidadesOptions] = useState<Especialidad[]>([]);
-  const [obrasSocialesOptions, setObrasSocialesOptions] = useState<ObraSocial[]>([]);
+  const [especialidadesOptions, setEspecialidadesOptions] = useState<string[]>([]);
+  const [obrasSocialesOptions, setObrasSocialesOptions] = useState<string[]>([]);
   const [loadingOptions, setLoadingOptions] = useState(true); // Estado de carga para las opciones
 
 
@@ -41,13 +41,13 @@ const BuscarMedico = () => {
         const medicosResponse = await dataService.getMedicos();
         setMedicos(medicosResponse); // dataService.getMedicos ya retorna el array de Medicos
 
-        // Cargar especialidades usando dataService
-        const especialidadesResponse = await dataService.getEspecialidades();
-        setEspecialidadesOptions(especialidadesResponse);
+        // Cargar especialidades
+        const uniqueEspecialidades = Array.from(new Set(medicosResponse.map(medico => medico.especialidad)));
+        setEspecialidadesOptions(uniqueEspecialidades);
 
-        // Cargar obras sociales usando dataService
-        const obrasSocialesResponse = await dataService.getObrasSociales();
-        setObrasSocialesOptions(obrasSocialesResponse);
+        // Cargar obras sociales
+        const uniqueObrasSociales = Array.from(new Set(medicosResponse.map(medico => medico.obraSocial)));
+        setObrasSocialesOptions(uniqueObrasSociales);
 
       } catch (err) {
         console.error('Error al traer los médicos:', err);
@@ -123,7 +123,7 @@ const BuscarMedico = () => {
               {/* Filtros adicionales */}
               <div className='container row align-items-center'>
                 <div className="col-auto">
-                  {/* Especialidades - Ahora cargadas desde backend */}
+                  {/* Especialidades - Ahora cargadas desde los médicos */}
                   <div className="mb-1">
                     <select
                       className="form-select form-select-sm input-formulario"
@@ -138,14 +138,15 @@ const BuscarMedico = () => {
                     >
                       {/* Opción por defecto */}
                       <option value="Especialidades">Especialidades</option>
-                      {/* Opciones cargadas desde el backend */}
+                      {/* Opciones cargadas desde los médicos */}
                       {especialidadesOptions.map(esp => (
-                        <option key={esp._id} value={esp.nombre_especialidad}>{esp.nombre_especialidad}</option>
+                        // Use the specialty name directly as the key and value
+                        <option key={esp} value={esp}>{esp}</option>
                       ))}
                     </select>
                   </div>
 
-                  {/* Obras Sociales - Ahora cargadas desde backend */}
+                  {/* Obras Sociales - Ahora cargadas desde los médicos */}
                   <div className="mb-1">
                     <select
                       className="form-select form-select-sm input-formulario"
@@ -160,9 +161,10 @@ const BuscarMedico = () => {
                     >
                        {/* Opción por defecto */}
                       <option value="Obras Sociales">Obras Sociales</option>
-                      {/* Opciones cargadas desde el backend */}
-                      {obrasSocialesOptions.map(os => (
-                        <option key={os._id} value={os.nombre_obra_social}>{os.nombre_obra_social}</option>
+                      {/* Opciones cargadas desde los médicos */}
+                      {obrasSocialesOptions.map(esp => (
+                        // Use the specialty name directly as the key and value
+                        <option key={esp} value={esp}>{esp}</option>
                       ))}
                     </select>
                   </div>
