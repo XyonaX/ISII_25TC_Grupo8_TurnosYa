@@ -9,6 +9,7 @@ import Paciente from "../models/Paciente";
 import Medico from "../models/Medico";
 import userSchema from "./validations/userSchema";
 import Usuario from "../models/Usuario";
+import EspecialidadMedico from "../models/EspecialidadMedico";
 
 // Esquema de validación para login
 const loginSchema = Joi.object({
@@ -23,6 +24,7 @@ const loginSchema = Joi.object({
 
 const registerHandler = async (req: Request, res: Response) => {
     try {
+        console.log("Datos de registro:", req.body);
         const newUser = await registerController(req.body);
 
         // Si el tipo de usuario es paciente, creá un documento en pacientes
@@ -54,23 +56,40 @@ const registerHandler = async (req: Request, res: Response) => {
                     matricula_medico: req.body.matricula_medico,
                 });
                 await nuevoMedico.save();
+
+                const especialidades = req.body.especialidades || [];
+                console.log("Especialidades recibidas:", especialidades);
+
+                for (const id_especialidad of especialidades) {
+                    try {
+                        const relacion = new EspecialidadMedico({
+                            id_medico: nuevoMedico._id,
+                            id_especialidad,
+                        });
+                        await relacion.save();
+                        console.log("Relacion guardada:", relacion);
+                    } catch (err) {
+                        console.error(
+                            "Error al guardar especialidad/medico:",
+                            err
+                        );
+                    }
+                }
+
+                return res.status(201).json({
+                    success: true,
+                    message:
+                        "Usuario registrado correctamente con especialidades",
+                });
             } catch (error) {
-                console.error(
-                    "Error al crear médico, se elimina el usuario:",
-                    error
-                );
+                console.error("Error al crear médico o especialidades:", error);
                 await Usuario.findByIdAndDelete(newUser._id);
                 return res.status(500).json({
                     success: false,
-                    message: "Error al crear médico",
+                    message: "Error al crear médico o asignar especialidades",
                 });
             }
         }
-
-        res.status(201).json({
-            success: true,
-            message: "Usuario registrado correctamente",
-        });
     } catch (error: any) {
         console.error("Error en registro:", error.message);
         res.status(409).json({

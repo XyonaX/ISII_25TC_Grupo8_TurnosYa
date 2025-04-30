@@ -11,7 +11,7 @@ const EspecialidadMedicoSchema = new Schema({
   }
 });
 
-const EspecialidadMedico = model("especialidad/medico", EspecialidadMedicoSchema);
+const EspecialidadMedico = model("EspecialidadMedico", EspecialidadMedicoSchema,"especialidad/medico");
 
 export default EspecialidadMedico;
 
