@@ -6,6 +6,7 @@ import apiRoutes from "./routes/api.routes";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import './models';
+import medicoRoutes from './routes/MedicoRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -35,15 +36,6 @@ mongoose.connect(mongoUri)
     console.error('❌ Error de conexión a MongoDB:', err.message);
     process.exit(1); // Sale de la aplicación si falla la conexión
   });
-
-mongoose.connection.on('connected', async () => {
-  const collections = await mongoose.connection.db.listCollections().toArray();
-  console.log('📁 Colecciones disponibles:', collections.map(c => c.name));
-});
-
-mongoose.connection.on('connected', () => {
-  console.log(`✅ Conectado a la base: ${mongoose.connection.db.databaseName}`);
-});
 // Rutas
 
 app.get("/", (req: Request, res: Response) => {
@@ -51,7 +43,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api", apiRoutes);
-
+app.use('/medicos', medicoRoutes);
 
 // Swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

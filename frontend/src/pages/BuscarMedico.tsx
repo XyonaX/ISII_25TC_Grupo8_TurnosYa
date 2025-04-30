@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PaginationUI from '../utils/PaginationUI';
 import { dataService } from '../services/userServices'; // Importar dataService
 import { Especialidad, ObraSocial } from '../types/userTypes'; // Importar tipos
 
-
 interface Medico {
   id: string;
-  medico: string;
+  nombreCompleto: string;
   especialidad: string;
   obraSocial: string;
   estado: string;
@@ -72,7 +70,8 @@ const BuscarMedico = () => {
 
   // Lógica de filtrado actualizada
   const medicosFiltrados = medicos.filter((medico) => {
-    const coincideNombre = medico.medico.toLowerCase().includes(nombreFiltro.toLowerCase());
+    const coincideNombre = (medico.nombreCompleto ?? '').toLowerCase().includes(nombreFiltro.toLowerCase());
+
     const coincideEspecialidad = especialidadFiltro === 'Especialidades' || medico.especialidad === especialidadFiltro;
     const coincideObraSocial = obraSocialFiltro === 'Obras Sociales' || medico.obraSocial === obraSocialFiltro;
 
@@ -224,7 +223,7 @@ const BuscarMedico = () => {
                       <tbody>
                         {medicosFiltrados.map((medico) => (
                           <tr key={medico.id}>
-                            <td>{medico.medico}</td>
+                            <td>{medico.nombreCompleto}</td>
                             <td>{medico.especialidad}</td>
                             <td>{medico.obraSocial}</td>
                             <td>
