@@ -2,7 +2,7 @@ import {Schema, model} from 'mongoose';
 
 const estadoTurnoSchema = new Schema({
     id_estado_turno: {
-        type: Schema.Types.ObjectId,
+        type: Number,
         required: true,
         unique: true,
     },
