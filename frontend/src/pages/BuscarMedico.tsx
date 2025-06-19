@@ -1,232 +1,319 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import PaginationUI from '../utils/PaginationUI';
-import { dataService } from '../services/userServices'; // Importar dataService
-import { Especialidad, ObraSocial } from '../types/userTypes'; // Importar tipos
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+import PaginationUI from "../utils/PaginationUI";
+import { dataService } from "../services/userServices"; // Importar dataService
+import { Especialidad, ObraSocial } from "../types/userTypes"; // Importar tipos
+import { useNavigate } from "react-router-dom";
 
 interface Medico {
-  id: string;
-  medico: string;
-  especialidad: string;
-  obraSocial: string;
-  estado: string;
-  matricula?: string;
+    id: string;
+    medico: string;
+    especialidad: string;
+    obraSocial: string;
+    estado: string;
+    matricula?: string;
 }
 
 const BuscarMedico = () => {
-  const [medicos, setMedicos] = useState<Medico[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  
-  // Estados para filtros
-  const [nombreFiltro, setNombreFiltro] = useState('');
-  const [especialidadFiltro, setEspecialidadFiltro] = useState('Especialidades');
-  const [obraSocialFiltro, setObraSocialFiltro] = useState('Obras Sociales');
-  
-  // Obtener opciones únicas para los filtros
-  const [especialidadesOptions, setEspecialidadesOptions] = useState<string[]>([]);
-  const [obrasSocialesOptions, setObrasSocialesOptions] = useState<string[]>([]);
-  const [loadingOptions, setLoadingOptions] = useState(true); // Estado de carga para las opciones
+    const [medicos, setMedicos] = useState<Medico[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
+    // Estados para filtros
+    const [nombreFiltro, setNombreFiltro] = useState("");
+    const [especialidadFiltro, setEspecialidadFiltro] =
+        useState("Especialidades");
+    const [obraSocialFiltro, setObraSocialFiltro] = useState("Obras Sociales");
 
-  // Cargar médicos desde backend
-  useEffect(() => {
-    const fetchMedicos = async () => {
-      try {
-        setLoading(true);
-        setLoadingOptions(true);
-        
-        // Usar dataService.getMedicos() en lugar de axios.get directo
-        const medicosResponse = await dataService.getMedicos();
-        setMedicos(medicosResponse); // dataService.getMedicos ya retorna el array de Medicos
-
-        // Cargar especialidades
-        const uniqueEspecialidades = Array.from(new Set(medicosResponse.map(medico => medico.especialidad)));
-        setEspecialidadesOptions(uniqueEspecialidades);
-
-        // Cargar obras sociales
-        const uniqueObrasSociales = Array.from(new Set(medicosResponse.map(medico => medico.obraSocial)));
-        setObrasSocialesOptions(uniqueObrasSociales);
-
-      } catch (err) {
-        console.error('Error al traer los médicos:', err);
-        setError('Error al cargar los médicos. Intente nuevamente más tarde.');
-      } finally {
-        setLoading(false);
-        setLoadingOptions(false); // Finalizar carga de opciones
-      }
-    };
-
-    fetchMedicos();
-  }, []);
-
-  // Lógica de filtrado actualizada
-  const medicosFiltrados = medicos.filter((medico) => {
-    const coincideNombre = medico.medico.toLowerCase().includes(nombreFiltro.toLowerCase());
-    const coincideEspecialidad = especialidadFiltro === 'Especialidades' || medico.especialidad === especialidadFiltro;
-    const coincideObraSocial = obraSocialFiltro === 'Obras Sociales' || medico.obraSocial === obraSocialFiltro;
-
-    return coincideNombre && coincideEspecialidad && coincideObraSocial;
-  });
-
-  // Mostrar spinner si se está cargando médicos O las opciones de los dropdowns
-  if (loading || loadingOptions) {
-    return (
-      <div className="container text-center mt-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-        <p>Cargando médicos...</p>
-      </div>
+    // Obtener opciones únicas para los filtros
+    const [especialidadesOptions, setEspecialidadesOptions] = useState<
+        string[]
+    >([]);
+    const [obrasSocialesOptions, setObrasSocialesOptions] = useState<string[]>(
+        []
     );
-  }
+    const [loadingOptions, setLoadingOptions] = useState(true); // Estado de carga para las opciones
 
-  if (error) {
-    return (
-      <div className="container alert alert-danger mt-5">
-        {error}
-      </div>
-    );
-  }
+    // Cargar médicos desde backend
+    useEffect(() => {
+        const fetchMedicos = async () => {
+            try {
+                setLoading(true);
+                setLoadingOptions(true);
 
-  return (
-    <div className="container container-formulario p-6 mb-5 mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-12 col-lg-10">
-          <div className="card shadow-lg border-0 card-formulario">
-            <div className="card-body p-4 row">
-              <h2 className="card-title text-center mb-4 card-titulo">
-                <span className="text-iniciar">Buscar</span>
-                <span className="text-sesion"> Médicos</span>
-              </h2>
+                // Usar dataService.getMedicos() en lugar de axios.get directo
+                const medicosResponse = await dataService.getMedicos();
+                setMedicos(medicosResponse); // dataService.getMedicos ya retorna el array de Medicos
 
-              {/* Input de búsqueda por nombre */}
-              <div className="row mb-4 justify-content-center">
-                <div className="col-auto">
-                  <input
-                    type="text"
-                    className="form-control input-formulario-buscarMedico"
-                    placeholder="Buscar por nombre"
-                    value={nombreFiltro}
-                    onChange={(e) => setNombreFiltro(e.target.value)}
-                    style={{
-                      borderRadius: '8px',
-                      border: '2px solid #ae5bbf',
-                      height: '40px',
-                      minWidth: '300px'
-                    }}
-                  />
+                // Cargar especialidades
+                const uniqueEspecialidades = Array.from(
+                    new Set(
+                        medicosResponse.map((medico) => medico.especialidad)
+                    )
+                );
+                setEspecialidadesOptions(uniqueEspecialidades);
+
+                // Cargar obras sociales
+                const uniqueObrasSociales = Array.from(
+                    new Set(medicosResponse.map((medico) => medico.obraSocial))
+                );
+                setObrasSocialesOptions(uniqueObrasSociales);
+            } catch (err) {
+                console.error("Error al traer los médicos:", err);
+                setError(
+                    "Error al cargar los médicos. Intente nuevamente más tarde."
+                );
+            } finally {
+                setLoading(false);
+                setLoadingOptions(false); // Finalizar carga de opciones
+            }
+        };
+
+        fetchMedicos();
+    }, []);
+
+    // Lógica de filtrado actualizada
+    const medicosFiltrados = medicos.filter((medico) => {
+        const coincideNombre = medico.medico
+            .toLowerCase()
+            .includes(nombreFiltro.toLowerCase());
+        const coincideEspecialidad =
+            especialidadFiltro === "Especialidades" ||
+            medico.especialidad === especialidadFiltro;
+        const coincideObraSocial =
+            obraSocialFiltro === "Obras Sociales" ||
+            medico.obraSocial === obraSocialFiltro;
+
+        return coincideNombre && coincideEspecialidad && coincideObraSocial;
+    });
+
+    // Mostrar spinner si se está cargando médicos O las opciones de los dropdowns
+    if (loading || loadingOptions) {
+        return (
+            <div className='container text-center mt-5'>
+                <div className='spinner-border text-primary' role='status'>
+                    <span className='visually-hidden'>Cargando...</span>
                 </div>
-              </div>
-
-              {/* Filtros adicionales */}
-              <div className='container row align-items-center'>
-                <div className="col-auto">
-                  {/* Especialidades - Ahora cargadas desde los médicos */}
-                  <div className="mb-1">
-                    <select
-                      className="form-select form-select-sm input-formulario"
-                      value={especialidadFiltro}
-                      onChange={(e) => setEspecialidadFiltro(e.target.value)}
-                      style={{
-                        borderRadius: '8px',
-                        border: '2px solid #ae5bbf',
-                        height: '40px',
-                        color: 'green',
-                      }}
-                    >
-                      {/* Opción por defecto */}
-                      <option value="Especialidades">Especialidades</option>
-                      {/* Opciones cargadas desde los médicos */}
-                      {especialidadesOptions.map(esp => (
-                        // Use the specialty name directly as the key and value
-                        <option key={esp} value={esp}>{esp}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Obras Sociales - Ahora cargadas desde los médicos */}
-                  <div className="mb-1">
-                    <select
-                      className="form-select form-select-sm input-formulario"
-                      value={obraSocialFiltro}
-                      onChange={(e) => setObraSocialFiltro(e.target.value)}
-                      style={{
-                        borderRadius: '8px',
-                        border: '2px solid #ae5bbf',
-                        height: '40px',
-                        color: 'green',
-                      }}
-                    >
-                       {/* Opción por defecto */}
-                      <option value="Obras Sociales">Obras Sociales</option>
-                      {/* Opciones cargadas desde los médicos */}
-                      {obrasSocialesOptions.map(esp => (
-                        // Use the specialty name directly as the key and value
-                        <option key={esp} value={esp}>{esp}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Tabla de resultados */}
-                <div className="col-auto mb-4">
-                  <div className="table-responsive">
-                    <table className="table table-hover" style={{ borderColor: '#ae5bbf' }}>
-                      <thead>
-                        <tr style={{ backgroundColor: '#f8f9fa' }}>
-                          <th style={{ borderBottom: '2px solid #ae5bbf' }}>Médico</th>
-                          <th style={{ borderBottom: '2px solid #ae5bbf' }}>Especialidad</th>
-                          <th style={{ borderBottom: '2px solid #ae5bbf' }}>Obra Social</th>
-                          <th style={{ borderBottom: '2px solid #ae5bbf' }}>Estado</th>
-                          <th style={{ borderBottom: '2px solid #ae5bbf' }}>Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {medicosFiltrados.map((medico) => (
-                          <tr key={medico.id}>
-                            <td>{medico.medico}</td>
-                            <td>{medico.especialidad}</td>
-                            <td>{medico.obraSocial}</td>
-                            <td>
-                              <span
-                                className={`badge ${medico.estado === 'disponible' ? 'bg-primary' : 'bg-danger'}`}
-                                style={{ padding: '6px 10px', borderRadius: '12px', fontSize: '0.85rem' }}
-                              >
-                                {medico.estado}
-                              </span>
-                            </td>
-                            <td>
-                              <button className='btn btn-outline-success btn-sm py-1 px-3'>
-                                Consultar
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    {medicosFiltrados.length === 0 && (
-                      <div className="alert alert-info text-center">
-                        No se encontraron médicos con los filtros aplicados
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Componente de paginación */}
-              <PaginationUI
-                currentPage={1}
-                totalPages={Math.ceil(medicosFiltrados.length / 10)}
-                disabled={false}
-              />
+                <p>Cargando médicos...</p>
             </div>
-          </div>
+        );
+    }
+
+    if (error) {
+        return <div className='container alert alert-danger mt-5'>{error}</div>;
+    }
+
+    return (
+        <div className='container container-formulario p-6 mb-5 mt-5'>
+            <div className='row justify-content-center'>
+                <div className='col-md-12 col-lg-10'>
+                    <div className='card shadow-lg border-0 card-formulario'>
+                        <div className='card-body p-4 row'>
+                            <h2 className='card-title text-center mb-4 card-titulo'>
+                                <span className='text-iniciar'>Buscar</span>
+                                <span className='text-sesion'> Médicos</span>
+                            </h2>
+
+                            {/* Input de búsqueda por nombre */}
+                            <div className='row mb-4 justify-content-center'>
+                                <div className='col-auto'>
+                                    <input
+                                        type='text'
+                                        className='form-control input-formulario-buscarMedico'
+                                        placeholder='Buscar por nombre'
+                                        value={nombreFiltro}
+                                        onChange={(e) =>
+                                            setNombreFiltro(e.target.value)
+                                        }
+                                        style={{
+                                            borderRadius: "8px",
+                                            border: "2px solid #ae5bbf",
+                                            height: "40px",
+                                            minWidth: "300px",
+                                        }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Filtros adicionales */}
+                            <div className='container d-flex flex-column align-items-center'>
+                                <div className='col-auto d-flex justify-content-center gap-2 mb-2'>
+                                    {/* Especialidades - Ahora cargadas desde los médicos */}
+                                    <div className='mb-1'>
+                                        <select
+                                            className='form-select form-select-sm input-formulario'
+                                            value={especialidadFiltro}
+                                            onChange={(e) =>
+                                                setEspecialidadFiltro(
+                                                    e.target.value
+                                                )
+                                            }
+                                            style={{
+                                                borderRadius: "8px",
+                                                border: "2px solid #ae5bbf",
+                                                height: "40px",
+                                                color: "green",
+                                            }}
+                                        >
+                                            {/* Opción por defecto */}
+                                            <option value='Especialidades'>
+                                                Especialidades
+                                            </option>
+                                            {/* Opciones cargadas desde los médicos */}
+                                            {especialidadesOptions.map(
+                                                (esp) => (
+                                                    // Use the specialty name directly as the key and value
+                                                    <option
+                                                        key={esp}
+                                                        value={esp}
+                                                    >
+                                                        {esp}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </div>
+
+                                    {/* Obras Sociales - Ahora cargadas desde los médicos */}
+                                    <div className='mb-1'>
+                                        <select
+                                            className='form-select form-select-sm input-formulario'
+                                            value={obraSocialFiltro}
+                                            onChange={(e) =>
+                                                setObraSocialFiltro(
+                                                    e.target.value
+                                                )
+                                            }
+                                            style={{
+                                                borderRadius: "8px",
+                                                border: "2px solid #ae5bbf",
+                                                height: "40px",
+                                                color: "green",
+                                            }}
+                                        >
+                                            {/* Opción por defecto */}
+                                            <option value='Obras Sociales'>
+                                                Obras Sociales
+                                            </option>
+                                            {/* Opciones cargadas desde los médicos */}
+                                            {obrasSocialesOptions.map((esp) => (
+                                                // Use the specialty name directly as the key and value
+                                                <option key={esp} value={esp}>
+                                                    {esp}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className='container'>
+                                    <div className='row justify-content-center'>
+                                        {medicosFiltrados.length > 0 ? (
+                                            medicosFiltrados.map((medico) => (
+                                                <div
+                                                    key={medico.id}
+                                                    className='col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex'
+                                                >
+                                                    <div className='card h-100 w-100 shadow-sm'>
+                                                        <div className='position-relative'>
+                                                            <img
+                                                                src='https://cdn-icons-png.freepik.com/256/1513/1513568.png'
+                                                                className='card-img-top'
+                                                                alt='Imagen del médico'
+                                                                style={{
+                                                                    height: "200px",
+                                                                    objectFit:
+                                                                        "cover",
+                                                                }}
+                                                            />
+                                                            <span
+                                                                className={`badge position-absolute top-0 end-0 m-2 ${
+                                                                    medico.estado ===
+                                                                    "disponible"
+                                                                        ? "bg-success"
+                                                                        : "bg-danger"
+                                                                }`}
+                                                                style={{
+                                                                    padding:
+                                                                        "0.5em 0.75em",
+                                                                    fontSize:
+                                                                        "0.8rem",
+                                                                    borderRadius:
+                                                                        "10px",
+                                                                }}
+                                                            >
+                                                                {medico.estado}
+                                                            </span>
+                                                        </div>
+                                                        <div className='card-body d-flex flex-column'>
+                                                            <h5 className='card-title'>
+                                                                {medico.medico}
+                                                            </h5>
+                                                            <h6
+                                                                className='card-subtitle mb-2'
+                                                                style={{
+                                                                    color: "#9a4aad",
+                                                                    fontWeight:
+                                                                        "bold",
+                                                                }}
+                                                            >
+                                                                {
+                                                                    medico.especialidad
+                                                                }
+                                                            </h6>
+                                                            <p
+                                                                className='card-text mb-1'
+                                                                style={{
+                                                                    fontSize:
+                                                                        "14px",
+                                                                }}
+                                                            >
+                                                                <strong>
+                                                                    Obra Social:
+                                                                </strong>{" "}
+                                                                {
+                                                                    medico.obraSocial
+                                                                }
+                                                            </p>
+                                                            <div className='mt-auto'>
+                                                                <button className='btn btn-outline-success btn-sm w-100'
+                                                                onClick={() => navigate(`/medico/${medico.id}`)}
+                                                                >
+                                                                    Consultar
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className='col-12'>
+                                                <div className='alert alert-info text-center'>
+                                                    No se encontraron médicos
+                                                    con los filtros aplicados
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Componente de paginación */}
+                            <PaginationUI
+                                currentPage={1}
+                                totalPages={Math.ceil(
+                                    medicosFiltrados.length / 10
+                                )}
+                                disabled={false}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default BuscarMedico;
