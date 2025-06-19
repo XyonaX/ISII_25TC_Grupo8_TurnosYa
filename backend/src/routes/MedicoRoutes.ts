@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { obtenerMedicosParaListado } from '../controllers/medicoControllers';
-const router = Router();
+import { getMedicoByIdHandler } from '../handlers/medicoHandler';
+const medicoRouter = Router();
 
 // Ruta para el listado de médicos
-router.get('/', obtenerMedicosParaListado);
+medicoRouter.get('/', obtenerMedicosParaListado);
+medicoRouter.get('/:id', getMedicoByIdHandler);
 
-export default router;
+export default medicoRouter;
