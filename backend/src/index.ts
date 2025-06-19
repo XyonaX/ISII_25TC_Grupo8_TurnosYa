@@ -37,12 +37,12 @@ mongoose.connect(mongoUri)
   });
 
 mongoose.connection.on('connected', async () => {
-  const collections = await mongoose.connection.db.listCollections().toArray();
-  console.log('📁 Colecciones disponibles:', collections.map(c => c.name));
+  const collections = await mongoose.connection.db?.listCollections().toArray();
+  console.log('📁 Colecciones disponibles:', collections?.map(c => c.name));
 });
 
 mongoose.connection.on('connected', () => {
-  console.log(`✅ Conectado a la base: ${mongoose.connection.db.databaseName}`);
+  console.log(`✅ Conectado a la base: ${mongoose.connection.db?.databaseName}`);
 });
 // Rutas
 
