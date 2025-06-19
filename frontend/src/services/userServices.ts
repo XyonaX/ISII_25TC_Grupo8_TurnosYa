@@ -188,7 +188,7 @@ export const dataService = {
       // La ruta en el backend es /api/medico/medicos
       const response = await api.get('/medico/');
       // Basado en medicoControllers.ts, devuelve el array directamente (res.json(medicos))
-      return response.data; // <-- Aquí se completa, retornando response.data
+      return response.data.data; // <-- Aquí se completa, retornando response.data
     } catch (error) {
       console.error('Error obteniendo médicos:', error);
       throw error;

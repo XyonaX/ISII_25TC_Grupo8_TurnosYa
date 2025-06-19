@@ -31,7 +31,7 @@ export interface MedicoData {
 
 export interface Medico {
   id: string; // Corresponde al _id del usuario/médico
-  medico: string; // Corresponde al campo 'medico' del pipeline (nombre + apellido)
+  nombreCompleto: string; // Corresponde al campo 'medico' del pipeline (nombre + apellido)
   especialidad: string; // Corresponde al campo 'especialidad' del pipeline (nombre de la especialidad)
   obraSocial: string; // Corresponde al campo 'obraSocial' del pipeline (nombre de la obra social)
   estado: string; // Corresponde al campo 'estado' del pipeline (nombre del estado)

@@ -6,6 +6,7 @@ import apiRoutes from "./routes/api.routes";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import './models';
+import medicoRoutes from './routes/MedicoRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,7 +52,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api", apiRoutes);
-
+app.use('/medicos', medicoRoutes);
 
 // Swagger docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
