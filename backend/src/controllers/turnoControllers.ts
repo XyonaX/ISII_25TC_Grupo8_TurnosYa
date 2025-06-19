@@ -48,13 +48,8 @@ const createTurnoController = async (
 // Obtener todos los turnos (Médico)
 const getAllTurnosController = async () => {
     try {
-        const estadoDisponible = await EstadoTurno.findOne({
-            id_estado_turno: 1,
-        });
-        if (!estadoDisponible)
-            throw new Error("Estado disponible no encontrado");
-
-        return await Turno.find({ id_estado_turno: estadoDisponible._id })
+        const estadoDisponible = await getEstadoTurnoId(1)
+        return await Turno.find({ id_estado_turno: estadoDisponible })
             .populate("id_estado_turno")
             .populate("id_medico")
             .populate("id_paciente");
