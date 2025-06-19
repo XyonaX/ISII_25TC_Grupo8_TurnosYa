@@ -12,6 +12,7 @@ import SobreNosotros from './pages/SobreNosotros';
 import PreguntasFrecuentes from './pages/PreguntasFrecuentes';
 import TerminosCondiciones from './pages/TerminosCondiciones';
 import PoliticasPrivacidad from './pages/PoliticasPrivacidad';
+import { MedicoPage } from './pages/MedicoPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path='/login' element={<IniciarSesion/>} />
           <Route path='/registro' element={<Registrarse/>} />
           <Route path='/buscarmedico' element={<BuscarMedico/>} />
+          <Route path='/medico/:id' element={<MedicoPage/>} />
           <Route path='/sobrenosotros' element={<SobreNosotros/>} />
           <Route path='/preguntasfrecuentes' element={<PreguntasFrecuentes/>} />
           <Route path='/terminos' element={<TerminosCondiciones/>} />
