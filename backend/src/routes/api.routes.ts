@@ -3,7 +3,7 @@ import usersRouter from "./usersRoutes";
 import authRouter from "./authRoutes";
 import turnoRouter from "./TurnoRoutes";
 import dataRouter from "./dataRoutes";
-import medicoRoutes from '../routes/MedicoRoutes';
+import medicoRoutes from './MedicoRoutes';
 import { fakeAuth } from "../middlewares/fakeAuth";
 
 const router = Router();
@@ -14,7 +14,7 @@ router.use(fakeAuth);
 router.use("/users",usersRouter);
 router.use("/auth",authRouter);
 router.use("/turnos", turnoRouter);
-router.use('/data', dataRouter);
+router.use("/data", dataRouter);
 router.use("/medico",medicoRoutes);
 
 
