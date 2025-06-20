@@ -7,6 +7,7 @@ import {
     editarMotivoTurnoHandler,
     getAllTurnosHandler,
     getTurnoByIdHandler,
+    getTurnosPormedicoHandler,
     updateTurnoHandler,
 } from "../handlers/turnoHandler";
 import { fakeAuth } from "../middlewares/fakeAuth";
@@ -18,6 +19,7 @@ turnoRouter.use(fakeAuth);
 turnoRouter.post("/", createTurnoHandler);
 turnoRouter.get("/", getAllTurnosHandler);
 turnoRouter.get("/:id", getTurnoByIdHandler);
+turnoRouter.get("/medico/:id", getTurnosPormedicoHandler);
 turnoRouter.put("/:id", updateTurnoHandler);
 turnoRouter.delete("/:id", deleteTurnoHandler);
 turnoRouter.post("/:id/agendar", agendarTurnoHandler);
