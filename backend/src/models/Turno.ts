@@ -1,11 +1,6 @@
 import { Schema, model } from "mongoose";
 
 const TurnoSchema = new Schema({
-    id_turno: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        unique: true,
-    },
     motivo_turno: {
         type: String,
         required: false,
