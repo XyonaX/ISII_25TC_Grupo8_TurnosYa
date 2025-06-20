@@ -254,6 +254,21 @@ const cancelarTurnoPacienteController = async (
     return { message: "Turno cancelado exitosamente" };
 };
 
+const getTurnosPorMedicoController = async (idMedico: string) => {
+    if(!mongoose.Types.ObjectId.isValid(idMedico)){
+        throw new Error("ID de médico inválido");
+    }
+
+    const estadoDisponible = await getEstadoTurnoId(1);
+
+    const turnos = await Turno.find({
+        id_medico: new mongoose.Types.ObjectId(idMedico),
+        id_estado_turno: estadoDisponible
+    }).populate("id_estado_turno").populate("id_paciente");
+
+    return turnos;
+}
+
 export {
     createTurnoController,
     getAllTurnosController,
@@ -263,4 +278,5 @@ export {
     agendarTurnoController,
     editarMotivoTurnoController,
     cancelarTurnoPacienteController,
+    getTurnosPorMedicoController,
 };
