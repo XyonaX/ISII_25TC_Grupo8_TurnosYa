@@ -5,6 +5,16 @@
         "version": "1.0.0",
         "description": "Documentación de TurnosYa API usando Swagger"
     },
+    "tags": [
+        {
+            "name": "Users",
+            "description": "Operaciones relacionadas con los usuarios"
+        },
+        {
+            "name": "Turnos",
+            "description": "Operaciones relacionadas con los turnos"
+        }
+    ],
     "paths": {
         "/api": {
             "get": {
@@ -18,6 +28,7 @@
         },
         "/api/users": {
             "get": {
+                "tags": ["Users"],
                 "summary": "Obtener todos los usuarios",
                 "responses": {
                     "200": {
@@ -28,6 +39,7 @@
         },
         "/api/users/dni/{dni}": {
             "get": {
+                "tags": ["Users"],
                 "summary": "Obtener usuario por DNI",
                 "parameters": [
                     {
@@ -51,6 +63,7 @@
         },
         "/api/users/{id}": {
             "get": {
+                "tags": ["Users"],
                 "summary": "Obtener usuario por ID",
                 "parameters": [
                     {
@@ -72,6 +85,7 @@
                 }
             },
             "put": {
+                "tags": ["Users"],
                 "summary": "Actualizar usuario",
                 "parameters": [
                     {
@@ -100,6 +114,7 @@
                 }
             },
             "delete": {
+                "tags": ["Users"],
                 "summary": "Eliminar usuario",
                 "parameters": [
                     {
@@ -120,6 +135,7 @@
         },
         "/api/users/create": {
             "post": {
+                "tags": ["Users"],
                 "summary": "Crear un nuevo usuario",
                 "requestBody": {
                     "required": true,
@@ -135,6 +151,188 @@
                     "201": {
                         "description": "Usuario creado"
                     }
+                }
+            }
+        },
+        "/api/turnos": {
+            "get": {
+                "tags": ["Turnos"],
+                "summary": "Obtener todos los turnos disponibles",
+                "responses": {
+                    "200": {
+                        "description": "Lista de turnos disponibles"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Turnos"],
+                "summary": "Crear un nuevo turno (solo médico)",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Turno"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Turno creado"
+                    }
+                }
+            }
+        },
+        "/api/turnos/{id}": {
+            "get": {
+                "tags": ["Turnos"],
+                "summary": "Obtener turno por ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": { "description": "Turno encontrado" },
+                    "404": { "description": "Turno no encontrado" }
+                }
+            },
+            "put": {
+                "tags": ["Turnos"],
+                "summary": "Actualizar turno (solo médico)",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Turno"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Turno actualizado" }
+                }
+            },
+            "delete": {
+                "tags": ["Turnos"],
+                "summary": "Eliminar turno (solo médico)",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": { "description": "Turno eliminado" }
+                }
+            }
+        },
+        "/api/turnos/{id}/agendar": {
+            "post": {
+                "tags": ["Turnos"],
+                "summary": "Agendar turno (solo paciente)",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "motivo_turno": { "type": "string" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Turno agendado" }
+                }
+            }
+        },
+        "/api/turnos/{id}/motivo": {
+            "put": {
+                "tags": ["Turnos"],
+                "summary": "Editar motivo del turno (solo paciente)",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "motivo_turno": { "type": "string" }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": { "description": "Motivo actualizado" }
+                }
+            }
+        },
+        "/api/turnos/{id}/cancelar": {
+            "delete": {
+                "tags": ["Turnos"],
+                "summary": "Cancelar turno (solo paciente)",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": { "description": "Turno cancelado" }
+                }
+            }
+        },
+        "/api/turnos/medico/{id}": {
+            "get": {
+                "tags": ["Turnos"],
+                "summary": "Obtener turnos disponibles de un médico",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "200": { "description": "Lista de turnos del médico" }
                 }
             }
         }
@@ -177,6 +375,41 @@
                     "id_estado_usuario",
                     "tipo_usuario"
                 ]
+            },
+            "Turno": {
+                "type": "object",
+                "properties": {
+                    "_id": { "type": "string", "description": "ID del turno" },
+                    "id_medico": {
+                        "type": "string",
+                        "description": "ID del médico"
+                    },
+                    "id_paciente": {
+                        "type": "string",
+                        "description": "ID del paciente",
+                        "nullable": true
+                    },
+                    "fecha_turno": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Fecha"
+                    },
+                    "hora_turno": {
+                        "type": "string",
+                        "format": "time",
+                        "description": "Hora del turno"
+                    },
+                    "motivo_turno": {
+                        "type": "string",
+                        "description": "Motivo del turno",
+                        "nullable": true
+                    },
+                    "estado_turno": {
+                        "type": "string",
+                        "description": "Estado del turno"
+                    }
+                },
+                "required": ["id_medico", "fecha_turno", "hora_turno"]
             }
         }
     }
