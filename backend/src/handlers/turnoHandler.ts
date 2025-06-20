@@ -7,7 +7,8 @@ import {
     deleteTurnoController,
     agendarTurnoController,
     editarMotivoTurnoController,
-    cancelarTurnoPacienteController
+    cancelarTurnoPacienteController,
+    getTurnosPorMedicoController
 } from "../controllers/turnoControllers";
 
 // CREATE Handler
@@ -158,6 +159,27 @@ const cancelarTurnoHandler = async (req: Request, res: Response) => {
     }
 };
 
+const getTurnosPormedicoHandler = async (req: Request, res: Response) => {
+    try {
+        if(!req.user) {
+            return res.status(401).json({ error: "No autenticado"});
+        }
+
+        const { id: idMedico } = req.params;
+        const turnos = await getTurnosPorMedicoController(idMedico);
+        res.status(200).json({
+            success: true,
+            data: turnos
+        });
+    }catch (error: any) {
+        console.error("Error en al obtener turnos por médico: ", error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
 export {
     createTurnoHandler,
     deleteTurnoHandler,
@@ -167,4 +189,5 @@ export {
     agendarTurnoHandler,
     editarMotivoTurnoHandler,
     cancelarTurnoHandler,
+    getTurnosPormedicoHandler,
 };
