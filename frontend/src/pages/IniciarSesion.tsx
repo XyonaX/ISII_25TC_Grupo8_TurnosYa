@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaGoogle } from 'react-icons/fa';
 import { authService } from '../services/userServices'; // Asegurate que el path esté bien
+import { useAuthStore } from '../store/userAuthStore';
 
 const IniciarSesion = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
+  const setUser = useAuthStore((state) => state.setUser);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,9 +22,20 @@ const IniciarSesion = () => {
         email_usuario: email,
         clave_usuario: password,
       });
+      console.log('Usuario logueado:', response);
 
+      const {_id, nombre_usuario, apellido_usuario, email_usuario, tipo_usuario} = response.data.user;
+
+      const user = {
+        id: _id,
+        nombre: nombre_usuario,
+        apellido: apellido_usuario,
+        email: email_usuario,
+        tipoUsuario: tipo_usuario
+      }
       // Si todo va bien, podés guardar el usuario en localStorage o contexto
-      localStorage.setItem('user', JSON.stringify(response));
+      localStorage.setItem('user', JSON.stringify(user));
+      setUser(response.data.user);
       navigate('/'); // o a la ruta que quieras después del login
       
     } catch (error: any) {
