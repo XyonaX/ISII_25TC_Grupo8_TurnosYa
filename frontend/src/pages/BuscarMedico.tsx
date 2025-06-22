@@ -92,7 +92,7 @@ const BuscarMedico = () => {
     // Mostrar spinner si se está cargando médicos O las opciones de los dropdowns
     if (loading || loadingOptions) {
         return (
-            <div className='container text-center mt-5'>
+            <div className='container text-center mt-5'> 
                 <div className='spinner-border text-primary' role='status'>
                     <span className='visually-hidden'>Cargando...</span>
                 </div>
@@ -122,11 +122,15 @@ const BuscarMedico = () => {
                                     <input
                                         type='text'
                                         className='form-control input-formulario-buscarMedico'
-                                        placeholder='Buscar por nombre'
+                                        placeholder='Buscar por nombre/apellido'
                                         value={nombreFiltro}
-                                        onChange={(e) =>
-                                            setNombreFiltro(e.target.value)
-                                        }
+                                        onChange={(e) => {
+                                            const valor = e.target.value;
+                                            // Solo permite letras (mayúsculas/minúsculas) y espacios
+                                            if (/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(valor)) {
+                                                setNombreFiltro(valor);
+                                            }
+                                        }}
                                         style={{
                                             borderRadius: "8px",
                                             border: "2px solid #ae5bbf",
