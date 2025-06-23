@@ -9,6 +9,7 @@ import Paciente from "../models/Paciente";
 import Medico from "../models/Medico";
 import userSchema from "./validations/userSchema";
 import Usuario from "../models/Usuario";
+import { generateToken } from "../utils/jwt";
 import EspecialidadMedico from "../models/EspecialidadMedico";
 
 // Esquema de validación para login
@@ -119,11 +120,15 @@ const loginHandler = async (req: Request, res: Response) => {
         // No devolver la contraseña en la respuesta
         const { clave_usuario: _, ...userWithoutPassword } = user.toObject();
 
+        // Generar un token JWT
+        const token = generateToken({ id: user._id, role: user.tipo_usuario, email : user.email_usuario});
+
         res.status(200).json({
             success: true,
             message: "Inicio de sesión exitoso",
             data: {
                 user: userWithoutPassword,
+                token,
             },
         });
     } catch (error: any) {

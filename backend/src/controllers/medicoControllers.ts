@@ -210,4 +210,89 @@ const getMedicoByIdController = async (id: string) => {
     }
 };
 
-export { getMedicoByIdController };
+const getMedicoByUserIdController = async (userId: string) => {
+    try {
+        const pipeline = [
+            {
+                $match: { id_usuario: new Types.ObjectId(userId) },
+            },
+            {
+                $lookup: {
+                    from: "usuarios",
+                    localField: "id_usuario",
+                    foreignField: "_id",
+                    as: "usuario",
+                },
+            },
+            { $unwind: { path: "$usuario", preserveNullAndEmptyArrays: true } },
+            {
+                $lookup: {
+                    from: "especialidad/medico",
+                    localField: "_id",
+                    foreignField: "id_medico",
+                    as: "rel_especialidades",
+                },
+            },
+            {
+                $lookup: {
+                    from: "especialidades",
+                    localField: "rel_especialidades.id_especialidad",
+                    foreignField: "_id",
+                    as: "especialidades",
+                },
+            },
+            {
+                $lookup: {
+                    from: "obra_social/medico",
+                    localField: "_id",
+                    foreignField: "id_medico",
+                    as: "rel_obras_sociales",
+                },
+            },
+            {
+                $lookup: {
+                    from: "obras_sociales",
+                    localField: "rel_obras_sociales.id_obra_social",
+                    foreignField: "_id",
+                    as: "obras_sociales",
+                },
+            },
+
+            {
+                $project: {
+                    id: "$_id",
+                    matricula: "$matricula_medico",
+                    nombreCompleto: {
+                        $cond: {
+                            if: { $ifNull: ["$usuario", false] },
+                            then: {
+                                $concat: [
+                                    "$usuario.nombre_usuario",
+                                    " ",
+                                    "$usuario.apellido_usuario",
+                                ],
+                            },
+                            else: "Médico sin usuario",
+                        },
+                    },
+                    especialidades: "$especialidades.nombre_especialidad",
+                    obrasSociales: "$obras_sociales.nombre_obra_social",
+                    estado: { $literal: "disponible" },
+                    _id: 0,
+                },
+            },
+        ];
+
+        const resultado = await Medico.aggregate(pipeline);
+        if (!resultado.length) {
+            throw new Error("Médico no encontrado");
+        }
+
+        return resultado[0];
+    } catch (error) {
+        console.error("Error al obtener medico por ID de usuario: ", error);
+        throw new Error("Médico no encontrado");
+    }
+}
+
+export { getMedicoByIdController,getMedicoByUserIdController };

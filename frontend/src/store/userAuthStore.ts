@@ -5,6 +5,13 @@ type User = {
     nombre_usuario: string;
     apellido_usuario: string;
     tipo_usuario: string;
+    calle_usuario: string;
+    cod_postal: string;
+    dni_usuario: string;
+    fecha_nac_usuario: string | Date;
+    num_usuario: string;
+    email_usuario: string;
+    celular_usuario: string;
 };
 
 type AuthState = {

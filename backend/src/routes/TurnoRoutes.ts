@@ -10,18 +10,20 @@ import {
     getTurnosPormedicoHandler,
     updateTurnoHandler,
 } from "../handlers/turnoHandler";
-import { fakeAuth } from "../middlewares/fakeAuth";
+import { authorizeRole } from "../middlewares/authorizeRole";
+import { authenticateToken } from "../middlewares/authMiddleware";
+import { getMedicoByUsuarioIdHandler } from "../handlers/medicoHandler";
 
 
 const turnoRouter = Router();
 
-turnoRouter.use(fakeAuth);
-turnoRouter.post("/", createTurnoHandler);
+turnoRouter.post("/", authenticateToken,authorizeRole('medico'),createTurnoHandler);
 turnoRouter.get("/", getAllTurnosHandler);
 turnoRouter.get("/:id", getTurnoByIdHandler);
-turnoRouter.get("/medico/:id", getTurnosPormedicoHandler);
+turnoRouter.get("/medico/:id",getTurnosPormedicoHandler);
+turnoRouter.get("/medico/usuario/:id", getMedicoByUsuarioIdHandler);
 turnoRouter.put("/:id", updateTurnoHandler);
-turnoRouter.delete("/:id", deleteTurnoHandler);
+turnoRouter.delete("/:id", authenticateToken,deleteTurnoHandler);
 turnoRouter.post("/:id/agendar", agendarTurnoHandler);
 turnoRouter.put("/:id/motivo", editarMotivoTurnoHandler);
 turnoRouter.delete("/:id/cancelar", cancelarTurnoHandler);

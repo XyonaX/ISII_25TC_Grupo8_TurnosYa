@@ -3,40 +3,45 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaGoogle } from 'react-icons/fa';
-import { authService } from '../services/userServices'; // Asegurate que el path esté bien
-import { useAuthStore } from '../store/userAuthStore';
+
+import { useUserStore } from '../store/userStore';
 
 const IniciarSesion = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const navigate = useNavigate();
-  const setUser = useAuthStore((state) => state.setUser);
-
+  const setUser = useUserStore((state) => state.setUser);
+  const { login } = useUserStore();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
 
     try {
-      const response = await authService.login({
+      const data = await login({
         email_usuario: email,
         clave_usuario: password,
       });
-      console.log('Usuario logueado:', response);
+      console.log('Usuario logueado:', data);
+      
 
-      const {_id, nombre_usuario, apellido_usuario, email_usuario, tipo_usuario} = response.data.user;
+      const {_id, nombre_usuario, apellido_usuario, email_usuario, tipo_usuario} = data.user;
+      const token = data.token;
+      console.log('Token recibido:', token);
 
       const user = {
         id: _id,
         nombre: nombre_usuario,
         apellido: apellido_usuario,
         email: email_usuario,
-        tipoUsuario: tipo_usuario
+        tipoUsuario: tipo_usuario,
+        token
       }
       // Si todo va bien, podés guardar el usuario en localStorage o contexto
+      localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-      setUser(response.data.user);
-      navigate('/'); // o a la ruta que quieras después del login
+      setUser(data.user);
+      navigate('/'); 
       
     } catch (error: any) {
       console.error('Error al iniciar sesión:', error);

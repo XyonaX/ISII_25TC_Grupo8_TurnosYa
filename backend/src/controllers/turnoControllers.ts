@@ -26,6 +26,10 @@ const createTurnoController = async (
             throw new Error("Solo los médicos pueden crear turnos");
         }
 
+        if (!turnoData.fecha_turno || !turnoData.hora_turno) {
+            throw new Error("Fecha y hora del turno son obligatorias");
+        }
+
         const disponibleId = await getEstadoTurnoId(1); // Estado "disponible"
 
         const nuevoTurno = new Turno({
@@ -48,7 +52,7 @@ const createTurnoController = async (
 // Obtener todos los turnos (Médico)
 const getAllTurnosController = async () => {
     try {
-        const estadoDisponible = await getEstadoTurnoId(1)
+        const estadoDisponible = await getEstadoTurnoId(1);
         return await Turno.find({ id_estado_turno: estadoDisponible })
             .populate("id_estado_turno")
             .populate("id_medico")
@@ -106,7 +110,9 @@ const updateTurnoController = async (
     });
 
     if (!turnoExistente) {
-        throw new Error("Turno no encontrado o no autorizado");
+        throw new Error(
+            "Turno no encontrado o no pertenece al médico autenticado"
+        );
     }
 
     // Actualizamos el turno
@@ -163,12 +169,13 @@ const agendarTurnoController = async (
     idTurno: string,
     motivo?: string
 ) => {
-
     if (!mongoose.Types.ObjectId.isValid(idTurno)) {
         throw new Error("ID de turno inválido");
     }
     if (role !== "paciente") {
-        throw new Error("Solo los pacientes pueden agendar turnos | controlador");
+        throw new Error(
+            "Solo los pacientes pueden agendar turnos | controlador"
+        );
     }
 
     const turno = await Turno.findById(idTurno);
@@ -222,7 +229,7 @@ const cancelarTurnoPacienteController = async (
     role: string,
     idTurno: string
 ) => {
-    if(role !== "paciente"){
+    if (role !== "paciente") {
         throw new Error("Solo los pacientes pueden cancelar turnos");
     }
 
@@ -255,7 +262,7 @@ const cancelarTurnoPacienteController = async (
 };
 
 const getTurnosPorMedicoController = async (idMedico: string) => {
-    if(!mongoose.Types.ObjectId.isValid(idMedico)){
+    if (!mongoose.Types.ObjectId.isValid(idMedico)) {
         throw new Error("ID de médico inválido");
     }
 
@@ -263,11 +270,13 @@ const getTurnosPorMedicoController = async (idMedico: string) => {
 
     const turnos = await Turno.find({
         id_medico: new mongoose.Types.ObjectId(idMedico),
-        id_estado_turno: estadoDisponible
-    }).populate("id_estado_turno").populate("id_paciente");
+        id_estado_turno: estadoDisponible,
+    })
+        .populate("id_estado_turno")
+        .populate("id_paciente");
 
     return turnos;
-}
+};
 
 export {
     createTurnoController,

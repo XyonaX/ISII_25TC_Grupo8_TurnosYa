@@ -13,6 +13,9 @@ import PreguntasFrecuentes from './pages/PreguntasFrecuentes';
 import TerminosCondiciones from './pages/TerminosCondiciones';
 import PoliticasPrivacidad from './pages/PoliticasPrivacidad';
 import { MedicoPage } from './pages/MedicoPage';
+import PublicRoutes from './utils/PublicRoutes';
+import { PerfilPage } from './pages/PerfilPage';
+import { GestionTurnos } from './pages/GestionTurnos';
 
 function App() {
   return (
@@ -21,8 +24,10 @@ function App() {
       <main>
         <Routes>
           <Route path='/' element={<HomePage/>} />          
-          <Route path='/login' element={<IniciarSesion/>} />
-          <Route path='/registro' element={<Registrarse/>} />
+          <Route path='/login' element={<PublicRoutes><IniciarSesion/></PublicRoutes>} />
+          <Route path='/registro' element={<PublicRoutes>?<Registrarse/></PublicRoutes>} />
+          <Route path='/perfil' element={<PerfilPage/> } />
+          <Route path='/gestion-turnos' element={<GestionTurnos/> } />
           <Route path='/buscarmedico' element={<BuscarMedico/>} />
           <Route path='/medico/:id' element={<MedicoPage/>} />
           <Route path='/sobrenosotros' element={<SobreNosotros/>} />

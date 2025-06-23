@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { getMedicoByIdController } from "../controllers/medicoControllers";
+import { getMedicoByUserIdController } from "../controllers/medicoControllers";
+import Medico from "../models/Medico";
 
 // GET Medico by ID Handler
 const getMedicoByIdHandler = async (req: Request, res: Response) => {
@@ -28,4 +30,15 @@ const getMedicoByIdHandler = async (req: Request, res: Response) => {
     }
 };
 
-export { getMedicoByIdHandler };
+const getMedicoByUsuarioIdHandler = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const medico = await Medico.findOne({ id_usuario: id });
+        if (!medico) return res.status(404).json({ message: "Médico no encontrado" });
+        res.status(200).json({ data: medico });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export { getMedicoByIdHandler, getMedicoByUsuarioIdHandler };

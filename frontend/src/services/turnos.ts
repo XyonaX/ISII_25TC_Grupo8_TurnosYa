@@ -1,11 +1,13 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_BASE_URL_API || "http://localhost:3000/api";
+const API_BASE_URL =
+    import.meta.env.VITE_BASE_URL_API || "http://localhost:3000/api";
 
 interface Turno {
     _id: string;
     fecha_turno: string;
     hora_turno: string;
+    id_medico?: string;
 }
 
 interface Medico {
@@ -15,6 +17,11 @@ interface Medico {
     obraSocial: string[];
 }
 
+const getAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const turnosService = {
     getMedicoById: async (id: string): Promise<Medico | null> => {
         const res = await axios.get(`${API_BASE_URL}/medico/${id}`);
@@ -22,8 +29,37 @@ export const turnosService = {
     },
 
     getTurnosDisponiblesByMedicoId: async (id: string): Promise<Turno[]> => {
-        const res = await axios.get(`${API_BASE_URL}/turnos/medico/${id}`);
+        const res = await axios.get(`${API_BASE_URL}/turnos/medico/${id}`, {
+            headers: getAuthHeaders(),
+        });
         return res.data.data || [];
+    },
+    getMedicoByUsuarioId: async (usuarioId: string): Promise<Medico | null> => {
+        const res = await axios.get(
+            `${API_BASE_URL}/turnos/medico/usuario/${usuarioId}`,
+            {
+                headers: getAuthHeaders(), 
+            }
+        );
+        return res.data.data || null;
+    },
+
+    createTurno: async (turnoData: {
+        fecha_turno: string;
+        hora_turno: string;
+        id_medico: string;
+        tipo_usuario: string;
+    }): Promise<Turno> => {
+        const res = await axios.post(`${API_BASE_URL}/turnos`, turnoData, {
+            headers: getAuthHeaders(),
+        });
+        return res.data;
+    },
+
+    deleteTurno: async (turnoId: string): Promise<void> => {
+        await axios.delete(`${API_BASE_URL}/turnos/${turnoId}`, {
+            headers: getAuthHeaders(),
+        });
     },
 
     agendarTurno: async (
@@ -31,18 +67,18 @@ export const turnosService = {
         motivo: string,
         idUsuario: string
     ): Promise<void> => {
-        const res = await axios.post(`${API_BASE_URL}/turnos/:id/agendar`, {
-            turnoId,
-            idUsuario,
-            motivo,
-        });
+        const res = await axios.post(
+            `${API_BASE_URL}/turnos/${turnoId}/agendar`,
+            { idUsuario, motivo },
+            { headers: getAuthHeaders() }
+        );
         return res.data;
     },
 };
 
 export const fetchTurnos = async () => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/api/turnos`);
+        const response = await axios.get(`${API_BASE_URL}/turnos`);
         return response.data;
     } catch (error) {
         throw new Error(

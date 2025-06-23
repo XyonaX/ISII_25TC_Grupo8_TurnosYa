@@ -1,15 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaUserCircle } from "react-icons/fa";
-import { useAuthStore } from "../../store/userAuthStore";
+import { useUserStore } from "../../store/userStore";
 
 export default function HeaderNavbar() {
-    const user = useAuthStore((state) => state.user);
-    const setUser = useAuthStore((state) => state.setUser);
+    const user = useUserStore((state) => state.user);
+    const setUser = useUserStore((state) => state.setUser);
     const navigate = useNavigate();
 
     const handleLogout = () => {
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
         setUser(null);
         navigate("/");
     };
@@ -98,17 +99,9 @@ export default function HeaderNavbar() {
                                                 <li>
                                                     <Link
                                                         className='dropdown-item'
-                                                        to='/obras-sociales'
+                                                        to='/gestion-turnos'
                                                     >
-                                                        Obras sociales
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link
-                                                        className='dropdown-item'
-                                                        to='/disponibilidad'
-                                                    >
-                                                        Disponibilidad
+                                                        Gestion de turnos
                                                     </Link>
                                                 </li>
                                             </>
@@ -126,7 +119,7 @@ export default function HeaderNavbar() {
                                         </li>
                                     </ul>
                                 </li>
-                                <p className="text-center fw-semibold mb-0" style={{color: "#ad3ebd"}}>{ user?.tipo_usuario.toUpperCase()}</p>
+                                <p className="text-center fw-semibold mb-0 text-uppercase" style={{color: "#ad3ebd"}}>{ user?.tipo_usuario}</p>
                             </div>
                         )}
                     </ul>

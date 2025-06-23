@@ -110,9 +110,9 @@ export const userService = {
   updateUser: async (
     id: string,
     userData: Partial<RegisterFormData>,
-    token: string
   ): Promise<UsuarioResponse | PacienteResponse | MedicoResponse> => {
     try {
+      const token = localStorage.getItem('token')
       const response = await api.put(`/users/${id}`, userData, {
         headers: { Authorization: `Bearer ${token}` },
       });

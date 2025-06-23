@@ -10,6 +10,7 @@ import {
     cancelarTurnoPacienteController,
     getTurnosPorMedicoController
 } from "../controllers/turnoControllers";
+import Medico from "../models/Medico";
 
 // CREATE Handler
 const createTurnoHandler = async (req: Request, res: Response) => {
@@ -20,7 +21,16 @@ const createTurnoHandler = async (req: Request, res: Response) => {
 
         const { id: userId, role } = req.user;
 
-        const turno = await createTurnoController(userId, role, req.body);
+        if (role !== "medico") {
+            return res.status(403).json({ error: "Solo los médicos pueden crear turnos" });
+        }
+
+        const medico = await Medico.findOne({ id_usuario: userId });
+        if (!medico) {
+            return res.status(404).json({ error: "Médico no encontrado" });
+        }
+
+        const turno = await createTurnoController(medico._id.toString(), role, req.body);
         res.status(201).json(turno);
     } catch (error: any) {
         res.status(400).json({ error: error.message });
@@ -164,6 +174,7 @@ const getTurnosPormedicoHandler = async (req: Request, res: Response) => {
         if(!req.user) {
             return res.status(401).json({ error: "No autenticado"});
         }
+        
 
         const { id: idMedico } = req.params;
         const turnos = await getTurnosPorMedicoController(idMedico);

@@ -8,7 +8,6 @@ import { fakeAuth } from "../middlewares/fakeAuth";
 
 const router = Router();
 
-router.use(fakeAuth);
 
 // Ejemplo de endpoints
 router.use("/users",usersRouter);
