@@ -164,6 +164,7 @@ export const GestionTurnos = () => {
                                 value={fecha}
                                 onChange={(newDate) => setFecha(newDate)}
                                 slotProps={{ textField: { fullWidth: true } }}
+                                minDate={new Date()} 
                             />
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
