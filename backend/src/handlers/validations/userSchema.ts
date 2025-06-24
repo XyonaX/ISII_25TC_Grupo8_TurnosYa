@@ -1,7 +1,12 @@
 import Joi from "joi";
 
 const userSchema = Joi.object({
-    dni_usuario: Joi.string().required().max(8).messages({
+    dni_usuario: Joi.string()
+    .pattern(/^[0-9]+$/)
+    .required()
+    .max(8)
+    .messages({
+        "string.pattern.base": "El DNI solo puede contener números",
         "string.max": "El DNI no puede tener más de 8 caracteres",
         "string.empty": "El DNI es requerido",
     }),

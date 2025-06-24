@@ -98,64 +98,32 @@ const Registrarse = () => {
         setIsSubmitting(true);
         setErrors({});
 
-        // Validar que todos los campos requeridos estén presentes
-        const requiredFields: (keyof RegisterFormData)[] = [
-            "dni_usuario",
-            "nombre_usuario",
-            "apellido_usuario",
-            "fecha_nac_usuario",
-            "celular_usuario",
-            "email_usuario",
-            "clave_usuario",
-            "calle_usuario",
-            "num_usuario",
-            "cod_postal",
-            "id_ciudad",
-            "id_estado_usuario",
-        ];
-
-        const missingFields = requiredFields.filter(
-            (field) => !formData[field]
-        );
-
-        if (missingFields.length > 0) {
-            setErrors({
-                general: `Faltan campos requeridos: ${missingFields.join(
-                    ", "
-                )}`,
-            });
-            setIsSubmitting(false);
-            return;
-        }
-
         try {
             // Crear objeto con todos los campos requeridos
             const userToSend: RegisterFormData = {
-                dni_usuario: formData.dni_usuario!,
-                nombre_usuario: formData.nombre_usuario!,
-                apellido_usuario: formData.apellido_usuario!,
-                fecha_nac_usuario: formData.fecha_nac_usuario!,
-                celular_usuario: formData.celular_usuario!,
-                email_usuario: formData.email_usuario!,
-                clave_usuario: formData.clave_usuario!,
-                calle_usuario: formData.calle_usuario!,
-                num_usuario: formData.num_usuario!,
-                cod_postal: formData.cod_postal!,
-                id_ciudad: formData.id_ciudad!,
-                id_estado_usuario: formData.id_estado_usuario!,
+                dni_usuario: formData.dni_usuario || "",
+                nombre_usuario: formData.nombre_usuario || "",
+                apellido_usuario: formData.apellido_usuario || "",
+                fecha_nac_usuario: formData.fecha_nac_usuario || "",
+                celular_usuario: formData.celular_usuario || "",
+                email_usuario: formData.email_usuario || "",
+                clave_usuario: formData.clave_usuario || "",
+                calle_usuario: formData.calle_usuario || "",
+                num_usuario: formData.num_usuario || "",
+                cod_postal: formData.cod_postal || "",
+                id_ciudad: formData.id_ciudad || "",
+                id_estado_usuario: formData.id_estado_usuario || "",
                 tipo_usuario: tipoUsuario,
-                // Campos condicionales
                 ...(tipoUsuario === "medico" && {
-                    matricula_medico: formData.matricula_medico!,
-                    especialidades: formData.especialidades
-                        ? [formData.especialidades[0]]
-                        : [],
+                    matricula_medico: formData.matricula_medico || "",
+                    especialidades: formData.especialidades ? [formData.especialidades[0]] : [],
                 }),
                 ...(tipoUsuario === "paciente" && {
-                    id_obra_social: formData.id_obra_social!,
+                    id_obra_social: formData.id_obra_social || "",
                 }),
             };
 
+            console.log("Enviando al backend:", userToSend);
             const response = await authService.register(userToSend);
             setSuccessMessage("Registro exitoso. Serás redirigido al login...");
 
@@ -163,11 +131,18 @@ const Registrarse = () => {
                 navigate("/login");
             }, 3000);
         } catch (error: any) {
-            console.error("Error al registrar:", error);
-            setErrors({
-                general:
-                    "Error de conexión con el servidor. Intenta más tarde.",
-            });
+            // Axios pone la respuesta del backend en error.response.data
+            if (error.response && error.response.data && error.response.data.errors) {
+                const errorsObj: RegisterErrors = {};
+                error.response.data.errors.forEach((err: { field: string, message: string }) => {
+                    errorsObj[err.field as keyof RegisterErrors] = { message: err.message };
+                });
+                setErrors(errorsObj);
+            } else {
+                setErrors({
+                    general: "Error de conexión con el servidor. Intenta más tarde.",
+                });
+            }
         } finally {
             setIsSubmitting(false);
         }
@@ -234,13 +209,12 @@ const Registrarse = () => {
                                         id='dni_usuario'
                                         name='dni_usuario'
                                         className='form-control'
-                                        required
                                         value={formData.dni_usuario}
                                         onChange={handleChange}
                                     />
                                     {errors.dni_usuario && (
                                         <small className='text-danger'>
-                                            {errors.dni_usuario}
+                                            {errors.dni_usuario.message}
                                         </small>
                                     )}
                                 </div>
@@ -257,13 +231,12 @@ const Registrarse = () => {
                                         id='nombre_usuario'
                                         name='nombre_usuario'
                                         className='form-control'
-                                        required
                                         value={formData.nombre_usuario}
                                         onChange={handleChange}
                                     />
                                     {errors.nombre_usuario && (
                                         <small className='text-danger'>
-                                            {errors.nombre_usuario}
+                                            {errors.nombre_usuario.message}
                                         </small>
                                     )}
                                 </div>
@@ -280,13 +253,12 @@ const Registrarse = () => {
                                         id='apellido_usuario'
                                         name='apellido_usuario'
                                         className='form-control'
-                                        required
                                         value={formData.apellido_usuario}
                                         onChange={handleChange}
                                     />
                                     {errors.apellido_usuario && (
                                         <small className='text-danger'>
-                                            {errors.apellido_usuario}
+                                            {errors.apellido_usuario.message}
                                         </small>
                                     )}
                                 </div>
@@ -303,12 +275,14 @@ const Registrarse = () => {
                                         id='fecha_nac_usuario'
                                         name='fecha_nac_usuario'
                                         className='form-control'
-                                        required
-                                        value={
-                                            formData.fecha_nac_usuario as string
-                                        }
+                                        value={formData.fecha_nac_usuario as string}
                                         onChange={handleChange}
                                     />
+                                    {errors.fecha_nac_usuario && (
+                                        <small className='text-danger'>
+                                            {errors.fecha_nac_usuario.message}
+                                        </small>
+                                    )}
                                 </div>
 
                                 <div className='mb-4'>
@@ -323,10 +297,14 @@ const Registrarse = () => {
                                         id='celular_usuario'
                                         name='celular_usuario'
                                         className='form-control'
-                                        required
                                         value={formData.celular_usuario}
                                         onChange={handleChange}
                                     />
+                                    {errors.celular_usuario && (
+                                        <small className='text-danger'>
+                                            {errors.celular_usuario.message}
+                                        </small>
+                                    )}
                                 </div>
 
                                 <div className='mb-4'>
@@ -341,10 +319,14 @@ const Registrarse = () => {
                                         id='email_usuario'
                                         name='email_usuario'
                                         className='form-control'
-                                        required
                                         value={formData.email_usuario}
                                         onChange={handleChange}
                                     />
+                                    {errors.email_usuario && (
+                                        <small className='text-danger'>
+                                            {errors.email_usuario.message}
+                                        </small>
+                                    )}
                                 </div>
 
                                 <div className='mb-4'>
@@ -359,10 +341,14 @@ const Registrarse = () => {
                                         id='clave_usuario'
                                         name='clave_usuario'
                                         className='form-control'
-                                        required
                                         value={formData.clave_usuario}
                                         onChange={handleChange}
                                     />
+                                    {errors.clave_usuario && (
+                                        <small className='text-danger'>
+                                            {errors.clave_usuario.message}
+                                        </small>
+                                    )}
                                 </div>
 
                                 <div className='mb-4'>
@@ -376,10 +362,14 @@ const Registrarse = () => {
                                                 name='calle_usuario'
                                                 placeholder='Calle'
                                                 className='form-control'
-                                                required
                                                 value={formData.calle_usuario}
                                                 onChange={handleChange}
                                             />
+                                            {errors.calle_usuario && (
+                                                <small className='text-danger'>
+                                                    {errors.calle_usuario.message}
+                                                </small>
+                                            )}
                                         </div>
                                         <div className='col-md-4'>
                                             <input
@@ -387,10 +377,14 @@ const Registrarse = () => {
                                                 name='num_usuario'
                                                 placeholder='Número'
                                                 className='form-control'
-                                                required
                                                 value={formData.num_usuario}
                                                 onChange={handleChange}
                                             />
+                                            {errors.num_usuario && (
+                                                <small className='text-danger'>
+                                                    {errors.num_usuario.message}
+                                                </small>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -403,10 +397,14 @@ const Registrarse = () => {
                                         type='text'
                                         name='cod_postal'
                                         className='form-control'
-                                        required
                                         value={formData.cod_postal}
                                         onChange={handleChange}
                                     />
+                                    {errors.cod_postal && (
+                                        <small className='text-danger'>
+                                            {errors.cod_postal.message}
+                                        </small>
+                                    )}
                                 </div>
 
                                 {/* Ciudad (fija, deshabilitada) */}
@@ -415,7 +413,6 @@ const Registrarse = () => {
                                     <select
                                         className='form-control'
                                         name='id_ciudad'
-                                        required
                                         value={formData.id_ciudad}
                                         onChange={handleChange}
                                     >
@@ -448,7 +445,7 @@ const Registrarse = () => {
                                             }))
                                         }
                                         especialidades={especialidades}
-                                        error={errors.especialidades}
+                                        error={errors.especialidades?.message}
                                     />
                                 )}
 
@@ -462,7 +459,6 @@ const Registrarse = () => {
                                             type='text'
                                             name='matricula_medico'
                                             className='form-control'
-                                            required
                                             value={
                                                 (formData as any)
                                                     .matricula_medico || ""

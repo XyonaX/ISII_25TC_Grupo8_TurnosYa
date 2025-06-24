@@ -24,6 +24,19 @@ const loginSchema = Joi.object({
 });
 
 const registerHandler = async (req: Request, res: Response) => {
+    // 1. Validar con Joi antes de cualquier lógica
+    const { error } = userSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+        // Devuelve todos los mensajes de error por campo
+        return res.status(400).json({
+            success: false,
+            errors: error.details.map(e => ({
+                field: e.path[0],
+                message: e.message
+            }))
+        });
+    }
+
     try {
         console.log("Datos de registro:", req.body);
         const newUser = await registerController(req.body);

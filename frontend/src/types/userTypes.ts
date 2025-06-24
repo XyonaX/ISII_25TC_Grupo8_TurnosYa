@@ -97,8 +97,8 @@ export interface LoginData {
 }
 
 // Tipo para errores de registro
-export type RegisterErrors = Partial<Record<keyof Omit<RegisterFormData, 'id_ciudad' | 'id_estado_usuario'>, string>> & {
-  id_ciudad?: { message: string };
-  id_estado_usuario?: { message: string };
+export type RegisterErrors = Partial<
+  Record<keyof RegisterFormData, { message: string }>
+> & {
   general?: string;
 };
