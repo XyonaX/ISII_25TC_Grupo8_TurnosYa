@@ -8,7 +8,7 @@ import {
     agendarTurnoController,
     editarMotivoTurnoController,
     cancelarTurnoPacienteController,
-    getTurnosPorMedicoController
+    getTurnosPorMedicoController,
 } from "../controllers/turnoControllers";
 import Medico from "../models/Medico";
 
@@ -22,7 +22,9 @@ const createTurnoHandler = async (req: Request, res: Response) => {
         const { id: userId, role } = req.user;
 
         if (role !== "medico") {
-            return res.status(403).json({ error: "Solo los médicos pueden crear turnos" });
+            return res
+                .status(403)
+                .json({ error: "Solo los médicos pueden crear turnos" });
         }
 
         const medico = await Medico.findOne({ id_usuario: userId });
@@ -30,31 +32,36 @@ const createTurnoHandler = async (req: Request, res: Response) => {
             return res.status(404).json({ error: "Médico no encontrado" });
         }
 
-        const turno = await createTurnoController(medico._id.toString(), role, req.body);
+        const turno = await createTurnoController(
+            medico._id.toString(),
+            role,
+            req.body
+        );
         res.status(201).json(turno);
     } catch (error: any) {
         res.status(400).json({ error: error.message });
     }
 };
 
-
 // GET All Handler
 const getAllTurnosHandler = async (req: Request, res: Response) => {
     try {
         if (!req.user) {
-            return res.status(401).json({ success: false, message: "No autenticado" });
+            return res
+                .status(401)
+                .json({ success: false, message: "No autenticado" });
         }
 
         const { id, role } = req.user;
         const turnos = await getAllTurnosController();
         res.status(200).json({
             success: true,
-            data: turnos
+            data: turnos,
         });
     } catch (error: any) {
         res.status(500).json({
             success: false,
-            message: error.message
+            message: error.message,
         });
     }
 };
@@ -73,28 +80,32 @@ const getTurnoByIdHandler = async (req: Request, res: Response) => {
     }
 };
 
-
 const updateTurnoHandler = async (req: Request, res: Response) => {
     try {
         if (!req.user) {
             return res.status(401).json({ error: "No autenticado" });
         }
 
-        const { id: userId, role } = req.user; 
+        const { id: userId, role } = req.user;
         const { id: idTurno } = req.params;
         const updateData = req.body;
 
-        const turnoActualizado = await updateTurnoController(userId,role, idTurno, updateData);
+        const turnoActualizado = await updateTurnoController(
+            userId,
+            role,
+            idTurno,
+            updateData
+        );
 
         res.status(200).json({
             success: true,
-            data: turnoActualizado
+            data: turnoActualizado,
         });
     } catch (error: any) {
         console.error("Error en updateTurnoHandler:", error);
         res.status(400).json({
             success: false,
-            message: error.message
+            message: error.message,
         });
     }
 };
@@ -107,7 +118,24 @@ const deleteTurnoHandler = async (req: Request, res: Response) => {
         }
 
         const { id: userId, role } = req.user;
-        const result = await deleteTurnoController(userId,role, req.params.id);
+
+        if (role !== "medico") {
+            return res
+                .status(403)
+                .json({ error: "Solo los médicos pueden eliminar turnos" });
+        }
+
+        // Buscar el médico que corresponde al usuario autenticado
+        const medico = await Medico.findOne({ id_usuario: userId });
+        if (!medico) {
+            return res.status(404).json({ error: "Médico no encontrado" });
+        }
+
+        const result = await deleteTurnoController(
+            medico._id.toString(),
+            role,
+            req.params.id
+        );
         res.status(200).json(result);
     } catch (error: any) {
         res.status(400).json({ error: error.message });
@@ -123,7 +151,12 @@ const agendarTurnoHandler = async (req: Request, res: Response) => {
         const { id: userId, role } = req.user;
         const { motivo_turno } = req.body;
 
-        const turnoAgendado = await agendarTurnoController(userId, role, req.params.id, motivo_turno);
+        const turnoAgendado = await agendarTurnoController(
+            userId,
+            role,
+            req.params.id,
+            motivo_turno
+        );
 
         res.status(200).json(turnoAgendado);
     } catch (error: any) {
@@ -131,22 +164,30 @@ const agendarTurnoHandler = async (req: Request, res: Response) => {
     }
 };
 
-
 const editarMotivoTurnoHandler = async (req: Request, res: Response) => {
     try {
         if (!req.user) return res.status(401).json({ error: "No autenticado" });
 
         const { id: userId, role } = req.user;
-        if (role !== "paciente") return res.status(403).json({ error: "Solo los pacientes pueden modificar el motivo del turno" });
+        if (role !== "paciente")
+            return res.status(403).json({
+                error: "Solo los pacientes pueden modificar el motivo del turno",
+            });
 
         const { id: turnoId } = req.params;
         const { motivo_turno } = req.body;
 
-        console.log(motivo_turno)
+        console.log(motivo_turno);
 
-        if (!motivo_turno) return res.status(400).json({ error: "Debe ingresar un motivo" });
+        if (!motivo_turno)
+            return res.status(400).json({ error: "Debe ingresar un motivo" });
 
-        const turno = await editarMotivoTurnoController(userId, role, turnoId, motivo_turno);
+        const turno = await editarMotivoTurnoController(
+            userId,
+            role,
+            turnoId,
+            motivo_turno
+        );
         res.status(200).json(turno);
     } catch (error: any) {
         res.status(400).json({ error: error.message });
@@ -158,11 +199,18 @@ const cancelarTurnoHandler = async (req: Request, res: Response) => {
         if (!req.user) return res.status(401).json({ error: "No autenticado" });
 
         const { id: userId, role } = req.user;
-        if (role !== "paciente") return res.status(403).json({ error: "Solo los pacientes pueden cancelar turnos" });
+        if (role !== "paciente")
+            return res
+                .status(403)
+                .json({ error: "Solo los pacientes pueden cancelar turnos" });
 
         const { id: turnoId } = req.params;
 
-        const resultado = await cancelarTurnoPacienteController(userId, role, turnoId);
+        const resultado = await cancelarTurnoPacienteController(
+            userId,
+            role,
+            turnoId
+        );
         res.status(200).json(resultado);
     } catch (error: any) {
         res.status(400).json({ error: error.message });
@@ -171,25 +219,24 @@ const cancelarTurnoHandler = async (req: Request, res: Response) => {
 
 const getTurnosPormedicoHandler = async (req: Request, res: Response) => {
     try {
-        if(!req.user) {
-            return res.status(401).json({ error: "No autenticado"});
+        if (!req.user) {
+            return res.status(401).json({ error: "No autenticado" });
         }
-        
 
         const { id: idMedico } = req.params;
         const turnos = await getTurnosPorMedicoController(idMedico);
         res.status(200).json({
             success: true,
-            data: turnos
+            data: turnos,
         });
-    }catch (error: any) {
+    } catch (error: any) {
         console.error("Error en al obtener turnos por médico: ", error);
         res.status(500).json({
             success: false,
-            message: error.message
-        })
+            message: error.message,
+        });
     }
-}
+};
 
 export {
     createTurnoHandler,
