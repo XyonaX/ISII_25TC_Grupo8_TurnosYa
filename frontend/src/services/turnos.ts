@@ -7,7 +7,9 @@ interface Turno {
     _id: string;
     fecha_turno: string;
     hora_turno: string;
-    id_medico?: string;
+    id_estado_turno: {
+        nombre_estado_turno: string;
+    };
 }
 
 interface Medico {
@@ -43,6 +45,12 @@ export const turnosService = {
         );
         return res.data.data || null;
     },
+    getTurnosByMedicoId: async (id: string): Promise<Turno[]> => {
+        const res = await axios.get(`${API_BASE_URL}/turnos/medico/${id}`, {
+            headers: getAuthHeaders(),
+        });
+        return res.data.data || [];
+    },
 
     createTurno: async (turnoData: {
         fecha_turno: string;
@@ -64,12 +72,11 @@ export const turnosService = {
 
     agendarTurno: async (
         turnoId: string,
-        motivo: string,
-        idUsuario: string
+        motivo: string
     ): Promise<void> => {
         const res = await axios.post(
             `${API_BASE_URL}/turnos/${turnoId}/agendar`,
-            { idUsuario, motivo },
+            { motivo_turno: motivo },
             { headers: getAuthHeaders() }
         );
         return res.data;

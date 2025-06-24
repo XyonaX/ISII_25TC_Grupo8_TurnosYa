@@ -28,11 +28,12 @@ import { format } from "date-fns";
 import { turnosService } from "../services/turnos";
 import { useUserStore } from "../store/userStore";
 
-type Turno = {
+interface Turno {
     _id: string;
     fecha_turno: string;
     hora_turno: string;
-};
+    id_paciente?: string | null;
+}
 
 export const GestionTurnos = () => {
     const user = useUserStore((state) => state.user);

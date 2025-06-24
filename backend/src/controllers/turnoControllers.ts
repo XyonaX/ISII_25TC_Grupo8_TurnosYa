@@ -266,14 +266,11 @@ const getTurnosPorMedicoController = async (idMedico: string) => {
         throw new Error("ID de médico inválido");
     }
 
-    const estadoDisponible = await getEstadoTurnoId(1);
-
     const turnos = await Turno.find({
         id_medico: new mongoose.Types.ObjectId(idMedico),
-        id_estado_turno: estadoDisponible,
     })
-        .populate("id_estado_turno")
-        .populate("id_paciente");
+    .populate("id_estado_turno")
+    .populate("id_paciente");
 
     return turnos;
 };

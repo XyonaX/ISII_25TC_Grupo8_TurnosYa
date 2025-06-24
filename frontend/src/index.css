@@ -322,6 +322,13 @@ body {
   color: #ae5bbf;
 }
 
+.turno-card.disabled {
+  background: #eee;
+  color: #aaa;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
 /* Estilos para la paginación */
 .pagination {
   margin: 20px 0;

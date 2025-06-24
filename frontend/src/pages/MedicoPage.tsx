@@ -6,6 +6,9 @@ interface Turno {
     _id: string;
     fecha_turno: string;
     hora_turno: string;
+    id_estado_turno: {
+        nombre_estado_turno: string;
+    };
 }
 
 interface Medico {
@@ -25,17 +28,21 @@ export const MedicoPage = () => {
     const [motivo, setMotivo] = useState<string>("");
     const [turnoSeleccionado, setTurnoSeleccionado] = useState<string>("");
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [dialog, setDialog] = useState({ open: false, message: "" });
 
     useEffect(() => {
         const userStr = localStorage.getItem("user");
         setIsLoggedIn(!!userStr);
-
+    
         if (!id) return;
-
+    
         turnosService.getMedicoById(id).then(setMedico).catch(console.error);
         turnosService
-            .getTurnosDisponiblesByMedicoId(id)
-            .then(setTurnos)
+            .getTurnosByMedicoId(id)
+            .then((turnos) => {
+                console.log("Turnos recibidos:", turnos);
+                setTurnos(turnos);
+            })
             .catch(console.error);
     }, [id]);
 
@@ -48,17 +55,14 @@ export const MedicoPage = () => {
                 return;
             }
             
-            const user = JSON.parse(userStr);
             await turnosService.agendarTurno(
                 turnoSeleccionado,
-                motivo,
-                user._id
+                motivo
             );
-
-            alert("Turno agendado correctamente");
-            setTurnos((prev) =>
-                prev.filter((t) => t._id !== turnoSeleccionado)
-            );
+    
+            setDialog({ open: true, message: "¡Turno reservado con éxito!" });
+            if (!id) return;
+            turnosService.getTurnosByMedicoId(id).then(setTurnos).catch(console.error);
             setTurnoSeleccionado("");
             setMotivo("");
         } catch (error: any) {
@@ -78,6 +82,15 @@ export const MedicoPage = () => {
     };
 
     return (
+        <>
+        {dialog.open && (
+            <div className="modal">
+            <div className="modal-content">
+                <p>{dialog.message}</p>
+                <button onClick={() => setDialog({ open: false, message: "" })}>Cerrar</button>
+            </div>
+            </div>
+        )}
         <div className='container mt-5'>
             <div className='card p-4 shadow-sm'>
                 <div className="mb-3">
@@ -141,28 +154,39 @@ export const MedicoPage = () => {
                 ) : (
                     <>
                     <div className='d-flex flex-wrap gap-3'>
-                {turnos.map((t) => {
-                    const fecha = new Date(t.fecha_turno);
-                    const fechaTexto = fecha.toLocaleDateString("es-AR", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                    });
+                        {turnos.map((t) => {
+                            const fecha = new Date(t.fecha_turno);
+                            const fechaTexto = fecha.toLocaleDateString("es-AR", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                            });
 
-                    const isSelected = turnoSeleccionado === t._id;
+                            const isDisponible = t.id_estado_turno?.nombre_estado_turno === "Disponible";
+                            const isSelected = turnoSeleccionado === t._id;
 
-                    return (
-                        <div
-                            key={t._id}
-                            className={`turno-card ${isSelected ? "selected" : ""}`}
-                            onClick={() => setTurnoSeleccionado(t._id)}
-                        >
-                            <div className='turno-fecha'>{fechaTexto}</div>
-                            <div className='turno-hora'>{t.hora_turno}</div>
+                            return (
+                                <div
+                                key={t._id}
+                                className={`turno-card ${isSelected ? "selected" : ""} ${!isDisponible ? "disabled" : ""}`}
+                                style={{
+                                    pointerEvents: isDisponible ? "auto" : "none",
+                                    opacity: isDisponible ? 1 : 0.5,
+                                    cursor: isDisponible ? "pointer" : "not-allowed"
+                                }}
+                                onClick={() => isDisponible && setTurnoSeleccionado(t._id)}
+                            >
+                                <div className='turno-fecha'>{fechaTexto}</div>
+                                <div className='turno-hora'>{t.hora_turno}</div>
+                                {!isDisponible && (
+                                    <div className="text-danger mt-2" style={{ fontSize: "0.9em" }}>
+                                        No disponible
+                                    </div>
+                                )}
+                            </div>
+                            );
+                        })}
                         </div>
-                    );
-                })}
-            </div>
 
             {turnoSeleccionado && (
                 <div className='mt-4'>
@@ -181,16 +205,24 @@ export const MedicoPage = () => {
             </div>
 
             {/* Botón fuera de la tarjeta */}
-{turnoSeleccionado && (
-    <div className='text-center mb-5'>
-        <button
-            className='btn boton-ingresar px-4 py-2 shadow'
-            onClick={handleAgendar}
-        >
-            Confirmar turno
-        </button>
-    </div>
-)}
+            {turnoSeleccionado && (
+                <div className='text-center mb-5'>
+                    <button
+                        className='btn boton-ingresar px-4 py-2 shadow'
+                        onClick={handleAgendar}
+                        disabled={
+                            !turnos.find(
+                                (t) =>
+                                    t._id === turnoSeleccionado &&
+                                    t.id_estado_turno?.nombre_estado_turno === "Disponible"
+                            )
+                        }
+                    >
+                        Confirmar turno
+                    </button>
+                </div>
+                )}
         </div>
+        </>
     );
 };
