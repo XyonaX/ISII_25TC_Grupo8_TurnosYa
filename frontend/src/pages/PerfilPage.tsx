@@ -163,7 +163,7 @@ export const PerfilPage = () => {
                     </div>
                 </div>
 
-                <button type='submit' className='btn btn-primary'>
+                <button type='submit' className='btn btn-primary mb-4'>
                     Guardar cambios
                 </button>
             </form>

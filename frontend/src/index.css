@@ -281,3 +281,43 @@ body {
 .enlace-registro:hover {
   text-decoration: underline;
 }
+
+.btn-atras {
+  border: 1px solid #ae5bbf;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #f8f9fa;
+  color: #ae5bbf;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  display: inline-block;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.btn-atras:hover {
+  background-color: #f8e7f4;
+  border-color: #ae5bbf!important;
+  color: #ae5bbf;
+  text-decoration: none;
+}
+
+.turno-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #f8f9fa; /* gris claro por defecto */
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.turno-card.selected {
+  background-color: #f5ecf3 !important; /* verde claro */
+  border-color: #ae5bbf!important;     /* verde Bootstrap */
+  color: #ae5bbf !important;
+}
+
+.turno-card:not(.selected):hover {
+  border-color: #ae5bbf;
+  color: #ae5bbf;
+}

@@ -177,6 +177,7 @@ export const GestionTurnos = () => {
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <Button
+                                className="boton-ingresar"
                                 variant='contained'
                                 startIcon={<AddCircle />}
                                 onClick={handleCreateTurno}
