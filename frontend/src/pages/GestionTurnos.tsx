@@ -52,8 +52,9 @@ export const GestionTurnos = () => {
 
     useEffect(() => {
         const fetchMedico = async () => {
+            
             if (!user?._id) return;
-
+    
             try {
                 const medico = await turnosService.getMedicoByUsuarioId(
                     user._id
@@ -61,11 +62,9 @@ export const GestionTurnos = () => {
                 if (medico) {
                     console.log("✅ Médico encontrado:", medico);
                     setMedicoId(medico._id);
-
-                    const turnos =
-                        await turnosService.getTurnosDisponiblesByMedicoId(
-                            medico._id
-                        );
+    
+                    // Trae todos los turnos del médico
+                    const turnos = await turnosService.getTurnosByMedicoId(medico._id);
                     console.log("🩺 Turnos cargados:", turnos);
                     setTurnos(turnos);
                 } else {
@@ -78,9 +77,7 @@ export const GestionTurnos = () => {
                 console.error("❌ Error al obtener el médico:", err);
             }
         };
-
-
-
+    
         fetchMedico();
     }, []);
 
@@ -148,6 +145,7 @@ export const GestionTurnos = () => {
         setTurnoToDelete(null);
     };
 
+    
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Box sx={{ p: 4 }}>

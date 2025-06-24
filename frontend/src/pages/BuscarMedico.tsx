@@ -67,14 +67,15 @@ const BuscarMedico = () => {
                     medicosConTurnos = await Promise.all(
                         medicosResponse.map(async (medico) => {
                             try {
-                                const turnosDisponibles =
-                                    await turnosService.getTurnosDisponiblesByMedicoId(
-                                        medico.id
-                                    );
+                                // Trae todos los turnos del médico
+                                const turnos = await turnosService.getTurnosByMedicoId(medico.id);
+                                // Filtra los disponibles
+                                const turnosDisponibles = turnos.filter(
+                                    (t) => t.id_estado_turno?.nombre_estado_turno === "Disponible"
+                                );
                                 return {
                                     ...medico,
-                                    tieneTurnosDisponibles:
-                                        turnosDisponibles.length > 0,
+                                    tieneTurnosDisponibles: turnosDisponibles.length > 0,
                                 };
                             } catch (err) {
                                 console.error(
