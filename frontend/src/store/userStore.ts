@@ -1,9 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import {
-    LoginData,
-    RegisterFormData,
-} from "../types/userTypes";
+import { LoginData, RegisterFormData } from "../types/userTypes";
 import { authService } from "../services/userServices";
 
 type User = {
@@ -68,12 +65,12 @@ export const useUserStore = create<UserState>()(
             },
             logout: () => {
                 set({ user: null, error: null, loading: false });
-                localStorage.removeItem("user");
+                localStorage.removeItem("user-storage");
             },
         }),
         {
-            name: "user",
-            partialize: (state) => ({ user: state.user }), // solo persistimos user
+            name: "user-storage",
+            partialize: (state) => ({ user: state.user }),
         }
     )
 );
