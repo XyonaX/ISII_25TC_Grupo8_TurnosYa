@@ -10,15 +10,26 @@ const userSchema = Joi.object({
         "string.max": "El DNI no puede tener más de 8 caracteres",
         "string.empty": "El DNI es requerido",
     }),
-    nombre_usuario: Joi.string().required().min(4).max(50).messages({
-        "string.max": "El nombre no puede tener más de 50 caracteres",
-        "string.min": "El nombre no puede tener menos de 4 caracteres",
-        "string.empty": "El nombre es requerido",
-    }),
-    apellido_usuario: Joi.string().required().max(50).messages({
-        "string.max": "El apellido no puede tener más de 50 caracteres",
-        "string.empty": "El apellido es requerido",
-    }),
+    nombre_usuario: Joi.string()
+        .pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)
+        .required()
+        .min(4)
+        .max(50)
+        .messages({
+            "string.pattern.base": "El nombre solo puede contener letras y espacios",
+            "string.max": "El nombre no puede tener más de 50 caracteres",
+            "string.min": "El nombre no puede tener menos de 4 caracteres",
+            "string.empty": "El nombre es requerido",
+        }),
+    apellido_usuario: Joi.string()
+        .pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)
+        .required()
+        .max(50)
+        .messages({
+            "string.pattern.base": "El apellido solo puede contener letras y espacios",
+            "string.max": "El apellido no puede tener más de 50 caracteres",
+            "string.empty": "El apellido es requerido",
+        }),
     fecha_nac_usuario: Joi.date().required().messages({
         "date.base": "La fecha de nacimiento no es válida",
         "date.empty": "La fecha de nacimiento es requerida",
@@ -41,18 +52,39 @@ const userSchema = Joi.object({
             "string.empty": "La clave es requerida",
             "string.min": "La clave debe tener al menos 6 caracteres",
         }),
-    calle_usuario: Joi.string().required().max(50).messages({
+    calle_usuario: Joi.string()
+    .pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]+$/)
+    .required()
+    .max(50)
+    .messages({
+        "string.pattern.base": "La calle solo puede contener letras, números y espacios",
         "string.max": "La calle no puede tener más de 50 caracteres",
         "string.empty": "La calle es requerida",
     }),
-    num_usuario: Joi.string().required().max(4).messages({
+    num_usuario: Joi.string()
+    .pattern(/^[0-9]+$/)
+    .required()
+    .max(4)
+    .messages({
+        "string.pattern.base": "El número solo puede contener números",
         "string.max": "El número no puede tener más de 4 caracteres",
         "string.empty": "El número es requerido",
     }),
-    dpto_usuario: Joi.string().optional().allow(null).max(20).messages({
+    dpto_usuario: Joi.string()
+    .optional()
+    .allow(null)
+    .pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]*$/)
+    .max(20)
+    .messages({
+        "string.pattern.base": "El departamento solo puede contener letras, números y espacios",
         "string.max": "El departamento no puede tener más de 20 caracteres",
     }),
-    cod_postal: Joi.string().required().max(10).messages({
+    cod_postal: Joi.string()
+    .pattern(/^[A-Za-z0-9]+$/)
+    .required()
+    .max(10)
+    .messages({
+        "string.pattern.base": "El código postal solo puede contener letras y números",
         "string.max": "El código postal no puede tener más de 10 caracteres",
         "string.empty": "El código postal es requerido",
     }),
