@@ -24,7 +24,7 @@ turnoRouter.get("/medico/:id",authenticateToken,getTurnosPormedicoHandler);
 turnoRouter.get("/medico/usuario/:id",getMedicoByUsuarioIdHandler);
 turnoRouter.put("/:id", updateTurnoHandler);
 turnoRouter.delete("/:id", authenticateToken,deleteTurnoHandler);
-turnoRouter.post("/:id/agendar", agendarTurnoHandler);
+turnoRouter.post("/:id/agendar", authenticateToken,agendarTurnoHandler);
 turnoRouter.put("/:id/motivo", editarMotivoTurnoHandler);
 turnoRouter.delete("/:id/cancelar", cancelarTurnoHandler);
 
