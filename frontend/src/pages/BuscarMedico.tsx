@@ -5,6 +5,7 @@ import PaginationUI from "../utils/PaginationUI";
 import { dataService } from "../services/userServices"; // Importar dataService
 import { Especialidad, ObraSocial } from "../types/userTypes"; // Importar tipos
 import { useNavigate } from "react-router-dom";
+import { turnosService } from "../services/turnos";
 
 interface Medico {
     id: string;
@@ -13,6 +14,7 @@ interface Medico {
     obraSocial: string;
     estado: string;
     matricula?: string;
+    tieneTurnosDisponibles?: boolean;
 }
 
 const BuscarMedico = () => {
@@ -35,7 +37,12 @@ const BuscarMedico = () => {
         []
     );
     const [loadingOptions, setLoadingOptions] = useState(true); // Estado de carga para las opciones
-
+    const token = localStorage.getItem("token");
+    
+    // Estados para paginación
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5); // Número de médicos por página
+    
     // Cargar médicos desde backend
     useEffect(() => {
         const fetchMedicos = async () => {
@@ -45,8 +52,46 @@ const BuscarMedico = () => {
 
                 // Usar dataService.getMedicos() en lugar de axios.get directo
                 const medicosResponse = await dataService.getMedicos();
-                setMedicos(medicosResponse); // dataService.getMedicos ya retorna el array de Medicos
+                
+                
 
+                let medicosConTurnos;
+                if (!token) {
+                    // Si no hay token, marcamos que no hay turnos disponibles
+                    medicosConTurnos = medicosResponse.map((m) => ({
+                        ...m,
+                        tieneTurnosDisponibles: false,
+                    }));
+                } else {
+                    // Si hay token, consultamos los turnos disponibles de cada médico
+                    medicosConTurnos = await Promise.all(
+                        medicosResponse.map(async (medico) => {
+                            try {
+                                const turnosDisponibles =
+                                    await turnosService.getTurnosDisponiblesByMedicoId(
+                                        medico.id
+                                    );
+                                return {
+                                    ...medico,
+                                    tieneTurnosDisponibles:
+                                        turnosDisponibles.length > 0,
+                                };
+                            } catch (err) {
+                                console.error(
+                                    `Error al verificar turnos para el médico ${medico.id}`,
+                                    err
+                                );
+                                return {
+                                    ...medico,
+                                    tieneTurnosDisponibles: false,
+                                };
+                            }
+                        })
+                    );
+                }
+
+                setMedicos(medicosConTurnos);
+                
                 // Cargar especialidades
                 const uniqueEspecialidades = Array.from(
                     new Set(
@@ -73,6 +118,7 @@ const BuscarMedico = () => {
 
         fetchMedicos();
     }, []);
+    
 
     // Lógica de filtrado actualizada
     const medicosFiltrados = medicos.filter((medico) => {
@@ -89,7 +135,19 @@ const BuscarMedico = () => {
         return coincideNombre && coincideEspecialidad && coincideObraSocial;
     });
 
-    // Mostrar spinner si se está cargando médicos O las opciones de los dropdowns
+    // Cálculo de médicos a mostrar
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentMedicos = medicosFiltrados.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(medicosFiltrados.length / itemsPerPage);
+
+    // Función para cambiar de página
+    const handlePageChange = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Opcional: scroll al inicio
+    };
+
+     // Mostrar spinner si se está cargando médicos O las opciones de los dropdowns
     if (loading || loadingOptions) {
         return (
             <div className='container text-center mt-5'> 
@@ -222,35 +280,27 @@ const BuscarMedico = () => {
                                                 >
                                                     <div className='card h-100 w-100 shadow-sm'>
                                                         <div className='position-relative'>
-                                                            <img
-                                                                src='https://cdn-icons-png.freepik.com/256/1513/1513568.png'
-                                                                className='card-img-top'
-                                                                alt='Imagen del médico'
-                                                                style={{
-                                                                    height: "200px",
-                                                                    objectFit:
-                                                                        "cover",
-                                                                }}
-                                                            />
-                                                            <span
-                                                                className={`badge position-absolute top-0 end-0 m-2 ${
-                                                                    medico.estado ===
-                                                                    "disponible"
-                                                                        ? "bg-success"
-                                                                        : "bg-danger"
-                                                                }`}
-                                                                style={{
-                                                                    padding:
-                                                                        "0.5em 0.75em",
-                                                                    fontSize:
-                                                                        "0.8rem",
-                                                                    borderRadius:
-                                                                        "10px",
-                                                                }}
-                                                            >
-                                                                {medico.estado}
-                                                            </span>
-                                                        </div>
+  <img
+    src='https://cdn-icons-png.freepik.com/256/1513/1513568.png'
+    className='card-img-top'
+    alt='Imagen del médico'
+    style={{ height: "200px", objectFit: "cover" }}
+  />
+  {token && (
+    <span
+      className={`badge position-absolute top-0 end-0 m-2 ${
+        medico.tieneTurnosDisponibles ? "bg-success" : "bg-danger"
+      }`}
+      style={{
+        padding: "0.5em 0.75em",
+        fontSize: "0.8rem",
+        borderRadius: "10px",
+      }}
+    >
+      {medico.tieneTurnosDisponibles ? "Turnos disponibles" : "Sin turnos"}
+    </span>
+  )}
+</div>
                                                         <div className='card-body d-flex flex-column'>
                                                             <h5 className='card-title'>
                                                                 {medico.medico}
