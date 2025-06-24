@@ -322,30 +322,6 @@ body {
   color: #ae5bbf;
 }
 
-/* Estilos para la paginación */
-.pagination {
-  margin: 20px 0;
-}
-
-.page-item.active .page-link {
-  background-color: #ae5bbf;
-  border-color: #ae5bbf;
-}
-
-.page-link {
-  color: #ae5bbf;
-  margin: 0 5px;
-  border-radius: 5px !important;
-}
-
-.page-link:hover {
-  color: #7d3c98;
-}
-
-.page-item.disabled .page-link {
-  color: #6c757d;
-}
-
-.page-item:not(.disabled):not(.active) .page-link:hover {
-  background-color: #f8f9fa;
+.label-formulario {
+    white-space: nowrap;
 }

@@ -41,7 +41,7 @@ const BuscarMedico = () => {
     
     // Estados para paginación
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5); // Número de médicos por página
+    const [itemsPerPage] = useState(8); // Número de médicos por página
     
     // Cargar médicos desde backend
     useEffect(() => {
@@ -126,11 +126,12 @@ const BuscarMedico = () => {
             .toLowerCase()
             .includes(nombreFiltro.toLowerCase());
         const coincideEspecialidad =
-            especialidadFiltro === "Especialidades" ||
-            medico.especialidad === especialidadFiltro;
-        const coincideObraSocial =
-            obraSocialFiltro === "Obras Sociales" ||
-            medico.obraSocial === obraSocialFiltro;
+        especialidadFiltro === "Todas" || especialidadFiltro === "Especialidades" ||
+        medico.especialidad === especialidadFiltro;
+
+    const coincideObraSocial =
+        obraSocialFiltro === "Todas" || obraSocialFiltro === "Obras Sociales" ||
+        medico.obraSocial === obraSocialFiltro;
 
         return coincideNombre && coincideEspecialidad && coincideObraSocial;
     });
@@ -179,7 +180,7 @@ const BuscarMedico = () => {
                                 <div className='col-auto'>
                                     <input
                                         type='text'
-                                        className='form-control input-formulario-buscarMedico'
+                                        className='form-control'
                                         placeholder='Buscar por nombre/apellido'
                                         value={nombreFiltro}
                                         onChange={(e) => {
@@ -201,69 +202,59 @@ const BuscarMedico = () => {
 
                             {/* Filtros adicionales */}
                             <div className='container d-flex flex-column align-items-center'>
-                                <div className='col-auto d-flex justify-content-center gap-2 mb-2'>
-                                    {/* Especialidades - Ahora cargadas desde los médicos */}
-                                    <div className='mb-1'>
+                                <div className='col-auto d-flex justify-content-center gap-4 mb-2'>
+                                
+                                    {/* Especialidades */}
+                                    <div className='d-flex align-items-center'>
+                                        <label
+                                            htmlFor='especialidadSelect'
+                                            className='form-label label-formulario me-2 mb-0'
+                                        >
+                                            Especialidad:
+                                        </label>
                                         <select
+                                            id='especialidadSelect'
                                             className='form-select form-select-sm input-formulario'
                                             value={especialidadFiltro}
-                                            onChange={(e) =>
-                                                setEspecialidadFiltro(
-                                                    e.target.value
-                                                )
-                                            }
+                                            onChange={(e) => setEspecialidadFiltro(e.target.value)}
                                             style={{
                                                 borderRadius: "8px",
                                                 border: "2px solid #ae5bbf",
                                                 height: "40px",
-                                                color: "green",
                                             }}
                                         >
-                                            {/* Opción por defecto */}
-                                            <option value='Especialidades'>
-                                                Especialidades
-                                            </option>
-                                            {/* Opciones cargadas desde los médicos */}
-                                            {especialidadesOptions.map(
-                                                (esp) => (
-                                                    // Use the specialty name directly as the key and value
-                                                    <option
-                                                        key={esp}
-                                                        value={esp}
-                                                    >
-                                                        {esp}
-                                                    </option>
-                                                )
-                                            )}
+                                            <option value='Todas'>Todas</option>
+                                            {especialidadesOptions.map((esp) => (
+                                                <option key={esp} value={esp}>
+                                                    {esp}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
 
-                                    {/* Obras Sociales - Ahora cargadas desde los médicos */}
-                                    <div className='mb-1'>
+                                    {/* Obras Sociales */}
+                                    <div className='d-flex align-items-center'>
+                                        <label
+                                            htmlFor='obraSocialSelect'
+                                            className='form-label label-formulario  me-2 mb-0'
+                                        >
+                                            Obra Social:
+                                        </label>
                                         <select
+                                            id='obraSocialSelect'
                                             className='form-select form-select-sm input-formulario'
                                             value={obraSocialFiltro}
-                                            onChange={(e) =>
-                                                setObraSocialFiltro(
-                                                    e.target.value
-                                                )
-                                            }
+                                            onChange={(e) => setObraSocialFiltro(e.target.value)}
                                             style={{
                                                 borderRadius: "8px",
                                                 border: "2px solid #ae5bbf",
                                                 height: "40px",
-                                                color: "green",
                                             }}
                                         >
-                                            {/* Opción por defecto */}
-                                            <option value='Obras Sociales'>
-                                                Obras Sociales
-                                            </option>
-                                            {/* Opciones cargadas desde los médicos */}
-                                            {obrasSocialesOptions.map((esp) => (
-                                                // Use the specialty name directly as the key and value
-                                                <option key={esp} value={esp}>
-                                                    {esp}
+                                            <option value='Todas'> Todas</option>
+                                            {obrasSocialesOptions.map((obra) => (
+                                                <option key={obra} value={obra}>
+                                                    {obra}
                                                 </option>
                                             ))}
                                         </select>
@@ -273,34 +264,34 @@ const BuscarMedico = () => {
                                 <div className='container'>
                                     <div className='row justify-content-center'>
                                         {medicosFiltrados.length > 0 ? (
-                                            medicosFiltrados.map((medico) => (
+                                            currentMedicos.map((medico) => (
                                                 <div
                                                     key={medico.id}
                                                     className='col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex'
                                                 >
                                                     <div className='card h-100 w-100 shadow-sm'>
                                                         <div className='position-relative'>
-  <img
-    src='https://cdn-icons-png.freepik.com/256/1513/1513568.png'
-    className='card-img-top'
-    alt='Imagen del médico'
-    style={{ height: "200px", objectFit: "cover" }}
-  />
-  {token && (
-    <span
-      className={`badge position-absolute top-0 end-0 m-2 ${
-        medico.tieneTurnosDisponibles ? "bg-success" : "bg-danger"
-      }`}
-      style={{
-        padding: "0.5em 0.75em",
-        fontSize: "0.8rem",
-        borderRadius: "10px",
-      }}
-    >
-      {medico.tieneTurnosDisponibles ? "Turnos disponibles" : "Sin turnos"}
-    </span>
-  )}
-</div>
+                                                            <img
+                                                                src='https://cdn-icons-png.freepik.com/256/1513/1513568.png'
+                                                                className='card-img-top'
+                                                                alt='Imagen del médico'
+                                                                style={{ height: "200px", objectFit: "cover" }}
+                                                            />
+                                                            {token && (
+                                                                <span
+                                                                className={`badge position-absolute top-0 end-0 m-2 ${
+                                                                    medico.tieneTurnosDisponibles ? "bg-success" : "bg-danger"
+                                                                }`}
+                                                                style={{
+                                                                    padding: "0.5em 0.75em",
+                                                                    fontSize: "0.8rem",
+                                                                    borderRadius: "10px",
+                                                                }}
+                                                                >
+                                                                {medico.tieneTurnosDisponibles ? "Turnos disponibles" : "Sin turnos"}
+                                                                </span>
+                                                            )}
+                                                            </div>
                                                         <div className='card-body d-flex flex-column'>
                                                             <h5 className='card-title'>
                                                                 {medico.medico}
@@ -356,10 +347,9 @@ const BuscarMedico = () => {
 
                             {/* Componente de paginación */}
                             <PaginationUI
-                                currentPage={1}
-                                totalPages={Math.ceil(
-                                    medicosFiltrados.length / 10
-                                )}
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={handlePageChange}
                                 disabled={false}
                             />
                         </div>

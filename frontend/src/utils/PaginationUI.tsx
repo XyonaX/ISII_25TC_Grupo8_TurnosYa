@@ -17,7 +17,7 @@ const PaginationUI: React.FC<PaginationUIProps> = ({
   // Rango de páginas a mostrar (máximo 5)
   const getPageNumbers = () => {
     const pages = [];
-    const maxVisiblePages = 5;
+    const maxVisiblePages = 8;
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = startPage + maxVisiblePages - 1;
 
