@@ -200,7 +200,7 @@ const Registrarse = () => {
                                 <div className='mb-4'>
                                     <label
                                         htmlFor='dni_usuario'
-                                        className='form-label'
+                                        className='form-label label-formulario'
                                     >
                                         DNI
                                     </label>
@@ -208,9 +208,11 @@ const Registrarse = () => {
                                         type='text'
                                         id='dni_usuario'
                                         name='dni_usuario'
-                                        className='form-control'
+                                        placeholder="Número de documento"
+                                        className='form-control input-formulario'
                                         value={formData.dni_usuario}
                                         onChange={handleChange}
+                                        style={{ borderRadius: '8px', border: '2px solid #ae5bbf' }}
                                     />
                                     {errors.dni_usuario && (
                                         <small className='text-danger'>
@@ -222,7 +224,7 @@ const Registrarse = () => {
                                 <div className='mb-4'>
                                     <label
                                         htmlFor='nombre_usuario'
-                                        className='form-label'
+                                        className='form-label label-formulario'
                                     >
                                         Nombre
                                     </label>
@@ -230,9 +232,11 @@ const Registrarse = () => {
                                         type='text'
                                         id='nombre_usuario'
                                         name='nombre_usuario'
+                                        placeholder="Nombre"
                                         className='form-control'
                                         value={formData.nombre_usuario}
                                         onChange={handleChange}
+                                        style={{ borderRadius: '8px', border: '2px solid #ae5bbf' }}
                                     />
                                     {errors.nombre_usuario && (
                                         <small className='text-danger'>
@@ -244,7 +248,7 @@ const Registrarse = () => {
                                 <div className='mb-4'>
                                     <label
                                         htmlFor='apellido_usuario'
-                                        className='form-label'
+                                        className='form-label label-formulario'
                                     >
                                         Apellido
                                     </label>
@@ -252,9 +256,11 @@ const Registrarse = () => {
                                         type='text'
                                         id='apellido_usuario'
                                         name='apellido_usuario'
+                                        placeholder='Apellido'
                                         className='form-control'
                                         value={formData.apellido_usuario}
                                         onChange={handleChange}
+                                        style={{ borderRadius: '8px', border: '2px solid #ae5bbf' }}
                                     />
                                     {errors.apellido_usuario && (
                                         <small className='text-danger'>
@@ -266,7 +272,7 @@ const Registrarse = () => {
                                 <div className='mb-4'>
                                     <label
                                         htmlFor='fecha_nac_usuario'
-                                        className='form-label'
+                                        className='form-label label-formulario'
                                     >
                                         Fecha de Nacimiento
                                     </label>
@@ -277,6 +283,7 @@ const Registrarse = () => {
                                         className='form-control'
                                         value={formData.fecha_nac_usuario as string}
                                         onChange={handleChange}
+                                        style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
                                     />
                                     {errors.fecha_nac_usuario && (
                                         <small className='text-danger'>
@@ -288,7 +295,7 @@ const Registrarse = () => {
                                 <div className='mb-4'>
                                     <label
                                         htmlFor='celular_usuario'
-                                        className='form-label'
+                                        className='form-label label-formulario'
                                     >
                                         Celular
                                     </label>
@@ -296,9 +303,11 @@ const Registrarse = () => {
                                         type='text'
                                         id='celular_usuario'
                                         name='celular_usuario'
+                                        placeholder='Número de celular'
                                         className='form-control'
                                         value={formData.celular_usuario}
                                         onChange={handleChange}
+                                        style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
                                     />
                                     {errors.celular_usuario && (
                                         <small className='text-danger'>
@@ -310,7 +319,7 @@ const Registrarse = () => {
                                 <div className='mb-4'>
                                     <label
                                         htmlFor='email_usuario'
-                                        className='form-label'
+                                        className='form-label label-formulario'
                                     >
                                         Email
                                     </label>
@@ -318,9 +327,11 @@ const Registrarse = () => {
                                         type='email'
                                         id='email_usuario'
                                         name='email_usuario'
+                                        placeholder='Correo electrónico'
                                         className='form-control'
                                         value={formData.email_usuario}
                                         onChange={handleChange}
+                                        style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
                                     />
                                     {errors.email_usuario && (
                                         <small className='text-danger'>
@@ -332,7 +343,7 @@ const Registrarse = () => {
                                 <div className='mb-4'>
                                     <label
                                         htmlFor='clave_usuario'
-                                        className='form-label'
+                                        className='form-label label-formulario'
                                     >
                                         Contraseña
                                     </label>
@@ -340,9 +351,11 @@ const Registrarse = () => {
                                         type='password'
                                         id='clave_usuario'
                                         name='clave_usuario'
+                                        placeholder='Contraseña'
                                         className='form-control'
                                         value={formData.clave_usuario}
                                         onChange={handleChange}
+                                        style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
                                     />
                                     {errors.clave_usuario && (
                                         <small className='text-danger'>
@@ -352,7 +365,7 @@ const Registrarse = () => {
                                 </div>
 
                                 <div className='mb-4'>
-                                    <label className='form-label'>
+                                    <label className='form-label label-formulario'>
                                         Dirección
                                     </label>
                                     <div className='row g-2'>
@@ -364,6 +377,7 @@ const Registrarse = () => {
                                                 className='form-control'
                                                 value={formData.calle_usuario}
                                                 onChange={handleChange}
+                                                style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
                                             />
                                             {errors.calle_usuario && (
                                                 <small className='text-danger'>
@@ -376,9 +390,10 @@ const Registrarse = () => {
                                                 type='text'
                                                 name='num_usuario'
                                                 placeholder='Número'
-                                                className='form-control'
+                                                className='form-control label-formulario'
                                                 value={formData.num_usuario}
                                                 onChange={handleChange}
+                                                style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
                                             />
                                             {errors.num_usuario && (
                                                 <small className='text-danger'>
@@ -390,15 +405,17 @@ const Registrarse = () => {
                                 </div>
 
                                 <div className='mb-4'>
-                                    <label className='form-label'>
+                                    <label className='form-label label-formulario'>
                                         Código Postal
                                     </label>
                                     <input
                                         type='text'
                                         name='cod_postal'
+                                        placeholder='Código Postal'
                                         className='form-control'
                                         value={formData.cod_postal}
                                         onChange={handleChange}
+                                        style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
                                     />
                                     {errors.cod_postal && (
                                         <small className='text-danger'>
@@ -409,12 +426,13 @@ const Registrarse = () => {
 
                                 {/* Ciudad (fija, deshabilitada) */}
                                 <div className='mb-4'>
-                                    <label className='form-label'>Ciudad</label>
+                                    <label className='form-label label-formulario'>Ciudad</label>
                                     <select
                                         className='form-control'
                                         name='id_ciudad'
                                         value={formData.id_ciudad}
                                         onChange={handleChange}
+                                        style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
                                     >
                                         {ciudades.map((ciudad) => (
                                             <option
@@ -452,18 +470,20 @@ const Registrarse = () => {
                                 {/* Campos condicionales */}
                                 {tipoUsuario === "medico" && (
                                     <div className='mb-4'>
-                                        <label className='form-label'>
+                                        <label className='form-label label-formulario'>
                                             Matrícula Profesional
                                         </label>
                                         <input
                                             type='text'
                                             name='matricula_medico'
+                                            placeholder='Matrícula Profesional'
                                             className='form-control'
                                             value={
                                                 (formData as any)
                                                     .matricula_medico || ""
                                             }
                                             onChange={handleChange}
+                                            style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
                                         />
                                         {errors.matricula_medico && (
                                             <small className='text-danger'>
@@ -492,7 +512,7 @@ const Registrarse = () => {
                                 <div className='d-grid gap-2 mb-3'>
                                     <button
                                         type='submit'
-                                        className='btn btn-primary'
+                                        className='btn boton-ingresar'
                                         disabled={isSubmitting}
                                     >
                                         {isSubmitting ? (
@@ -514,7 +534,7 @@ const Registrarse = () => {
                             <div className='mt-4 text-center'>
                                 <p>
                                     ¿Ya tienes cuenta?{" "}
-                                    <Link to='/login'>Inicia sesión aquí</Link>
+                                    <Link to='/login' className="enlace-registro">Inicia sesión aquí</Link>
                                 </p>
                             </div>
                         </div>

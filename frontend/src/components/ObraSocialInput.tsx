@@ -15,13 +15,16 @@ const ObraSocialInput: React.FC<Props> = ({
     error,
 }) => (
     <div className='mb-4'>
-        <label className='form-label'>Obra Social</label>
+        <label className='form-label label-formulario'>Obra Social</label>
         <select
             className='form-control'
             name='id_obra_social'
             required
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
+            onChange={(e) => onChange(e.target.value)
+            
+            }
         >
             <option value=''>Seleccione una obra social</option>
             {obrasSociales.map((obra) => (

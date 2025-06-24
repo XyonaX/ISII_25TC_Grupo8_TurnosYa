@@ -51,122 +51,124 @@ export const PerfilPage = () => {
     };
 
     return (
-        <div className='container mt-5'>
-            <h2 className='mb-4'>Mi perfil</h2>
-            <form onSubmit={handleSubmit}>
-                <div className='row'>
-                    <div className='col-md-6 mb-3'>
-                        <label className='form-label'>Nombre</label>
-                        <input
-                            type='text'
-                            className='form-control'
-                            name='nombre'
-                            value={formData.nombre}
-                            onChange={handleChange}
-                        />
+        <div className='container mt-5 mb-5'>
+            <div className='card p-4 shadow'>
+                <h2 className='mb-4'>Mi perfil</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className='row'>
+                        <div className='col-md-6 mb-3'>
+                            <label className='form-label'>Nombre</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                name='nombre'
+                                value={formData.nombre}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className='col-md-6 mb-3'>
+                            <label className='form-label'>Apellido</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                name='apellido'
+                                value={formData.apellido}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className='col-md-6 mb-3'>
+                            <label className='form-label'>Correo Electrónico</label>
+                            <input
+                                type='email'
+                                className='form-control'
+                                name='email'
+                                value={formData.email}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className='col-md-6 mb-3'>
+                            <label className='form-label'>Celular</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                name='celular'
+                                value={formData.celular}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className='col-md-6 mb-3'>
+                            <label className='form-label'>DNI</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                name='dni'
+                                value={formData.dni}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className='col-md-6 mb-3'>
+                            <label className='form-label'>Calle</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                name='calle'
+                                value={formData.calle}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className='col-md-4 mb-3'>
+                            <label className='form-label'>Número</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                name='numero'
+                                value={formData.numero}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className='col-md-4 mb-3'>
+                            <label className='form-label'>Código Postal</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                name='codPostal'
+                                value={formData.codPostal}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className='col-md-4 mb-3'>
+                            <label className='form-label'>
+                                Fecha de Nacimiento
+                            </label>
+                            <input
+                                type='date'
+                                className='form-control'
+                                name='fechaNacimiento'
+                                value={
+                                    formData.fechaNacimiento
+                                        ? new Date(formData.fechaNacimiento)
+                                            .toISOString()
+                                            .slice(0, 10)
+                                        : ""
+                                }
+                                onChange={handleChange}
+                            />
+                        </div>
                     </div>
 
-                    <div className='col-md-6 mb-3'>
-                        <label className='form-label'>Apellido</label>
-                        <input
-                            type='text'
-                            className='form-control'
-                            name='apellido'
-                            value={formData.apellido}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className='col-md-6 mb-3'>
-                        <label className='form-label'>Correo Electrónico</label>
-                        <input
-                            type='email'
-                            className='form-control'
-                            name='email'
-                            value={formData.email}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className='col-md-6 mb-3'>
-                        <label className='form-label'>Celular</label>
-                        <input
-                            type='text'
-                            className='form-control'
-                            name='celular'
-                            value={formData.celular}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className='col-md-6 mb-3'>
-                        <label className='form-label'>DNI</label>
-                        <input
-                            type='text'
-                            className='form-control'
-                            name='dni'
-                            value={formData.dni}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className='col-md-6 mb-3'>
-                        <label className='form-label'>Calle</label>
-                        <input
-                            type='text'
-                            className='form-control'
-                            name='calle'
-                            value={formData.calle}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className='col-md-4 mb-3'>
-                        <label className='form-label'>Número</label>
-                        <input
-                            type='text'
-                            className='form-control'
-                            name='numero'
-                            value={formData.numero}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className='col-md-4 mb-3'>
-                        <label className='form-label'>Código Postal</label>
-                        <input
-                            type='text'
-                            className='form-control'
-                            name='codPostal'
-                            value={formData.codPostal}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className='col-md-4 mb-3'>
-                        <label className='form-label'>
-                            Fecha de Nacimiento
-                        </label>
-                        <input
-                            type='date'
-                            className='form-control'
-                            name='fechaNacimiento'
-                            value={
-                                formData.fechaNacimiento
-                                    ? new Date(formData.fechaNacimiento)
-                                          .toISOString()
-                                          .slice(0, 10)
-                                    : ""
-                            }
-                            onChange={handleChange}
-                        />
-                    </div>
-                </div>
-
-                <button type='submit' className='btn btn-primary mb-4'>
-                    Guardar cambios
-                </button>
-            </form>
+                    <button type='submit' className='btn boton-ingresar mb-4'>
+                        Guardar cambios
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

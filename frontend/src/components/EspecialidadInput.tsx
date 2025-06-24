@@ -14,12 +14,13 @@ const EspecialidadInput: React.FC<Props> = ({
     error,
 }) => (
     <div className='mb-4'>
-        <label className='form-label'>Especialidad</label>
+        <label className='form-label label-formulario'>Especialidad</label>
         <select
             className='form-control'
             name='especialidades'
             required
             value={value}
+            style={{ borderRadius: '8px', border: '2px solid #ae5bbf'}}
             onChange={(e) => onChange(e.target.value)}
         >
             <option value=''>Seleccione una especialidad</option>
