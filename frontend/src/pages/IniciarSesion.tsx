@@ -110,12 +110,12 @@ const IniciarSesion = () => {
                 <div className="linea-separador"></div>
               </div>
 
-              <div className="d-grid gap-2 mb-4">
-                <button type="button" className="boton-google">
+              {/* <div className="d-grid gap-2 mb-4">
+                <button type="button" className="boton-google btn-secondary" disabled>
                   <FaGoogle className="icono-google" />
                   Continuar con Google
                 </button>
-              </div>
+              </div> */}
 
               <div className="mt-4 text-center">
                 <p className="mt-3 mb-0 texto-registro">

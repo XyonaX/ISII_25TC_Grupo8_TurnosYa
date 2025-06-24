@@ -1,4 +1,3 @@
-import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../index.css'; 
 
@@ -26,7 +25,7 @@ const HomePage = () => {
           className="display-4 fw-bold"
         > Agenda tu cita
         </h1>
-        <p style={{ marginBottom: "1.5rem", }}className="fs-5">Encontrá tu especialista y pedí un turno</p>
+        <p style={{ fontFamily: "'Trebuchet MS', sans-serif", marginBottom: "1.5rem", }}className="fs-5">Encontrá tu especialista y pedí un turno</p>
         <button className="custom-button">
           <Link className="nav-link" to="/buscarmedico">
               Buscar Médicos
@@ -41,8 +40,8 @@ const HomePage = () => {
         {/* Encabezado */}
         <div className="row mb-5">   
           <div className="col">
-            <h1 className="servicios-title">Cuidando de tu salud</h1>
-            <p className="servicios-descripcion">Conoce nuestros servicios</p>
+            <h1 className="servicios-title" style={{fontFamily: "'Trebuchet MS', sans-serif"}}>Cuidando de tu salud</h1>
+            <p className="servicios-descripcion" style={{fontFamily: "'Trebuchet MS', sans-serif"}}>Conoce nuestros servicios</p>
           </div>
         </div>
 
@@ -53,9 +52,9 @@ const HomePage = () => {
             <div className="card h-100">
               <div className="card-body text-center">
                 <img src="/img-card1.png" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
-                <h4 className="card-home-title">Reservas y Turnos</h4>
+                <h4 className="card-home-title" style={{fontFamily: "'Trebuchet MS', sans-serif"}}>Reservas y Turnos</h4>
                 <div className="d-flex flex-row justify-content-center">
-                  <div className="card-home-text p-3">
+                  <div className="card-home-text p-3" style={{fontFamily: "'Trebuchet MS', sans-serif"}}>
                     <a>
                       Encuentra profesionales verificados y reserva tu turno en segundos. 
                     </a>
@@ -70,9 +69,9 @@ const HomePage = () => {
             <div className="card h-100">
               <div className="card-body text-center">
                 <img src="/img-card2.png" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
-                <h4 className="card-home-title">Experiencia personalizada</h4>
+                <h4 className="card-home-title" style={{fontFamily: "'Trebuchet MS', sans-serif"}}>Experiencia personalizada</h4>
                 <div className="d-flex flex-row justify-content-center">
-                  <div className="card-home-text p-3">
+                  <div className="card-home-text p-3" style={{fontFamily: "'Trebuchet MS', sans-serif"}}>
                     <a>
                      Si sos un profesional de la salud, organizamos tu día a día con nuestro historial de turnos y recordatorios. 
                     </a>
@@ -87,9 +86,9 @@ const HomePage = () => {
             <div className="card h-100">
               <div className="card-body text-center">
                 <img src="/img-card3.png" alt="" className="img-fluid rounded-circle w-50 mb-3"></img>
-                <h4 className="card-home-title">Opciones de Pago</h4>
+                <h4 className="card-home-title" style={{fontFamily: "'Trebuchet MS', sans-serif"}} >Opciones de Pago</h4>
                 <div className="d-flex flex-row justify-content-center">
-                  <div className="card-home-text p-3">
+                  <div className="card-home-text p-3" style={{fontFamily: "'Trebuchet MS', sans-serif"}}>
                     <a>
                       Diferentes formas de pago y posibilidad de cancelación con 24 HS de anticipación. 
                     </a>
@@ -105,7 +104,7 @@ const HomePage = () => {
 
     <section className="franja-violeta">
             <div className="container text-center">
-                <p className="franja-texto"> &gt; Comenzá ahora y disfrutá de todos los beneficios &lt;</p>
+                <p className="franja-texto" style={{fontFamily: "'Trebuchet MS', sans-serif"}}> &gt; Comenzá ahora y disfrutá de todos los beneficios &lt;</p>
             </div>
     </section>
 

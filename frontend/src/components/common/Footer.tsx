@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useUserStore } from "../../store/userStore";
 
 const Footer = () => {
+    const user = useUserStore((state) => state.user);
     return (
         <footer className="footer mt-auto py-4" style={{ backgroundColor: '#f9fffb', borderTop: '2px solid #04a658' }}>
             <div className="container">
@@ -63,11 +65,14 @@ const Footer = () => {
                                     Registro Profesional
                                 </Link>
                             </li>
-                            <li className="mb-2">
-                                <Link to="/turnos" className="text-decoration-none" style={{ color: '#555', fontFamily: "'Trebuchet MS', sans-serif" }}>
-                                    Gestión de Turnos
-                                </Link>
-                            </li>
+                            {/* Solo muestra este enlace si el usuario es médico */}
+                            {user?.tipo_usuario === "medico" && (
+                                <li className="mb-2">
+                                    <Link to="/gestion-turnos" className="text-decoration-none" style={{ color: '#555', fontFamily: "'Trebuchet MS', sans-serif" }}>
+                                        Gestión de Turnos
+                                    </Link>
+                                </li>
+                            )}
                         </ul>
                     </div>
 
