@@ -45,6 +45,9 @@ export const MedicoPage = () => {
             })
             .catch(console.error);
     }, [id]);
+    useEffect(() => {
+        console.log("Dialog state changed:", dialog);
+      }, [dialog]);
 
     const handleAgendar = async () => {
         try {
@@ -55,11 +58,8 @@ export const MedicoPage = () => {
                 return;
             }
             
-            await turnosService.agendarTurno(
-                turnoSeleccionado,
-                motivo
-            );
-    
+            await turnosService.agendarTurno(turnoSeleccionado, motivo);
+            console.log("Turno agendado con éxito, mostrando modal");
             setDialog({ open: true, message: "¡Turno reservado con éxito!" });
             if (!id) return;
             turnosService.getTurnosByMedicoId(id).then(setTurnos).catch(console.error);
@@ -84,11 +84,18 @@ export const MedicoPage = () => {
     return (
         <>
         {dialog.open && (
-            <div className="modal">
-            <div className="modal-content">
+            <div className="custom-modal">
+                <div className="modal-content">
                 <p>{dialog.message}</p>
-                <button onClick={() => setDialog({ open: false, message: "" })}>Cerrar</button>
-            </div>
+                <button
+                    onClick={() => {
+                    setDialog({ open: false, message: "" });
+                    navigate("/buscarmedico");
+                    }}
+                >
+                    Cerrar
+                </button>
+                </div>
             </div>
         )}
         <div className='container mt-5'>

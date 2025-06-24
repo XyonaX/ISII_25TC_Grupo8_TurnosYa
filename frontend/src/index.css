@@ -153,6 +153,45 @@ body {
   letter-spacing: 1px; 
 }
 
+/*Configuracion de modal*/
+
+.custom-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.custom-modal .modal-content {
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  min-width: 320px;
+  max-width: 400px;      /* <-- Limita el ancho máximo del modal */
+  width: 100%;           /* Ocupa el 100% hasta el máximo */
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  text-align: center;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.custom-modal .modal-content button {
+  margin-top: 1.5rem;
+  padding: 0.5rem 2rem;
+  border-radius: 8px;
+  background: #ae5bbf;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.custom-modal .modal-content button:hover {
+  background: #19d184;
+}
 
   /* FORMULARIO DE INICIO DE SESIÓN (correcto, respetando tu diseño) */
 
@@ -332,3 +371,4 @@ body {
 .label-formulario {
     white-space: nowrap;
 }
+
