@@ -24,7 +24,7 @@ const loginSchema = Joi.object({
 });
 
 const registerHandler = async (req: Request, res: Response) => {
-    // 1. Validar con Joi antes de cualquier lógica
+    // 1. Validar con Joi
     const { error } = userSchema.validate(req.body, { abortEarly: false });
     if (error) {
         // Devuelve todos los mensajes de error por campo
@@ -34,6 +34,20 @@ const registerHandler = async (req: Request, res: Response) => {
                 field: e.path[0],
                 message: e.message
             }))
+        });
+    }
+
+    // Validación de email único luego de controlares errores en campos
+    const existingUser = await Usuario.findOne({ email_usuario: req.body.email_usuario });
+    if (existingUser) {
+        return res.status(400).json({
+            success: false,
+            errors: [
+                {
+                    field: "email_usuario",
+                    message: "El email ya está registrado"
+                }
+            ]
         });
     }
 
@@ -49,6 +63,10 @@ const registerHandler = async (req: Request, res: Response) => {
                     id_obra_social: req.body.id_obra_social,
                 });
                 await nuevoPaciente.save();
+                return res.status(201).json({
+                    success: true,
+                    message: "Usuario registrado correctamente como paciente"
+                });                
             } catch (error) {
                 console.error(
                     "Error al crear paciente, se elimina el usuario:",
@@ -70,6 +88,10 @@ const registerHandler = async (req: Request, res: Response) => {
                     matricula_medico: req.body.matricula_medico,
                 });
                 await nuevoMedico.save();
+                return res.status(201).json({
+                    success: true,
+                    message: "Usuario registrado correctamente como médico"
+                });
 
                 const especialidades = req.body.especialidades || [];
                 console.log("Especialidades recibidas:", especialidades);

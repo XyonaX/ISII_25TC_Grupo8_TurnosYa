@@ -465,6 +465,11 @@ const Registrarse = () => {
                                             }
                                             onChange={handleChange}
                                         />
+                                        {errors.matricula_medico && (
+                                            <small className='text-danger'>
+                                                {errors.matricula_medico.message}
+                                            </small>
+                                        )}
                                     </div>
                                 )}
 

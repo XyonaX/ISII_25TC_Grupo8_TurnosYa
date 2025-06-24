@@ -36,8 +36,10 @@ const userSchema = Joi.object({
     }),
     clave_usuario: Joi.string()
         .required()
+        .min(6)
         .messages({
             "string.empty": "La clave es requerida",
+            "string.min": "La clave debe tener al menos 6 caracteres",
         }),
     calle_usuario: Joi.string().required().max(50).messages({
         "string.max": "La calle no puede tener más de 50 caracteres",
@@ -78,9 +80,13 @@ const userSchema = Joi.object({
     }),
     matricula_medico: Joi.when('tipo_usuario', {
         is: 'medico',
-        then: Joi.string().required().messages({
-            "string.empty": "La matrícula es requerida para médicos"
-        }),
+        then: Joi.string()
+            .pattern(/^[A-Za-z0-9]+$/)
+            .required()
+            .messages({
+                "string.pattern.base": "La matrícula solo puede contener letras y números, sin espacios ni símbolos",
+                "string.empty": "La matrícula es requerida para médicos"
+            }),
         otherwise: Joi.forbidden()
     }),
     especialidades: Joi.when('tipo_usuario', {
