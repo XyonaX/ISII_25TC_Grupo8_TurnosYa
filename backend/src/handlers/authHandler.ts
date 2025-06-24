@@ -24,24 +24,6 @@ const loginSchema = Joi.object({
 });
 
 const registerHandler = async (req: Request, res: Response) => {
-    // Validar los datos de entrada con userSchema
-    const { error } = userSchema.validate(req.body, { abortEarly: false });
-    if (error) {
-        // Crear un objeto con todos los errores de validación
-        const validationErrors = error.details.reduce((acc: any, curr) => {
-            // Extraer el nombre del campo del path
-            const key = curr.path[0];
-            acc[key] = curr.message;
-            return acc;
-        }, {});
-
-        return res.status(400).json({
-            success: false,
-            message: "Errores de validación",
-            errors: validationErrors
-        });
-    }
-
     try {
         console.log("Datos de registro:", req.body);
         const newUser = await registerController(req.body);
@@ -153,24 +135,6 @@ const loginHandler = async (req: Request, res: Response) => {
         console.error("Error en login:", error);
 
         if (
-            error.message === "Credenciales inválidas" ||
-            error.message === "Usuario no encontrado"
-        ) {
-            return res.status(401).json({
-                success: false,
-                message: error.message,
-            });
-        }
-
-        return res.status(500).json({
-            success: false,
-            message: "Error interno del servidor al iniciar sesión",
-            error: error.message,
-        });
-    }
-};
-
-export { registerHandler, loginHandler };
             error.message === "Credenciales inválidas" ||
             error.message === "Usuario no encontrado"
         ) {
